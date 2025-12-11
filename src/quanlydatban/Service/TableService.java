@@ -17,6 +17,7 @@ public class TableService {
     
     TableDao tbDao = new TableDao();
     public TableService() {
+        
         this.tbList= tbDao.getAllTable();
     }
 

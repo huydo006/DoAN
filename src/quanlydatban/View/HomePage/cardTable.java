@@ -184,17 +184,17 @@ public class cardTable extends javax.swing.JPanel {
 
     private void modeUsingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modeUsingActionPerformed
         // TODO add your handling code here:
-        handleUpdate("Using");
+        handleUpdate("Đang Dùng");
     }//GEN-LAST:event_modeUsingActionPerformed
 
     private void modeBookedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modeBookedActionPerformed
         // TODO add your handling code here:
-        handleUpdate("Booked");
+        handleUpdate("Đã Đặt");
     }//GEN-LAST:event_modeBookedActionPerformed
 
     private void modeEmptyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modeEmptyActionPerformed
         // TODO add your handling code here:
-        handleUpdate("Empty");
+        handleUpdate("Trống");
         
     }//GEN-LAST:event_modeEmptyActionPerformed
 

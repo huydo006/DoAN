@@ -5,6 +5,7 @@
 package quanlydatban.View.HomePage;
 
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import quanlydatban.Model.Booking;
 import quanlydatban.Model.Customer;
@@ -17,29 +18,93 @@ import quanlydatban.Service.CustomerService;
  *
  * @author HELLO
  */
-public class pnScreenDanhSach extends javax.swing.JPanel {
-    JButton btnDeleteBooking=new JButton("Xóa Đơn Đặt");
-   
+public class pnScreenDanhSach extends javax.swing.JPanel implements TableUpdateListener {
+    
+    private TableUpdateListener datbanmoiListener;
+    BookingService bks = new BookingService();
     /**
      * Creates new form pnScreenDanhSach
      */
     public pnScreenDanhSach() {
         initComponents();
+        setCount();
         ViewTable();
     }
     private void ViewTable(){
         
-        BookingService bks = new BookingService();
-        Customer temp= null;
+        
+        
         DefaultTableModel model = (DefaultTableModel) this.tbMain.getModel();
         model.setNumRows(0);
         
         for(Booking x : bks.getAllBooking()){
             CustomerService cus = new CustomerService();
-            temp = cus.getCus(x.getIDcus());
-            model.addRow(new Object[] {x.getIdBooking() ,x.getIDtable() , temp.getNameCus() , temp.getCusPhone(), x.getTimeStart(),x.getGuestCount() ,x.getNote(),btnDeleteBooking  });
+            Customer temp = cus.getCus(x.getIDcus());
+            
+            model.addRow(new Object[] {x.getIdBooking() ,x.getIDtable() , temp.getNameCus() , temp.getCusPhone(), x.getTimeStart(),x.getGuestCount() ,x.getNote() });
+        }
+        this.tbMain.revalidate();
+        this.tbMain.repaint();
+    }
+    private void setCount(){
+        int countTongBooking=0;
+        for(Booking x: bks.getAllBooking() ){
+            countTongBooking++;
+        }
+        
+        this.txtTongBooking.setText(""+countTongBooking);
+    }
+    // Trong pnScreenDanhSach.java
+
+private void deleteSelectedBooking(int selectedRowIndex , int idTable) {
+    // 1. Lấy ID Booking từ JTable (chỉ để hiển thị thông báo xác nhận)
+    DefaultTableModel model = (DefaultTableModel) tbMain.getModel();
+    Object bookingIdObj = model.getValueAt(selectedRowIndex, 0); 
+    String bookingIdStr = String.valueOf(bookingIdObj);
+    
+    // 2. Kiểm tra và xác nhận xóa
+    int confirm = JOptionPane.showConfirmDialog(
+        this, 
+        "Bạn có chắc muốn xóa đơn đặt bàn ID: " + bookingIdStr + " khỏi danh sách hiển thị?", 
+        "Xác nhận xóa khỏi UI", 
+        JOptionPane.YES_NO_OPTION
+    );
+
+    if (confirm == JOptionPane.YES_OPTION) {
+        
+        try {
+            // ************ BƯỚC QUAN TRỌNG NHẤT ************
+            // XÓA HÀNG KHỎI JTable (MODEL)
+            model.removeRow(selectedRowIndex); 
+            bks.DeteteBooking(idTable);
+            bks.ResetStatus(idTable);
+            
+            JOptionPane.showMessageDialog(this, 
+                                          "Đơn đặt bàn ID " + bookingIdStr + " đã được xóa ", 
+                                          "Thông báo", 
+                                          JOptionPane.INFORMATION_MESSAGE);
+            
+            // 3. Cập nhật lại giao diện và thống kê
+            
+            // Cập nhật lại UI (Đã có trong ViewTable, nhưng nên gọi lại để làm sạch)
+            this.tbMain.revalidate();
+            this.tbMain.repaint();
+            
+            // Cần gọi lại logic tính toán thống kê (nếu thống kê phụ thuộc vào số hàng trong bảng)
+            // Hoặc gọi ViewTable() nếu bạn muốn làm mới toàn bộ từ DB:
+            // ViewTable(); // Tuy nhiên, nếu gọi ViewTable() thì hàng vừa xóa lại hiện ra, nên không gọi.
+            
+            // Cập nhật thống kê (Nếu txtCountEmpty là Tổng số đơn):
+            // Tính lại tổng số hàng còn lại
+            // int remainingCount = model.getRowCount();
+            // this.txtCountEmpty.setText(String.valueOf(remainingCount));
+            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Lỗi khi xóa hàng khỏi UI.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
     }
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -57,7 +122,7 @@ public class pnScreenDanhSach extends javax.swing.JPanel {
         thongkedatban = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
-        txtCountEmpty = new javax.swing.JTextField();
+        txtTongBooking = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         jPanel7 = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
@@ -66,6 +131,8 @@ public class pnScreenDanhSach extends javax.swing.JPanel {
         jScrollPane2 = new javax.swing.JScrollPane();
         tbMain = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setName(""); // NOI18N
@@ -110,12 +177,12 @@ public class pnScreenDanhSach extends javax.swing.JPanel {
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel4.setText("Tổng Số Bàn Đã Đặt");
 
-        txtCountEmpty.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        txtCountEmpty.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        txtCountEmpty.setBorder(null);
-        txtCountEmpty.addActionListener(new java.awt.event.ActionListener() {
+        txtTongBooking.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        txtTongBooking.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtTongBooking.setBorder(null);
+        txtTongBooking.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtCountEmptyActionPerformed(evt);
+                txtTongBookingActionPerformed(evt);
             }
         });
 
@@ -130,7 +197,7 @@ public class pnScreenDanhSach extends javax.swing.JPanel {
                         .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(105, 105, 105)
-                        .addComponent(txtCountEmpty, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(txtTongBooking, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(80, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -139,7 +206,7 @@ public class pnScreenDanhSach extends javax.swing.JPanel {
                 .addContainerGap()
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtCountEmpty)
+                .addComponent(txtTongBooking)
                 .addGap(12, 12, 12))
         );
 
@@ -215,25 +282,47 @@ public class pnScreenDanhSach extends javax.swing.JPanel {
 
         tbMain.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
             },
             new String [] {
-                "ID Booking", "Ban ", "Khach hang", "Dien Thoai", "Thoi Gian Dung", "So Khach", "Ghi Chu", "Thao tác"
+                "ID Booking", "Ban ", "Khach hang", "Dien Thoai", "Thoi Gian Dung", "So Khach", "Ghi Chu"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
-        tbMain.setMaximumSize(new java.awt.Dimension(70000, 900));
-        tbMain.setPreferredSize(new java.awt.Dimension(700, 80));
+        tbMain.setMaximumSize(new java.awt.Dimension(2147483647, 0));
+        tbMain.setPreferredSize(new java.awt.Dimension(700, 1000));
         tbMain.setRowHeight(40);
+        tbMain.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tbMainKeyPressed(evt);
+            }
+        });
         jScrollPane2.setViewportView(tbMain);
         if (tbMain.getColumnModel().getColumnCount() > 0) {
             tbMain.getColumnModel().getColumn(0).setResizable(false);
@@ -250,10 +339,25 @@ public class pnScreenDanhSach extends javax.swing.JPanel {
             tbMain.getColumnModel().getColumn(5).setPreferredWidth(30);
             tbMain.getColumnModel().getColumn(6).setResizable(false);
             tbMain.getColumnModel().getColumn(6).setPreferredWidth(150);
-            tbMain.getColumnModel().getColumn(7).setResizable(false);
         }
 
         jLabel1.setText("Danh sach dat ban :");
+
+        jButton1.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
+        jButton1.setText("Hoàn Thành");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jButton2.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
+        jButton2.setText("Xóa Đơn ");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -268,15 +372,29 @@ public class pnScreenDanhSach extends javax.swing.JPanel {
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton2)
+                .addGap(33, 33, 33)
+                .addComponent(jButton1)
+                .addGap(214, 214, 214))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(24, 24, 24)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 237, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(49, Short.MAX_VALUE))
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 309, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(107, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jButton2)
+                            .addComponent(jButton1))
+                        .addGap(47, 47, 47))))
         );
 
         main.add(jPanel3, java.awt.BorderLayout.CENTER);
@@ -287,16 +405,36 @@ public class pnScreenDanhSach extends javax.swing.JPanel {
         screenDanhSach.getAccessibleContext().setAccessibleName("pnScreenDanhSach");
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtCountEmptyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCountEmptyActionPerformed
+    private void txtTongBookingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTongBookingActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtCountEmptyActionPerformed
+    }//GEN-LAST:event_txtTongBookingActionPerformed
 
     private void txtCountEmpty3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCountEmpty3ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtCountEmpty3ActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        int n = this.tbMain.getSelectedRow();
+        int id = (int) this.tbMain.getValueAt(n, 0);
+        deleteSelectedBooking(n , id);
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void tbMainKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tbMainKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tbMainKeyPressed
+//    public void setDatbanmoiListener(TableUpdateListener listener) {
+//        this.datbanmoiListener = listener;
+//    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel3;
@@ -311,7 +449,18 @@ public class pnScreenDanhSach extends javax.swing.JPanel {
     private javax.swing.JPanel screenDanhSach;
     private javax.swing.JTable tbMain;
     private javax.swing.JPanel thongkedatban;
-    private javax.swing.JTextField txtCountEmpty;
     private javax.swing.JTextField txtCountEmpty3;
+    private javax.swing.JTextField txtTongBooking;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void onTableStatusUpdated() {
+        setCount();
+        ViewTable();
+        if (datbanmoiListener != null) {
+            this.datbanmoiListener.onTableStatusUpdated(); 
+        }
+        this.tbMain.revalidate();
+        this.tbMain.repaint();
+    }
 }

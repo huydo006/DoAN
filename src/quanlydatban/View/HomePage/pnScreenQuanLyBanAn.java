@@ -8,9 +8,10 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.List;
-import quanlydatban.Dao.TableDao;
+
 import quanlydatban.Model.Table;
 import javax.swing.JPanel;
+import quanlydatban.Service.TableService;
 /**
  *
  * @author HELLO
@@ -47,8 +48,9 @@ public class pnScreenQuanLyBanAn extends JPanel implements  TableUpdateListener 
     
     public void uploadTablefromDataBase(){
         tbList.clear();
-        TableDao tbDao= new TableDao();
-        this.tbList= tbDao.getAllTable();
+        TableService tbs = new TableService();
+        this.tbList= tbs.getTbList();
+        
     }
     public void uploadTable(){
         
@@ -68,10 +70,10 @@ public class pnScreenQuanLyBanAn extends JPanel implements  TableUpdateListener 
             card.setUpdateListener(this);
             
             String status = tbList.get(i).getStatusTable();
-            if(status.equalsIgnoreCase("empty")){
+            if(status.equalsIgnoreCase("Trống")){
                 count1++;
             }
-            else if(status.equalsIgnoreCase("Booked")){
+            else if(status.equalsIgnoreCase("Đã Đặt")){
                 count2++;
             }
             else{ 

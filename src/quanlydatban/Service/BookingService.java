@@ -22,17 +22,25 @@ public class BookingService {
     private BookingDao bookingDao = new BookingDao(); 
     // Khởi tạo đối tượng DAO để giao tiếp với DB
 
-    public boolean insertBooking(String time, int seat, String note, int idEmp, int IDcus , int idTable)throws SQLException {
+    public boolean insertBooking(String timeStart,String timeEnd, int seat, String note, int idEmp, int IDcus , int idTable)throws SQLException {
         
-            bookingDao.updateStatusTable("Booked", idTable);
-            return bookingDao.addBooking(time, seat, note, idEmp, IDcus , idTable);
+            bookingDao.updateStatusTable("Đã Đặt", idTable);
+            return bookingDao.addBooking(timeStart,timeEnd, seat, note, idEmp, IDcus , idTable);
             
     }
-    public List<Booking> getAllBooking(){
+    public List<Booking> getAllBooking() {
         list= bookingDao.getAllBooking();
         return list;
     }
-
+    public void ResetStatus(int id){
+        bookingDao.updateStatusTable("Trống", id);
+    }
+    public void setCompleteBooking(){
+        
+    }
+    public void DeteteBooking(int id){
+        bookingDao.DeleteBooking(id);
+    }
 //    private boolean isValidTime(String time) {
 //        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
 //    }

@@ -28,6 +28,9 @@ public class pnScreenDatBanMoi extends javax.swing.JPanel implements TableUpdate
    
     private Employee Emp = null;
     private TableUpdateListener quanLyBanListener;
+    private TableUpdateListener danhSachListener; 
+
+   
 
     public pnScreenDatBanMoi(Main_menu temp)  {
         
@@ -44,10 +47,7 @@ public class pnScreenDatBanMoi extends javax.swing.JPanel implements TableUpdate
         DefaultTableModel model = (DefaultTableModel) this.tableEmpty.getModel();
         model.setNumRows(0);
         for(Table x: list.getTbList()){
-            if(x.getStatusTable().equalsIgnoreCase("Empty")){
-                String mode = "San Sang";
-                model.addRow(new Object[] {x.getIdTable(),x.getSeats(),mode});
-            }
+            model.addRow(new Object[] {x.getIdTable(),x.getSeats()});
         }
     }
     private void loadTabletoComboBox(){
@@ -57,9 +57,8 @@ public class pnScreenDatBanMoi extends javax.swing.JPanel implements TableUpdate
         cbChonBan.addItem("--- Chọn ID Bàn ---");
         
         for(Table x : list.getTbList()){
-            if(x.getStatusTable().equalsIgnoreCase("Empty")){
-                ((javax.swing.JComboBox) cbChonBan).addItem(x.getIdTable());
-            }
+            ((javax.swing.JComboBox) cbChonBan).addItem(x.getIdTable());
+            
         }
         if(cbChonBan.getItemCount()==1){
             cbChonBan.removeAllItems();
@@ -85,6 +84,13 @@ public class pnScreenDatBanMoi extends javax.swing.JPanel implements TableUpdate
     public void setQuanLyBanListener(TableUpdateListener listener) {
         this.quanLyBanListener = listener;
     }
+    
+
+// Setter mới
+    public void setDanhSachListener(TableUpdateListener listener) {
+        this.danhSachListener = listener;
+    }
+    
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -115,6 +121,8 @@ public class pnScreenDatBanMoi extends javax.swing.JPanel implements TableUpdate
         jLabel16 = new javax.swing.JLabel();
         txtGhiChu = new javax.swing.JTextField();
         cbChonBan = new javax.swing.JComboBox<>();
+        jLabel17 = new javax.swing.JLabel();
+        txtTimeEnd = new javax.swing.JFormattedTextField();
         pnBanTrong = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tableEmpty = new javax.swing.JTable();
@@ -201,6 +209,14 @@ public class pnScreenDatBanMoi extends javax.swing.JPanel implements TableUpdate
             }
         });
 
+        jLabel17.setText("Gio ket thuc : ");
+
+        txtTimeEnd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtTimeEndActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnThongTinKHLayout = new javax.swing.GroupLayout(pnThongTinKH);
         pnThongTinKH.setLayout(pnThongTinKHLayout);
         pnThongTinKHLayout.setHorizontalGroup(
@@ -220,7 +236,9 @@ public class pnScreenDatBanMoi extends javax.swing.JPanel implements TableUpdate
                                     .addComponent(txtTimeStarted, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel14)
-                                    .addComponent(txtGhiChu, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addComponent(txtGhiChu, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel17)
+                                    .addComponent(txtTimeEnd, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(pnThongTinKHLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtSDT, javax.swing.GroupLayout.PREFERRED_SIZE, 321, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -259,18 +277,26 @@ public class pnScreenDatBanMoi extends javax.swing.JPanel implements TableUpdate
                     .addComponent(txtSoKhach, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtTimeStarted, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(pnThongTinKHLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(pnThongTinKHLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel12)
-                    .addComponent(jLabel16))
+                    .addComponent(jLabel17))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnThongTinKHLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(cbChonBan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtGhiChu, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
-                .addGroup(pnThongTinKHLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnDeleteAll)
-                    .addComponent(btnConfirm))
-                .addGap(19, 19, 19))
+                    .addComponent(txtTimeEnd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cbChonBan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(13, 13, 13)
+                .addComponent(jLabel16)
+                .addGroup(pnThongTinKHLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnThongTinKHLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(pnThongTinKHLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnDeleteAll)
+                            .addComponent(btnConfirm))
+                        .addGap(19, 19, 19))
+                    .addGroup(pnThongTinKHLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtGhiChu, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(24, Short.MAX_VALUE))))
         );
 
         mainTaoDon.add(pnThongTinKH, java.awt.BorderLayout.PAGE_START);
@@ -284,11 +310,11 @@ public class pnScreenDatBanMoi extends javax.swing.JPanel implements TableUpdate
 
             },
             new String [] {
-                "ID Table", "Seats", "Mode"
+                "ID Table", "Seats"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false
+                false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -302,7 +328,6 @@ public class pnScreenDatBanMoi extends javax.swing.JPanel implements TableUpdate
         if (tableEmpty.getColumnModel().getColumnCount() > 0) {
             tableEmpty.getColumnModel().getColumn(0).setResizable(false);
             tableEmpty.getColumnModel().getColumn(1).setResizable(false);
-            tableEmpty.getColumnModel().getColumn(2).setResizable(false);
         }
 
         pnBanTrong.add(jScrollPane2);
@@ -358,19 +383,23 @@ public class pnScreenDatBanMoi extends javax.swing.JPanel implements TableUpdate
         
         
         int idEmp = this.Emp.getIdEmploy();
-        String time = this.txtTimeStarted.getText();
+        String timeStart = this.txtTimeStarted.getText();
+        String timeEnd =this.txtTimeEnd.getText();
         int seat = Integer.parseInt(this.txtSoKhach.getText());
         String note = this.txtGhiChu.getText();
         int IDcus =cus.getIdCus(this.txtSDT.getText());
         int idTable =Integer.parseInt((String)cbChonBan.getSelectedItem());
         
         try {
-            if(bks.insertBooking(time, seat, note,idEmp ,IDcus ,idTable)){
+            if(bks.insertBooking(timeStart,timeEnd, seat, note,idEmp ,IDcus ,idTable)){
                 JOptionPane.showMessageDialog(null, "Thêm đơn đặt thành công , " + idTable, "Thông báo", JOptionPane.INFORMATION_MESSAGE);
             }
             if (quanLyBanListener != null) {
                     quanLyBanListener.onTableStatusUpdated();
                 }
+            if(danhSachListener!=null){
+                danhSachListener.onTableStatusUpdated();
+            }
         } catch (SQLException ex) {
             System.getLogger(pnScreenDatBanMoi.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
             JOptionPane.showMessageDialog(null, "Thêm đơn đặt thất bại ", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
@@ -383,6 +412,10 @@ public class pnScreenDatBanMoi extends javax.swing.JPanel implements TableUpdate
         
     }//GEN-LAST:event_btnConfirmActionPerformed
 
+    private void txtTimeEndActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTimeEndActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtTimeEndActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnConfirm;
@@ -394,6 +427,7 @@ public class pnScreenDatBanMoi extends javax.swing.JPanel implements TableUpdate
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane2;
@@ -407,6 +441,7 @@ public class pnScreenDatBanMoi extends javax.swing.JPanel implements TableUpdate
     private javax.swing.JTextField txtSDT;
     private javax.swing.JTextField txtSoKhach;
     private javax.swing.JTextField txtTenKH;
+    private javax.swing.JFormattedTextField txtTimeEnd;
     private javax.swing.JFormattedTextField txtTimeStarted;
     // End of variables declaration//GEN-END:variables
 
@@ -416,9 +451,7 @@ public class pnScreenDatBanMoi extends javax.swing.JPanel implements TableUpdate
         resetForm();
         ViewTable();
         loadTabletoComboBox();
-        // THÊM CÁC LỆNH NÀY để đảm bảo JTable được làm mới trên giao diện
-        this.tableEmpty.revalidate();
-        this.tableEmpty.repaint();
+        
         // Hoặc làm mới toàn bộ JPanel chứa JTable
         this.pnBanTrong.revalidate();
         this.pnBanTrong.repaint();

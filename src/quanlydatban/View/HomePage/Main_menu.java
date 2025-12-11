@@ -57,11 +57,13 @@ public class Main_menu extends javax.swing.JFrame {
         // 1. Khởi tạo đối tượng từ File Panel
         pnScreenQuanLyBanAn banAnPanel = new pnScreenQuanLyBanAn();
         pnScreenDatBanMoi datBanPanel = new pnScreenDatBanMoi(this);
+        pnScreenDanhSach danhSachPanel =new pnScreenDanhSach();
         
         banAnPanel.setDatBanMoiListener(datBanPanel);
         datBanPanel.setQuanLyBanListener(banAnPanel);
+        datBanPanel.setDanhSachListener(danhSachPanel);
         
-        pnScreenDanhSach danhSachPanel =new pnScreenDanhSach();
+        
         pnScreenDanhSachEmployee danhsachEm = new pnScreenDanhSachEmployee(); 
         
         
@@ -71,20 +73,12 @@ public class Main_menu extends javax.swing.JFrame {
         pnMain.add(banAnPanel, "pnScreenQuanLyBanAn");
         pnMain.add(datBanPanel, "pnScreenDatBanMoi");
         pnMain.add(danhSachPanel, "pnScreenDanhSach");
-        pnMain.add(danhsachEm , "pnScreenDanhSachEmployee");
-        
-        
-        
+        pnMain.add(danhsachEm , "pnScreenDanhSachEmployee");       
 //          ^ Đối tượng Panel      ^ Tên Card
         
         
     }
-//    public void setDefauleCurrentAccount(Account now){
-//        this.AccCurrent = now;
-//    }
-//    public Account getDefauleCurrentAccount(){
-//        return this.AccCurrent;
-//    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

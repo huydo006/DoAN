@@ -17,20 +17,21 @@ import quanlydatban.Model.Booking;
  */
 public class BookingDao {
     
-    public boolean addBooking(String time , int numGuest , String note ,int idEmp ,int idCus  , int idTable){
+    public boolean addBooking(String timeStart,String timeEnd , int numGuest , String note ,int idEmp ,int idCus  , int idTable){
         try {
-            String sql ="Insert into Booking (TimeStarted , guestCount ,Note , IDemploy , IDcus , IDtable )"
-                    + "Values(?, ? ,? , ? , ? ,? ) ";
+            String sql ="Insert into Booking (TimeStarted,TimeEnd , guestCount ,Note , IDemploy , IDcus , IDtable )"
+                    + "Values(?,?, ? ,? , ? , ? ,? ) ";
             
             Connection conn = ConnectionDatabase.getConnection();
             PreparedStatement ptm = conn.prepareStatement(sql);
             
-            ptm.setString(1, time);
-            ptm.setInt(2, numGuest);
-            ptm.setString(3, note);
-            ptm.setInt(4, idEmp);
-            ptm.setInt(5, idCus);
-            ptm.setInt(6 , idTable);
+            ptm.setString(1, timeStart);
+            ptm.setString(2, timeEnd);
+            ptm.setInt(3, numGuest);
+            ptm.setString(4, note);
+            ptm.setInt(5, idEmp);
+            ptm.setInt(6, idCus);
+            ptm.setInt(7 , idTable);
             
             ptm.executeUpdate();
                     
@@ -89,5 +90,22 @@ public class BookingDao {
             System.getLogger(BookingDao.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
         }
         return list;
+    }
+    public void DeleteBooking(int idBooking){
+        String sql="Delete From Booking "
+                + "Where IDbooking = ? ";
+        try {
+            Connection conn = ConnectionDatabase.getConnection();
+            PreparedStatement pstm = conn.prepareStatement(sql);
+            
+            pstm.setInt(1,idBooking);
+            pstm.executeUpdate();
+            
+            pstm.close();
+            conn.close();
+        } catch (SQLException ex) {
+            System.getLogger(BookingDao.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        }
+        
     }
 }
