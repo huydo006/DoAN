@@ -1,16 +1,16 @@
 use demo002
 INSERT INTO DiningTable (seats, statusTable) VALUES
-(4,  'Empty'),
-(2,  'Booked'),
-(6,  'Using'),
-(8,  'Empty'),
-(4,  'Using'),
-(10, 'Booked'),
-(2,  'Empty'),
-(6,  'Booked'),
-(12, 'Empty'),
-(4,  'Booked'),
-(8,  'Using');
+(4,  'Trống'),
+(2,  'Trống'),
+(6,  'Trống'),
+(8,  'Trống'),
+(4,  'Trống'),
+(10, 'Trông'),
+(2,  'Trống'),
+(6,  'Trống'),
+(12, 'Trống'),
+(4,  'Trống'),
+(8,  'Trống');
 
 Insert into Account (username , password) 
 values('doquanghuy' , '11'),

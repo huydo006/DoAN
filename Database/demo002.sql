@@ -1,8 +1,8 @@
 create database demo002
 use demo002
 
-
-
+drop database demo002
+select * from Booking
 -- BẢNG ACCOUNT
 CREATE TABLE `Account` (
   `username` VARCHAR(50) NOT NULL,
@@ -27,7 +27,7 @@ CREATE TABLE `Employee` (
   CONSTRAINT `fk_employee_account` FOREIGN KEY (`username`)
     REFERENCES `Account` (`username`)
     
-) 
+) ;
 
 -- BẢNG CUSTOMER
 CREATE TABLE `Customer` (
@@ -40,8 +40,8 @@ CREATE TABLE `Customer` (
 -- BẢNG DiningTable (statusTable là ENUM)
 CREATE TABLE `DiningTable` (
   `IDtable` INT NOT NULL AUTO_INCREMENT,
-  `seats` int NOT NULL DEFAULT 4,
-  `statusTable` ENUM('Empty','Booked','Using') NOT NULL DEFAULT 'Empty',
+  `seats` int NOT NULL DEFAULT 1,
+  `statusTable` ENUM('Trống','Đã Đặt','Đang Dùng') NOT NULL DEFAULT 'Trống',
   PRIMARY KEY (`IDtable`)
 ) ;
 
@@ -51,7 +51,7 @@ CREATE TABLE `Booking` (
   `IDbooking` INT NOT NULL AUTO_INCREMENT,
   `DateTimeCreateBooking` timestamp default current_timestamp,
   `TimeStarted` TIME,
-  `TimeEnd` TIME AS (addtime(TimeStarted, '02:00:00')) virtual,
+  `TimeEnd` Time,
   `guestCount` INT DEFAULT 1,
   `Note` TEXT,
   `IDtable`  INT NOT NULL ,
