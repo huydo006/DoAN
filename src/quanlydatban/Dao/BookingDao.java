@@ -166,6 +166,57 @@ public class BookingDao {
         }
         return idBooking; // Đảm bảo trả về ID > 0
     }
+    public List<Booking> getConflictingBookings(List<Integer> idTableList, Timestamp newTimeStart, Timestamp newTimeEnd) {
+    List<Booking> list = new ArrayList<>();
+    if (idTableList == null || idTableList.isEmpty()) {
+        return list;
+    }
+
+    // Tạo chuỗi placeholders (?, ?, ...) cho IN clause
+    String placeholders = String.join(",", java.util.Collections.nCopies(idTableList.size(), "?"));
+
+    try {
+        // Lấy tất cả các Booking liên quan đến các bàn này.
+        // Sau đó sẽ lọc kỹ hơn (có tính đến 30p) ở tầng Service.
+        // TRUY VẤN: Lấy các đơn cũ (b) đang sử dụng một trong các bàn được chọn (dt)
+        // và khoảng thời gian của đơn cũ đó CÓ THỂ va chạm với khoảng thời gian mới (newTimeStart, newTimeEnd).
+        // Công thức kiểm tra va chạm cơ bản: (Start1 < End2) AND (End1 > Start2)
+        // Cần phải mở rộng công thức này ở tầng Service để thêm khoảng đệm 30 phút.
+        // Ở đây, ta chỉ cần lấy tất cả các đơn Booking liên quan:
+        String sql = "SELECT DISTINCT b.IDbooking, b.TimeStarted, b.TimeEnd, b.guestCount, b.Note, b.IDemploy, b.IDcus "
+                   + "FROM Booking b "
+                   + "JOIN List l ON b.IDbooking = l.IDbooking "
+                   + "WHERE l.IDtable IN (" + placeholders + ") ";
+
+        Connection conn = ConnectionDatabase.getConnection();
+        PreparedStatement pstm = conn.prepareStatement(sql);
+
+        // Set các IDtable vào placeholders
+        for (int i = 0; i < idTableList.size(); i++) {
+            pstm.setInt(i + 1, idTableList.get(i));
+        }
+
+        ResultSet rs = pstm.executeQuery();
+
+        while (rs.next()) {
+            int idBooking = rs.getInt("IDbooking");
+            Timestamp TimeStart = rs.getTimestamp("TimeStarted");
+            Timestamp TimeEnd = rs.getTimestamp("TimeEnd");
+            int guestCount = rs.getInt("guestCount");
+            String Note = rs.getString("Note");
+            int IdEmploy = rs.getInt("IDemploy");
+            int IDcus = rs.getInt("IDcus");
+
+            list.add(new Booking(idBooking, TimeStart, TimeEnd, guestCount, Note, IdEmploy, IDcus));
+        }
+
+        conn.close();
+        pstm.close();
+    } catch (SQLException ex) {
+        System.getLogger(BookingDao.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+    }
+    return list;
+}
         
     
 }
