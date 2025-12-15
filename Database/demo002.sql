@@ -41,7 +41,7 @@ CREATE TABLE `Customer` (
 CREATE TABLE `DiningTable` (
   `IDtable` INT NOT NULL AUTO_INCREMENT,
   `seats` int NOT NULL DEFAULT 1,
-  `statusTable` ENUM('Trống','Đã Đặt','Đang Dùng') NOT NULL DEFAULT 'Trống',
+  `statusTable` ENUM('Trống','Đã đặt','Đang dùng') NOT NULL DEFAULT 'Trống',
   PRIMARY KEY (`IDtable`)
 ) ;
 
