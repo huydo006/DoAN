@@ -13,6 +13,7 @@ import java.sql.Date;
 import java.util.List;
 import quanlydatban.Model.Booking;
 import java.sql.Timestamp;
+import quanlydatban.Model.BookingDetail;
 
 import java.sql.Timestamp;
 /**
@@ -219,4 +220,73 @@ public class BookingDao {
 }
         
     
+    private BookingDetail mapResultSetToBookingDetail(ResultSet rs) throws SQLException {
+        // Lưu ý: rs.getString("TimeStarted") sẽ lấy dữ liệu Time/Timestamp từ DB
+        return new BookingDetail(
+            rs.getInt("IDbooking"),
+            rs.getTimestamp("TimeStarted"), // <<< LẤY TIMESTAMP
+            rs.getTimestamp("TimeEnd"),    // <<< LẤY TIMESTAMP 
+            rs.getInt("guestCount"),
+            rs.getString("Note"),
+            rs.getInt("IDtable"),    // Lấy IDtable từ bảng List
+            rs.getString("nameCus"),
+            rs.getString("cusPhone")
+        );
+    }
+    
+    // --- PHƯƠNG THỨC 1: Tải tất cả chi tiết đặt bàn (JOIN 3 bảng) ---
+    public List<BookingDetail> getAllBookingDetail() {
+        List<BookingDetail> list = new ArrayList<>();
+        
+        String sql = "SELECT b.IDbooking, b.TimeStarted, b.TimeEnd, b.guestCount, b.Note, "
+               + "       c.nameCus, c.cusPhone, l.IDtable "
+               + "FROM Booking b "
+               + "JOIN Customer c ON b.IDcus = c.IDcus "
+               + "JOIN List l ON b.IDbooking = l.IDbooking "
+               + "ORDER BY b.IDbooking DESC";
+        
+        try (Connection conn = ConnectionDatabase.getConnection();
+             PreparedStatement pstm = conn.prepareStatement(sql);
+             ResultSet rs = pstm.executeQuery()) {
+            
+            while (rs.next()) {
+                list.add(mapResultSetToBookingDetail(rs));
+            }
+        } catch (SQLException ex) {
+            System.err.println("Lỗi khi tải toàn bộ Booking Detail: " + ex.getMessage());
+        }
+        return list;
+    }
+
+    // --- PHƯƠNG THỨC 2: Tìm kiếm Đặt bàn CHỈ THEO TÊN HOẶC SĐT KHÁCH HÀNG ---
+public List<BookingDetail> searchBookingDetail(String keyword) {
+    List<BookingDetail> list = new ArrayList<>();
+    String searchPattern = "%" + keyword + "%";
+    
+    // Sửa đổi SQL: CHỈ BAO GỒM NAME CUS VÀ PHONE
+    String sql = "SELECT b.IDbooking, b.TimeStarted, b.TimeEnd, b.guestCount, b.Note, "
+               + "       c.nameCus, c.cusPhone, l.IDtable "
+               + "FROM Booking b "
+               + "JOIN Customer c ON b.IDcus = c.IDcus "
+               + "JOIN List l ON b.IDbooking = l.IDbooking "
+               + "WHERE c.nameCus LIKE ? OR c.cusPhone LIKE ? "
+               + "ORDER BY b.IDbooking DESC";
+
+    try (Connection conn = ConnectionDatabase.getConnection();
+         PreparedStatement pstm = conn.prepareStatement(sql)) {
+        
+        // Chỉ đặt 2 tham số: Tên và SĐT
+        pstm.setString(1, searchPattern); 
+        pstm.setString(2, searchPattern); 
+        
+        try (ResultSet rs = pstm.executeQuery()) {
+            while (rs.next()) {
+                list.add(mapResultSetToBookingDetail(rs));
+            }
+        }
+    } catch (SQLException ex) {
+         System.err.println("Lỗi khi tìm kiếm Booking Detail (Tên/SĐT): " + ex.getMessage());
+    }
+    return list;
+}
 }

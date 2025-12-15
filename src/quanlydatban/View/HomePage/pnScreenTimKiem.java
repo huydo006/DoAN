@@ -6,19 +6,35 @@ package quanlydatban.View.HomePage;
 import java.awt.Color; // Cần thêm dòng này nếu chưa có
 import java.awt.event.FocusAdapter; // Cần thêm dòng này nếu chưa có
 import java.awt.event.FocusEvent; // Cần thêm dòng này nếu chưa có
+import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
+import quanlydatban.Model.BookingDetail; // Thêm Model Detail
+import quanlydatban.Dao.BookingDao; // Thêm DAO
 /**
  *
  * @author Admin
  */
 public class pnScreenTimKiem extends javax.swing.JPanel {
     private final String PLACEHOLDER_TEXT = "Tìm kiếm theo tên hoặc số điện thoại";
+    
+    private BookingDao bookingDao;
+    private DefaultTableModel tableModel;
     /**
      * Creates new form pnScreenTimKiem
      */
     public pnScreenTimKiem() {
         initComponents();
         addPlaceholderFeature(jTextField2);
+        
+       bookingDao = new BookingDao(); 
+    
+    initComponents();
+    addPlaceholderFeature(jTextField2);
+    
+    // Gọi khởi tạo bảng (chỉ khởi tạo model, không tải dữ liệu)
+    khoiTaoJTable();
     }
 
     /**
@@ -35,8 +51,8 @@ public class pnScreenTimKiem extends javax.swing.JPanel {
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jTextField2 = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -57,7 +73,7 @@ public class pnScreenTimKiem extends javax.swing.JPanel {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(370, Short.MAX_VALUE)
+                .addContainerGap(378, Short.MAX_VALUE)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(350, 350, 350))
         );
@@ -84,8 +100,6 @@ public class pnScreenTimKiem extends javax.swing.JPanel {
             }
         });
 
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/Screenshot 2025-12-15 113641.png"))); // NOI18N
-
         jButton1.setBackground(new java.awt.Color(255, 179, 190));
         jButton1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jButton1.setText("X");
@@ -96,13 +110,22 @@ public class pnScreenTimKiem extends javax.swing.JPanel {
             }
         });
 
+        jButton2.setBackground(new java.awt.Color(153, 255, 255));
+        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/Screenshot 2025-12-15 113641.png"))); // NOI18N
+        jButton2.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 2, new java.awt.Color(255, 255, 255)), javax.swing.BorderFactory.createMatteBorder(2, 2, 0, 0, new java.awt.Color(51, 51, 255))));
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap(43, Short.MAX_VALUE)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 707, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -114,9 +137,9 @@ public class pnScreenTimKiem extends javax.swing.JPanel {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap(35, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField2))
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
+                    .addComponent(jTextField2)
+                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(34, 34, 34))
         );
 
@@ -124,6 +147,7 @@ public class pnScreenTimKiem extends javax.swing.JPanel {
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
 
+        jTable1.setBackground(new java.awt.Color(255, 255, 102));
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null},
@@ -132,7 +156,7 @@ public class pnScreenTimKiem extends javax.swing.JPanel {
                 {null, null, null, null, null, null, null}
             },
             new String [] {
-                "Mã bàn", "Bàn", "Khách hàng", "Điện thoại", "Thời gian dùng", "Số khách", "Ghi chú"
+                "Mã đặt bàn", "Bàn", "Khách hàng", "Điện thoại", "Thời gian dùng", "Số khách", "Ghi chú"
             }
         ));
         jScrollPane1.setViewportView(jTable1);
@@ -141,7 +165,7 @@ public class pnScreenTimKiem extends javax.swing.JPanel {
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 870, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 878, Short.MAX_VALUE)
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -162,14 +186,37 @@ public class pnScreenTimKiem extends javax.swing.JPanel {
     }//GEN-LAST:event_jTextField2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // Gọi phương thức setText() và truyền vào chuỗi rỗng ("")
-        jTextField2.setText("");
-
-    // Tùy chọn: Đặt con trỏ chuột quay lại trường nhập liệu (cho tiện sử dụng)
-        jTextField2.requestFocus();
-        
-        // TODO add your handling code here:
+       // Đặt lại ô tìm kiếm về trạng thái placeholder
+    jTextField2.setText(PLACEHOLDER_TEXT);
+    jTextField2.setForeground(new java.awt.Color(204, 204, 204));
+    jTextField2.requestFocus();
+    
+    // >>> THAY ĐỔI: CHỈ LÀM TRỐNG BẢNG, KHÔNG TẢI LẠI DỮ LIỆU <<<
+    if (tableModel != null) {
+        tableModel.setRowCount(0);
+    }
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        String tuKhoa = jTextField2.getText().trim();
+    
+    if (tuKhoa.isEmpty() || tuKhoa.equals(PLACEHOLDER_TEXT)) {
+        // Nếu trống, hiển thị lại toàn bộ dữ liệu
+        taiDuLieuLenBang(bookingDao.getAllBookingDetail()); 
+        return;
+    }
+    
+    // Gọi DAO để tìm kiếm
+    List<BookingDetail> ketQua = bookingDao.searchBookingDetail(tuKhoa);
+    
+    // Đổ dữ liệu kết quả tìm kiếm vào JTable
+    taiDuLieuLenBang(ketQua);
+    
+    if (ketQua.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Không tìm thấy đặt bàn nào khớp với từ khóa: " + tuKhoa, "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+    }
+// TODO add your handling code here:
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     
     // >>> Vị trí DÁN CODE 3: Thêm phương thức xử lý FocusListener <<<
@@ -197,10 +244,38 @@ public class pnScreenTimKiem extends javax.swing.JPanel {
         });
     }
 
+    // --- PHƯƠNG THỨC KHỞI TẠO BẢNG VÀ TẢI DỮ LIỆU BAN ĐẦU ---
+private void khoiTaoJTable() {
+    tableModel = (DefaultTableModel) jTable1.getModel();
+    
+    // XÓA DÒNG NÀY: taiDuLieuLenBang(bookingDao.getAllBookingDetail()); 
+    
+    // Nếu bạn muốn bảng trống trơn khi khởi động:
+    tableModel.setRowCount(0);
+}
+
+// --- PHƯƠNG THỨC ĐỔ DỮ LIỆU VÀO BẢNG ---
+private void taiDuLieuLenBang(List<BookingDetail> listBookingDetail) {
+    tableModel.setRowCount(0); 
+    if (listBookingDetail != null) {
+        for (BookingDetail detail : listBookingDetail) {
+            // ...
+            tableModel.addRow(new Object[]{
+                detail.getIdBooking(),
+                detail.getIdTable(),     
+                detail.getNameCus(),     
+                detail.getCusPhone(),    
+                detail.getDurationString(), // <<< THAY THẾ BẰNG DURATION
+                detail.getGuestCount(),  
+                detail.getNote()         
+            });
+        }
+    }
+}
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

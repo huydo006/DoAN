@@ -45,8 +45,15 @@ public class pnScreenDatBanMoi extends javax.swing.JPanel implements TableUpdate
         
         setCurrentEmp();
         initComponents();
-        
-        ViewTable();
+      jScrollPane1.setPreferredSize(new java.awt.Dimension(800, 300));
+    jScrollPane1.setMinimumSize(new java.awt.Dimension(800, 300));
+
+    jScrollPane1.setVerticalScrollBarPolicy(
+        javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS
+    );
+    
+    // 6. Tải dữ liệu lần đầu tiên (vì bạn đã xóa nó khỏi Constructor)
+    ViewTable();
     }
 //    private void setTxtChonBan(){
 //        int  row = this.tbTableList.getSelectedRow();
@@ -61,6 +68,9 @@ public class pnScreenDatBanMoi extends javax.swing.JPanel implements TableUpdate
         for(Table x: list.getTbList()){
             model.addRow(new Object[] {x.getIdTable(),x.getSeats()});
         }
+        for (int i = 1; i <= 30; i++) {
+    model.addRow(new Object[]{i, i * 2});
+}
     }
 
     private void resetForm(){
@@ -154,6 +164,7 @@ public class pnScreenDatBanMoi extends javax.swing.JPanel implements TableUpdate
         txtTimeStarted = new javax.swing.JSpinner(new javax.swing.SpinnerDateModel());
         txtTimeEnd = new javax.swing.JSpinner(new javax.swing.SpinnerDateModel());
         pnBanTrong = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tbTableList = new javax.swing.JTable();
 
@@ -175,7 +186,7 @@ public class pnScreenDatBanMoi extends javax.swing.JPanel implements TableUpdate
             .addGroup(titleTDDBMLayout.createSequentialGroup()
                 .addGap(14, 14, 14)
                 .addComponent(jLabel8)
-                .addContainerGap(675, Short.MAX_VALUE))
+                .addContainerGap(673, Short.MAX_VALUE))
         );
         titleTDDBMLayout.setVerticalGroup(
             titleTDDBMLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -241,26 +252,30 @@ public class pnScreenDatBanMoi extends javax.swing.JPanel implements TableUpdate
         pnThongTinKHLayout.setHorizontalGroup(
             pnThongTinKHLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnThongTinKHLayout.createSequentialGroup()
-                .addGroup(pnThongTinKHLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGap(20, 20, 20)
+                .addGroup(pnThongTinKHLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnThongTinKHLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel9))
                     .addGroup(pnThongTinKHLayout.createSequentialGroup()
-                        .addGap(20, 20, 20)
+                        .addGap(24, 24, 24)
                         .addGroup(pnThongTinKHLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(pnThongTinKHLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel9))
-                            .addGroup(pnThongTinKHLayout.createSequentialGroup()
-                                .addGap(24, 24, 24)
-                                .addGroup(pnThongTinKHLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtTenKH, javax.swing.GroupLayout.PREFERRED_SIZE, 338, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel14)
-                                    .addComponent(txtGhiChu, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel17)
-                                    .addComponent(txtTimeStarted, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtTimeEnd, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(txtTenKH, javax.swing.GroupLayout.PREFERRED_SIZE, 338, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel14)
+                            .addComponent(txtGhiChu, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel17)
+                            .addComponent(txtTimeStarted, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtTimeEnd, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGroup(pnThongTinKHLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnThongTinKHLayout.createSequentialGroup()
+                        .addGap(23, 23, 23)
+                        .addComponent(btnChonBan)
+                        .addGap(0, 387, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnThongTinKHLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(pnThongTinKHLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(pnThongTinKHLayout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnThongTinKHLayout.createSequentialGroup()
                                 .addGroup(pnThongTinKHLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(txtSDT, javax.swing.GroupLayout.DEFAULT_SIZE, 321, Short.MAX_VALUE)
                                     .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -268,17 +283,12 @@ public class pnScreenDatBanMoi extends javax.swing.JPanel implements TableUpdate
                                     .addComponent(txtSoKhach, javax.swing.GroupLayout.DEFAULT_SIZE, 321, Short.MAX_VALUE)
                                     .addComponent(jLabel12)
                                     .addComponent(txtChonBan))
-                                .addGap(35, 35, 35))
-                            .addGroup(pnThongTinKHLayout.createSequentialGroup()
-                                .addGap(23, 23, 23)
-                                .addComponent(btnChonBan)
-                                .addGap(0, 236, Short.MAX_VALUE))))
-                    .addGroup(pnThongTinKHLayout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnDeleteAll)))
-                .addGap(29, 29, 29)
-                .addComponent(btnConfirm)
-                .addGap(49, 49, 49))
+                                .addGap(187, 187, 187))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnThongTinKHLayout.createSequentialGroup()
+                                .addComponent(btnDeleteAll)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnConfirm)
+                                .addGap(75, 75, 75))))))
         );
         pnThongTinKHLayout.setVerticalGroup(
             pnThongTinKHLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -313,7 +323,7 @@ public class pnScreenDatBanMoi extends javax.swing.JPanel implements TableUpdate
                     .addGroup(pnThongTinKHLayout.createSequentialGroup()
                         .addGap(13, 13, 13)
                         .addComponent(jLabel16)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
                         .addGroup(pnThongTinKHLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnDeleteAll)
                             .addComponent(btnConfirm))
@@ -323,7 +333,7 @@ public class pnScreenDatBanMoi extends javax.swing.JPanel implements TableUpdate
                         .addComponent(btnChonBan)
                         .addGap(12, 12, 12)
                         .addComponent(txtGhiChu, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(18, Short.MAX_VALUE))))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
         javax.swing.JSpinner.DateEditor timeStartedEditor = new javax.swing.JSpinner.DateEditor(txtTimeStarted, "HH:mm");
@@ -332,6 +342,13 @@ public class pnScreenDatBanMoi extends javax.swing.JPanel implements TableUpdate
         txtTimeEnd.setEditor(timeEndEditor);
 
         mainTaoDon.add(pnThongTinKH, java.awt.BorderLayout.PAGE_START);
+
+        jPanel1.setLayout(new java.awt.BorderLayout());
+
+        jScrollPane1.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        jScrollPane1.setMaximumSize(new java.awt.Dimension(800, 300));
+        jScrollPane1.setMinimumSize(new java.awt.Dimension(800, 300));
+        jScrollPane1.setPreferredSize(new java.awt.Dimension(800, 300));
 
         tbTableList.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -368,16 +385,23 @@ public class pnScreenDatBanMoi extends javax.swing.JPanel implements TableUpdate
         pnBanTrongLayout.setHorizontalGroup(
             pnBanTrongLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnBanTrongLayout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 804, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(28, Short.MAX_VALUE))
+                .addGap(27, 27, 27)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(41, 41, 41)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         pnBanTrongLayout.setVerticalGroup(
             pnBanTrongLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnBanTrongLayout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 472, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(59, Short.MAX_VALUE))
+                .addGroup(pnBanTrongLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnBanTrongLayout.createSequentialGroup()
+                        .addGap(235, 235, 235)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(pnBanTrongLayout.createSequentialGroup()
+                        .addGap(16, 16, 16)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(255, Short.MAX_VALUE))
         );
 
         mainTaoDon.add(pnBanTrong, java.awt.BorderLayout.CENTER);
@@ -388,20 +412,16 @@ public class pnScreenDatBanMoi extends javax.swing.JPanel implements TableUpdate
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1235, Short.MAX_VALUE)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(screenDatBanMoi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(screenDatBanMoi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1100, Short.MAX_VALUE)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                    .addGap(0, 159, Short.MAX_VALUE)
-                    .addComponent(screenDatBanMoi, javax.swing.GroupLayout.PREFERRED_SIZE, 941, javax.swing.GroupLayout.PREFERRED_SIZE)))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 159, Short.MAX_VALUE)
+                .addComponent(screenDatBanMoi, javax.swing.GroupLayout.PREFERRED_SIZE, 941, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -567,6 +587,7 @@ public class pnScreenDatBanMoi extends javax.swing.JPanel implements TableUpdate
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPanel mainTaoDon;
     private javax.swing.JPanel pnBanTrong;

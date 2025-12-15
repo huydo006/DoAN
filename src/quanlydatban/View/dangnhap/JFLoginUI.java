@@ -38,6 +38,7 @@ public class JFLoginUI extends javax.swing.JFrame {
     public JFLoginUI() {
         initComponents();
         applyRoundedBorder();
+        this.setLocationRelativeTo(null);
     }
     private void applyRoundedBorder() {
     int cornerRadius = 15; // Ví dụ: Bán kính 15 pixels
