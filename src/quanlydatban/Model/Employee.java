@@ -29,6 +29,16 @@ public class Employee {
         this.Role = Role;
     }
 
+    public Employee(String name, String DoB, String Gender, String Phone, String Address, int Salary, String Role) {
+        this.name = name;
+        this.DoB = DoB;
+        this.Gender = Gender;
+        this.Phone = Phone;
+        this.Address = Address;
+        this.Salary = Salary;
+        this.Role = Role;
+    }
+    
     public int getIdEmploy() {
         return IdEmploy;
     }

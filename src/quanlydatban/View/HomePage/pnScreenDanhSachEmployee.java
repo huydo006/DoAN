@@ -13,6 +13,7 @@ import quanlydatban.View.dangnhap.RoundedBorder;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import quanlydatban.Service.EmployeeService;
 
 /**
  *
@@ -21,10 +22,12 @@ import java.sql.SQLException;
 public class pnScreenDanhSachEmployee extends javax.swing.JPanel {
     // ... (bên trong public class pnScreenDanhSachEmployee extends javax.swing.JPanel { ) ...
     private RoundedBorder roundedBorder;
+    EmployeeService ems = new EmployeeService();
     public pnScreenDanhSachEmployee() {
         initComponents();
         loadDataToTable();
         applyRoundedBorder();
+        
     
     }
     private void applyRoundedBorder() {
@@ -46,15 +49,13 @@ public class pnScreenDanhSachEmployee extends javax.swing.JPanel {
         new String[]{"ID", "Họ và Tên", "Ngày sinh", "Giới Tính", "Số điện thoại", "Địa Chỉ", "Lương", "Chức Vụ"},
         0
     );
-
-    EmployeeDao dao = new EmployeeDao();
     
     try {
         // 2a. THAY ĐỔI: GỌI phương thức getEmployee() để TẢI DỮ LIỆU vào biến list nội bộ của DAO
-        dao.getEmployee(); 
+//        ems.getListEMP();
         
         // 2b. THAY ĐỔI: Lấy danh sách đã được tải ra bằng getList()
-        List<Employee> employeeList = dao.getList();
+        List<Employee> employeeList = ems.getListEMP();
         
         // 3. Duyệt qua danh sách và thêm từng dòng vào Model
         for (Employee emp : employeeList) {
@@ -226,7 +227,7 @@ public class pnScreenDanhSachEmployee extends javax.swing.JPanel {
         EmployeeDao dao = new EmployeeDao();
         try {
             // 3. Thực hiện xóa (Cần phương thức deleteEmployee(int id) trong EmployeeDao)
-            boolean success = dao.deleteEmployee(employeeId); 
+            boolean success = ems.RemoveEmp(employeeId); 
             
             if (success) {
                 JOptionPane.showMessageDialog(this, "Xóa nhân viên thành công!", "Thành công", JOptionPane.INFORMATION_MESSAGE);
@@ -234,8 +235,6 @@ public class pnScreenDanhSachEmployee extends javax.swing.JPanel {
             } else {
                 JOptionPane.showMessageDialog(this, "Không tìm thấy nhân viên hoặc thao tác xóa thất bại.", "Lỗi", JOptionPane.ERROR_MESSAGE);
             }
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Lỗi Database khi xóa: " + e.getMessage(), "Lỗi SQL", JOptionPane.ERROR_MESSAGE);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Lỗi không xác định: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
         }

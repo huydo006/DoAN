@@ -5,6 +5,7 @@
 package quanlydatban.Service;
 
 import java.sql.SQLException;
+import java.util.List;
 import quanlydatban.Dao.EmployeeDao;
 import quanlydatban.Model.Employee;
 
@@ -16,8 +17,19 @@ import quanlydatban.Model.Employee;
 public class EmployeeService {
     EmployeeDao empDao = new EmployeeDao();
     Employee emp=null;
+    List<Employee> list;
     public Employee getCurrentEmp(String user) throws SQLException{
         emp= empDao.getEmpbyUsername(user);
         return emp;
     }
+    public List<Employee> getListEMP(){
+        return empDao.getListEmployee();
+    }
+    public boolean RemoveEmp(int id){
+        return empDao.DeleteEmp(id);
+    }
+    public boolean AddEmp(Employee emp){
+        return empDao.addEmployee(emp);
+    }
+    
 }

@@ -40,5 +40,8 @@ public class AccountService {
         acc= accDao.getAccountByUser(user);
         return acc;
     }
+    public Account getActiveACc(){
+        return acc= accDao.getActiveAccount();
+    }
     
 }

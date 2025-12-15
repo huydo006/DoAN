@@ -20,24 +20,30 @@ import java.sql.ResultSet;
 public class EmployeeDao {
     List<Employee> list = new ArrayList<>();
    
-    public void getEmployee() throws SQLException{
-        String sql = "select IDemploy , Name, DoB , Gender , Phone, Address, Salary, role from employee";
-        Connection conn = ConnectionDatabase.getConnection();
-        
-        Statement stm= conn.createStatement();
-        ResultSet rs= stm.executeQuery(sql);
-        
-        while(rs.next()){
-            int IdEmploy = rs.getInt("IDemploy");
-            String name = rs.getString("Name");
-            String DoB = rs.getString("DoB");
-            String Gender = rs.getString("Gender");
-            String Phone = rs.getString("Phone");
-            String Address = rs.getString("Address");
-            int Salary = rs.getInt("Salary");
-            String Role= rs.getString("role");
-            list.add(new Employee(IdEmploy,name, DoB, Gender, Phone,  Address, Salary, Role));
+    public List<Employee> getListEmployee(){
+        try {
+            String sql = "select IDemploy , Name, DoB , Gender , Phone, Address, Salary, role from employee";
+            Connection conn = ConnectionDatabase.getConnection();
+            
+            Statement stm= conn.createStatement();
+            ResultSet rs= stm.executeQuery(sql);
+            
+            while(rs.next()){
+                int IdEmploy = rs.getInt("IDemploy");
+                String name = rs.getString("Name");
+                String DoB = rs.getString("DoB");
+                String Gender = rs.getString("Gender");
+                String Phone = rs.getString("Phone");
+                String Address = rs.getString("Address");
+                int Salary = rs.getInt("Salary");
+                String Role= rs.getString("role");
+                list.add(new Employee(IdEmploy,name, DoB, Gender, Phone,  Address, Salary, Role));
+            }
+            return list;
+        } catch (SQLException ex) {
+            System.getLogger(EmployeeDao.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
         }
+        return null;
     }
     
    
@@ -93,6 +99,46 @@ public class EmployeeDao {
         }
         
         return emp;
+    }
+    public boolean addEmployee(Employee emp)  {
+        try {
+            String sql = "INSERT INTO employee ( Name, DoB, Gender, Phone, Address, Salary, Role) VALUES ( ?, ?, ?, ?, ?, ?, ?)";
+            
+            Connection conn = ConnectionDatabase.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            
+            
+            
+            ps.setString(1, emp.getName());
+            ps.setString(2, emp.getDoB());
+            ps.setString(3, emp.getGender());
+            ps.setString(4, emp.getPhone());
+            ps.setString(5, emp.getAddress());
+            ps.setInt(6, emp.getSalary());
+            ps.setString(7, emp.getRole());
+            
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException ex) {
+            System.getLogger(EmployeeDao.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        }
+        return false;
+
+    }
+    public boolean DeleteEmp(int IdEmp){
+        try {
+            String sql= "DELETE FROM Employee " +
+                    "WHERE IDemploy = ?;";
+            Connection conn = ConnectionDatabase.getConnection();
+            PreparedStatement pstm = conn.prepareStatement(sql);
+            pstm.executeUpdate();
+            
+            return true;
+        } catch (SQLException ex) {
+            System.getLogger(EmployeeDao.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        }
+        return false;
+        
     }
     
 }

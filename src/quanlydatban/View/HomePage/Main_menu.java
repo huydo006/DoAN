@@ -24,6 +24,7 @@ import java.util.List;
 import quanlydatban.Dao.AccountDao;
 import quanlydatban.Dao.TableDao;
 import quanlydatban.Model.Account;
+import quanlydatban.Service.AccountService;
 
 import quanlydatban.View.dangnhap.JFLoginUI;
 
@@ -49,15 +50,27 @@ public class Main_menu extends javax.swing.JFrame {
         
         setCurrentAcc();
         initComponents();
-//        if (this.AccCurrent != null) { 
-//            this.txtWelcome.setText(""+"Chào Mừng " + cur.getUsername()); 
-//        }
-        
+        if (this.AccCurrent != null) {
+            this.txtWelcome.setText("Chào Mừng Quản Lý: " + AccCurrent.getUsername());
+        }
+        else {
+            // Nếu là Employee hoặc không lấy được role, nút sẽ bị ẩn/vô hiệu hóa
+            // Giả định: Employee không được xem danh sách nhân viên khác
+            jButton4.setVisible(false); // Ẩn nút đi
+        jButton4.setEnabled(false); // Hoặc chỉ vô hiệu hóa
+
+        // Cập nhật thông báo chào mừng
+        if (this.AccCurrent != null) {
+            this.txtWelcome.setText("Chào Mừng Nhân Viên: " + AccCurrent.getUsername());
+        }
+    }
+
 //        this.txtWelcome.setText(this.txtWelcome.getString()+ "something");
         // 1. Khởi tạo đối tượng từ File Panel
         pnScreenQuanLyBanAn banAnPanel = new pnScreenQuanLyBanAn();
         pnScreenDatBanMoi datBanPanel = new pnScreenDatBanMoi();
         pnScreenDanhSach danhSachPanel =new pnScreenDanhSach();
+        pnScreenDanhSachEmployee danhsachEm = new pnScreenDanhSachEmployee(); 
         
         banAnPanel.setDatBanMoiListener(datBanPanel);
         datBanPanel.setQuanLyBanListener(banAnPanel);
@@ -69,19 +82,14 @@ public class Main_menu extends javax.swing.JFrame {
         pnMain.add(banAnPanel, "pnScreenQuanLyBanAn");
         pnMain.add(datBanPanel, "pnScreenDatBanMoi");
         pnMain.add(danhSachPanel, "pnScreenDanhSach");
+        pnMain.add(danhsachEm , "pnScreenDanhSachEmployee");   
            
 //          ^ Đối tượng Panel      ^ Tên Card
         
     }
     private void setCurrentAcc(){
-       
-        for(Account x: AccList){
-           
-            if(x.isActive==true){
-                AccCurrent= x;
-                break;
-            }
-        }
+        AccountService acs= new AccountService();
+        this.AccCurrent=acs.getActiveACc();
         
     }
 
@@ -438,7 +446,6 @@ public class Main_menu extends javax.swing.JFrame {
         pnMain.setLayout(new java.awt.CardLayout());
 
         txtWelcome.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        txtWelcome.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         txtWelcome.setText("Chào Mừng");
         txtWelcome.setOpaque(true);
 
@@ -447,16 +454,16 @@ public class Main_menu extends javax.swing.JFrame {
         jPanel7Layout.setHorizontalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
-                .addGap(182, 182, 182)
-                .addComponent(txtWelcome, javax.swing.GroupLayout.PREFERRED_SIZE, 279, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(409, Short.MAX_VALUE))
+                .addGap(135, 135, 135)
+                .addComponent(txtWelcome, javax.swing.GroupLayout.PREFERRED_SIZE, 385, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(350, Short.MAX_VALUE))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
-                .addGap(45, 45, 45)
+                .addGap(29, 29, 29)
                 .addComponent(txtWelcome)
-                .addContainerGap(1023, Short.MAX_VALUE))
+                .addContainerGap(1039, Short.MAX_VALUE))
         );
 
         pnMain.add(jPanel7, "card2");

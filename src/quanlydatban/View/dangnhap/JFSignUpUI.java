@@ -17,20 +17,8 @@ public class JFSignUpUI extends javax.swing.JFrame {
      */
     public JFSignUpUI() {
         initComponents();
-        applyRoundedBorder();
+        
     }
-        private void applyRoundedBorder() {
-    int cornerRadius = 15; // Ví dụ: Bán kính 15 pixels
-
-    // Áp dụng cho ô Tài khoản
-    jTextField1.setBorder(new RoundedBorder(cornerRadius));
-
-    // Áp dụng cho ô Mật khẩu
-    jPasswordField1.setBorder(new RoundedBorder(cornerRadius));
-    jPasswordField2.setBorder(new RoundedBorder(cornerRadius));
-    
-}
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -54,11 +42,8 @@ public class JFSignUpUI extends javax.swing.JFrame {
         jPasswordField1 = new javax.swing.JPasswordField();
         jPasswordField2 = new javax.swing.JPasswordField();
         jButton1 = new javax.swing.JButton();
-        jLabel5 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(800, 500));
 
         jPanel1.setBackground(new java.awt.Color(204, 204, 204));
         jPanel1.setPreferredSize(new java.awt.Dimension(800, 500));
@@ -67,7 +52,7 @@ public class JFSignUpUI extends javax.swing.JFrame {
         right.setBackground(new java.awt.Color(0, 102, 102));
         right.setPreferredSize(new java.awt.Dimension(400, 500));
 
-        jLabel6.setIcon(new javax.swing.ImageIcon("D:\\github\\Git\\DoAnJaVa\\src\\icon\\LOGO_DHXD.png")); // NOI18N
+        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/LOGO_DHXD.png"))); // NOI18N
         jLabel6.setText("jLabel6");
 
         jLabel7.setFont(new java.awt.Font("Snap ITC", 1, 30)); // NOI18N
@@ -133,16 +118,6 @@ public class JFSignUpUI extends javax.swing.JFrame {
         jButton1.setForeground(new java.awt.Color(255, 255, 255));
         jButton1.setText("Đăng Kí");
 
-        jLabel5.setText("tôi đã có tài khoản");
-
-        jButton2.setForeground(new java.awt.Color(255, 51, 51));
-        jButton2.setText("Đăng Nhập");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout leftLayout = new javax.swing.GroupLayout(left);
         left.setLayout(leftLayout);
         leftLayout.setHorizontalGroup(
@@ -162,12 +137,7 @@ public class JFSignUpUI extends javax.swing.JFrame {
                                 .addComponent(jLabel4)
                                 .addComponent(jPasswordField2)
                                 .addComponent(jPasswordField1, javax.swing.GroupLayout.DEFAULT_SIZE, 318, Short.MAX_VALUE)
-                                .addComponent(jLabel2))))
-                    .addGroup(leftLayout.createSequentialGroup()
-                        .addGap(32, 32, 32)
-                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton2)))
+                                .addComponent(jLabel2)))))
                 .addContainerGap(44, Short.MAX_VALUE))
         );
         leftLayout.setVerticalGroup(
@@ -189,11 +159,7 @@ public class JFSignUpUI extends javax.swing.JFrame {
                 .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(29, 29, 29)
-                .addGroup(leftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(52, Short.MAX_VALUE))
+                .addContainerGap(98, Short.MAX_VALUE))
         );
 
         jPanel1.add(left);
@@ -216,17 +182,6 @@ public class JFSignUpUI extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-          // 1. Khởi tạo form Đăng Kí
-    JFLoginUI loginFrame = new JFLoginUI(); 
-    
-    // 2. Hiển thị form Đăng Kí
-    loginFrame.setVisible(true);
-    
-    // 3. Đóng form Đăng Nhập hiện tại
-    this.dispose(); 
-    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -255,12 +210,10 @@ public class JFSignUpUI extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;

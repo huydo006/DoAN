@@ -97,4 +97,27 @@ public class AccountDao {
         }
         
     }
+    public Account getActiveAccount(){
+        try {
+            Account temp;
+            String sql ="select username , password ,isActive from account ";
+            Connection conn = ConnectionDatabase.getConnection();
+            PreparedStatement psm= conn.prepareStatement(sql);
+            
+            ResultSet rs = psm.executeQuery();
+            if(rs.next()){
+                String user = rs.getString("username");
+                String pass = rs.getString("password");
+                Boolean isActive = rs.getBoolean("isActive");
+                
+                temp= new Account( isActive ,user, pass );
+                return temp;
+            }
+            
+        } catch (SQLException ex) {
+            System.getLogger(AccountDao.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        }
+        return null;
+        
+    }
 }
