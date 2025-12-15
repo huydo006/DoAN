@@ -73,7 +73,7 @@ public class pnScreenQuanLyBanAn extends JPanel implements  TableUpdateListener 
             if(status.equalsIgnoreCase("Trống")){
                 count1++;
             }
-            else if(status.equalsIgnoreCase("Đã Đặt")){
+            else if(status.equalsIgnoreCase("Đã đặt")){
                 count2++;
             }
             else{ 
@@ -121,42 +121,46 @@ public class pnScreenQuanLyBanAn extends JPanel implements  TableUpdateListener 
 
         setLayout(new java.awt.BorderLayout());
 
-        titleQLB.setBackground(new java.awt.Color(255, 204, 204));
-        titleQLB.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        titleQLB.setBackground(new java.awt.Color(247, 250, 252));
+        titleQLB.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(224, 232, 240)));
         titleQLB.setPreferredSize(new java.awt.Dimension(870, 70));
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel3.setText("Quan Ly Ban An");
+        jLabel3.setText("Quản lý bàn ăn");
 
         javax.swing.GroupLayout titleQLBLayout = new javax.swing.GroupLayout(titleQLB);
         titleQLB.setLayout(titleQLBLayout);
         titleQLBLayout.setHorizontalGroup(
             titleQLBLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(titleQLBLayout.createSequentialGroup()
-                .addGap(29, 29, 29)
+                .addGap(355, 355, 355)
                 .addComponent(jLabel3)
-                .addContainerGap(697, Short.MAX_VALUE))
+                .addContainerGap(375, Short.MAX_VALUE))
         );
         titleQLBLayout.setVerticalGroup(
             titleQLBLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, titleQLBLayout.createSequentialGroup()
-                .addContainerGap(23, Short.MAX_VALUE)
+            .addGroup(titleQLBLayout.createSequentialGroup()
+                .addGap(20, 20, 20)
                 .addComponent(jLabel3)
-                .addGap(20, 20, 20))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
 
         add(titleQLB, java.awt.BorderLayout.PAGE_START);
 
         main.setLayout(new java.awt.BorderLayout());
 
-        thongkebanan.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        thongkebanan.setBackground(new java.awt.Color(255, 255, 255));
+        thongkebanan.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(224, 232, 240)));
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jPanel1.setBackground(new java.awt.Color(237, 233, 216));
+        jPanel1.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 2, new java.awt.Color(128, 128, 128)), javax.swing.BorderFactory.createMatteBorder(2, 2, 0, 0, new java.awt.Color(255, 255, 255))));
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel4.setText("Ban Trong");
+        jLabel4.setText("Bàn trống");
 
+        txtCountEmpty.setBackground(new java.awt.Color(237, 233, 216));
         txtCountEmpty.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        txtCountEmpty.setForeground(new java.awt.Color(0, 141, 46));
         txtCountEmpty.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtCountEmpty.setBorder(null);
         txtCountEmpty.addActionListener(new java.awt.event.ActionListener() {
@@ -189,13 +193,16 @@ public class pnScreenQuanLyBanAn extends JPanel implements  TableUpdateListener 
                 .addGap(12, 12, 12))
         );
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jPanel2.setBackground(new java.awt.Color(237, 233, 216));
+        jPanel2.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 2, new java.awt.Color(128, 128, 128)), javax.swing.BorderFactory.createMatteBorder(2, 2, 0, 0, new java.awt.Color(255, 255, 255))));
         jPanel2.setPreferredSize(new java.awt.Dimension(233, 80));
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel5.setText("Da Dat");
+        jLabel5.setText("Đã đặt");
 
+        txtCountBooked.setBackground(new java.awt.Color(237, 233, 216));
         txtCountBooked.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        txtCountBooked.setForeground(new java.awt.Color(255, 133, 0));
         txtCountBooked.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtCountBooked.setBorder(null);
         txtCountBooked.addActionListener(new java.awt.event.ActionListener() {
@@ -216,7 +223,7 @@ public class pnScreenQuanLyBanAn extends JPanel implements  TableUpdateListener 
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(71, 71, 71)
                         .addComponent(txtCountBooked, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(81, Short.MAX_VALUE))
+                .addContainerGap(79, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -224,16 +231,19 @@ public class pnScreenQuanLyBanAn extends JPanel implements  TableUpdateListener 
                 .addContainerGap()
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtCountBooked, javax.swing.GroupLayout.DEFAULT_SIZE, 32, Short.MAX_VALUE)
+                .addComponent(txtCountBooked, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
                 .addGap(14, 14, 14))
         );
 
-        jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jPanel3.setBackground(new java.awt.Color(237, 233, 216));
+        jPanel3.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 2, new java.awt.Color(128, 128, 128)), javax.swing.BorderFactory.createMatteBorder(2, 2, 0, 0, new java.awt.Color(255, 255, 255))));
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel6.setText("Dang Dung");
+        jLabel6.setText("Đang dùng");
 
+        txtCountUsing.setBackground(new java.awt.Color(237, 233, 216));
         txtCountUsing.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        txtCountUsing.setForeground(new java.awt.Color(242, 0, 39));
         txtCountUsing.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtCountUsing.setBorder(null);
         txtCountUsing.addActionListener(new java.awt.event.ActionListener() {
@@ -263,7 +273,7 @@ public class pnScreenQuanLyBanAn extends JPanel implements  TableUpdateListener 
                 .addGap(14, 14, 14))
         );
 
-        jLabel7.setText("Thong ke ban an");
+        jLabel7.setText("Thống kê bàn ăn");
 
         javax.swing.GroupLayout thongkebananLayout = new javax.swing.GroupLayout(thongkebanan);
         thongkebanan.setLayout(thongkebananLayout);
@@ -272,9 +282,9 @@ public class pnScreenQuanLyBanAn extends JPanel implements  TableUpdateListener 
             .addGroup(thongkebananLayout.createSequentialGroup()
                 .addGap(33, 33, 33)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(27, 27, 27)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(38, 38, 38))
             .addGroup(thongkebananLayout.createSequentialGroup()
@@ -299,6 +309,8 @@ public class pnScreenQuanLyBanAn extends JPanel implements  TableUpdateListener 
 
         sodobanan.setLayout(new java.awt.BorderLayout());
 
+        tableListPanel.setBackground(new java.awt.Color(255, 255, 255));
+        tableListPanel.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(128, 128, 128)));
         jScrollPane1.setViewportView(tableListPanel);
 
         sodobanan.add(jScrollPane1, java.awt.BorderLayout.CENTER);

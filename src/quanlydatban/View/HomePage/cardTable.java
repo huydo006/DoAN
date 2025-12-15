@@ -7,7 +7,10 @@ package quanlydatban.View.HomePage;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import quanlydatban.Dao.TableDao;
-
+import javax.swing.BorderFactory;
+import javax.swing.border.Border;
+import java.awt.Color;
+import java.awt.Font;
 /**
  *
  * @author HELLO
@@ -38,11 +41,47 @@ public class cardTable extends javax.swing.JPanel {
     }
 
     public void setTxtSeats(String seat){
-        this.txtSeats.setText(this.txtSeats.getText()+seat);
+        this.txtSeats.setText(this.txtSeats.getText()+ " " +seat);
     }
 
     public void setTxtTrangThai(String txtTrangThai) {
         this.txtTrangThai.setText(txtTrangThai);
+        Color bgColor;      // Màu nền
+        Color borderColor;  // Màu đường viền
+    
+    // So sánh chuỗi (dùng trim() để loại bỏ khoảng trắng thừa, dùng equalsIgnoreCase để không phân biệt chữ hoa/thường)
+        String status = txtTrangThai;
+    
+        switch (status) {
+            case "Trống":
+                bgColor = new Color(102, 240, 150);
+                borderColor = new Color(3, 144, 49);
+                break;
+            case "Đã đặt":
+                bgColor = new Color(254, 212, 0);
+                borderColor = new Color(251, 131, 0);
+                break;
+            default:  
+                bgColor = new Color(255, 179, 190);
+                borderColor = new Color(245, 17, 53);
+                break;
+        }
+        
+    // --- Áp dụng Background và Border ---
+    
+    // 1. Áp dụng Màu nền
+    this.txtTrangThai.setBackground(bgColor);
+    this.txtTrangThai.setOpaque(true); // Quan trọng: Đảm bảo nền được hiển thị
+    
+    // 2. Tạo MatteBorder
+    // Tạo MatteBorder với padding (top, left, bottom, right) và màu viền
+    int padding = 2; 
+    Border matteBorder = BorderFactory.createMatteBorder(
+            padding, padding, padding, padding, borderColor);
+    this.txtTrangThai.setBorder(BorderFactory.createCompoundBorder(
+            matteBorder, 
+            BorderFactory.createEmptyBorder(2, 5, 2, 5) // Padding nhỏ bên trong text
+    ));
     }
     
     private void handleUpdate(String status) {
@@ -81,13 +120,15 @@ public class cardTable extends javax.swing.JPanel {
         modeBooked = new javax.swing.JButton();
         modeUsing = new javax.swing.JButton();
 
-        setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 1, 1), javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0))));
+        setBackground(new java.awt.Color(255, 255, 255));
+        setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 1, 1), javax.swing.BorderFactory.createLineBorder(new java.awt.Color(242, 242, 242))));
         setMaximumSize(new java.awt.Dimension(200, 280));
         setMinimumSize(new java.awt.Dimension(200, 280));
         setPreferredSize(new java.awt.Dimension(200, 280));
         setLayout(new java.awt.BorderLayout());
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 5, 10));
+        jPanel1.setBackground(new java.awt.Color(237, 233, 216));
+        jPanel1.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 0, 2, new java.awt.Color(128, 128, 128)), javax.swing.BorderFactory.createMatteBorder(2, 2, 0, 0, new java.awt.Color(255, 255, 255))));
         jPanel1.setLayout(new javax.swing.BoxLayout(jPanel1, javax.swing.BoxLayout.Y_AXIS));
 
         txtIdTable.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -97,7 +138,7 @@ public class cardTable extends javax.swing.JPanel {
         jPanel1.add(txtIdTable);
 
         txtSeats.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        txtSeats.setText("So cho : ");
+        txtSeats.setText("Số chỗ :");
         txtSeats.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 1, 5, 1));
         jPanel1.add(txtSeats);
 
@@ -107,19 +148,20 @@ public class cardTable extends javax.swing.JPanel {
 
         add(jPanel1, java.awt.BorderLayout.PAGE_START);
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 5, 10));
+        jPanel2.setBackground(new java.awt.Color(237, 233, 216));
+        jPanel2.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 2, new java.awt.Color(128, 128, 128)), javax.swing.BorderFactory.createMatteBorder(0, 2, 0, 0, new java.awt.Color(255, 255, 255))));
         jPanel2.setLayout(new java.awt.GridBagLayout());
 
         displayTrangthai.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         displayTrangthai.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        displayTrangthai.setText("Thay doi trang thai : ");
+        displayTrangthai.setText("Thay đổi trạng thái ");
         displayTrangthai.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 0, 0));
         jPanel2.add(displayTrangthai, new java.awt.GridBagConstraints());
 
+        modeEmpty.setBackground(new java.awt.Color(231, 227, 220));
         modeEmpty.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        modeEmpty.setText("Trong");
-        modeEmpty.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 10, 10));
-        modeEmpty.setHorizontalAlignment(javax.swing.SwingConstants.LEADING);
+        modeEmpty.setText("Trống");
+        modeEmpty.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 2, new java.awt.Color(128, 128, 128)), javax.swing.BorderFactory.createMatteBorder(2, 2, 0, 0, new java.awt.Color(255, 255, 255))));
         modeEmpty.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 modeEmptyMouseClicked(evt);
@@ -137,10 +179,10 @@ public class cardTable extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 10, 10);
         jPanel2.add(modeEmpty, gridBagConstraints);
 
+        modeBooked.setBackground(new java.awt.Color(231, 227, 220));
         modeBooked.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        modeBooked.setText("Da Dat");
-        modeBooked.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 10, 10));
-        modeBooked.setHorizontalAlignment(javax.swing.SwingConstants.LEADING);
+        modeBooked.setText("Đã đặt");
+        modeBooked.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 2, new java.awt.Color(128, 128, 128)), javax.swing.BorderFactory.createMatteBorder(2, 2, 0, 0, new java.awt.Color(255, 255, 255))));
         modeBooked.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 modeBookedMouseClicked(evt);
@@ -158,10 +200,10 @@ public class cardTable extends javax.swing.JPanel {
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 10, 10);
         jPanel2.add(modeBooked, gridBagConstraints);
 
+        modeUsing.setBackground(new java.awt.Color(231, 227, 220));
         modeUsing.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        modeUsing.setText("Dang Dung");
-        modeUsing.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 10, 10));
-        modeUsing.setHorizontalAlignment(javax.swing.SwingConstants.LEADING);
+        modeUsing.setText("Đang dùng");
+        modeUsing.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 2, new java.awt.Color(128, 128, 128)), javax.swing.BorderFactory.createMatteBorder(2, 2, 0, 0, new java.awt.Color(255, 255, 255))));
         modeUsing.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 modeUsingMouseClicked(evt);
@@ -184,12 +226,12 @@ public class cardTable extends javax.swing.JPanel {
 
     private void modeUsingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modeUsingActionPerformed
         // TODO add your handling code here:
-        handleUpdate("Đang Dùng");
+        handleUpdate("Đang dùng");
     }//GEN-LAST:event_modeUsingActionPerformed
 
     private void modeBookedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modeBookedActionPerformed
         // TODO add your handling code here:
-        handleUpdate("Đã Đặt");
+        handleUpdate("Đã đặt");
     }//GEN-LAST:event_modeBookedActionPerformed
 
     private void modeEmptyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modeEmptyActionPerformed
