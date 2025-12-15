@@ -25,6 +25,7 @@ import quanlydatban.Dao.AccountDao;
 import quanlydatban.Dao.TableDao;
 import quanlydatban.Model.Account;
 import quanlydatban.Service.AccountService;
+import quanlydatban.Service.EmployeeService;
 
 import quanlydatban.View.dangnhap.JFLoginUI;
 
@@ -37,6 +38,7 @@ public class Main_menu extends javax.swing.JFrame {
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Main_menu.class.getName());
     TableDao table = new TableDao();
     AccountDao acc = new AccountDao();
+    EmployeeService empSe = new EmployeeService();
     
     List<Account> AccList = acc.getAllAcount();
     List<Table> tbList = table.getAllTable();
@@ -50,20 +52,22 @@ public class Main_menu extends javax.swing.JFrame {
         
         setCurrentAcc();
         initComponents();
-        if (this.AccCurrent != null) {
-            this.txtWelcome.setText("Chào Mừng Quản Lý: " + AccCurrent.getUsername());
+        
+        if(AccCurrent!=null){           //Đang Nhap thành công
+            
+            
+            if(empSe.getRole(AccCurrent.getUsername())){
+                //Quản lý
+                this.txtWelcome.setText("Chào Mừng Quản Lý: " + AccCurrent.getUsername());
+                jButton4.setVisible(true); // Đảm bảo nút này hiển thị
+                jButton4.setEnabled(true);
+            }
+            else{
+                this.txtWelcome.setText("Chào Mừng Nhân Viên: " + AccCurrent.getUsername());
+            }
+            
+            
         }
-        else {
-            // Nếu là Employee hoặc không lấy được role, nút sẽ bị ẩn/vô hiệu hóa
-            // Giả định: Employee không được xem danh sách nhân viên khác
-            jButton4.setVisible(false); // Ẩn nút đi
-        jButton4.setEnabled(false); // Hoặc chỉ vô hiệu hóa
-
-        // Cập nhật thông báo chào mừng
-        if (this.AccCurrent != null) {
-            this.txtWelcome.setText("Chào Mừng Nhân Viên: " + AccCurrent.getUsername());
-        }
-    }
 
 //        this.txtWelcome.setText(this.txtWelcome.getString()+ "something");
         // 1. Khởi tạo đối tượng từ File Panel
@@ -90,7 +94,6 @@ public class Main_menu extends javax.swing.JFrame {
     private void setCurrentAcc(){
         AccountService acs= new AccountService();
         this.AccCurrent=acs.getActiveACc();
-        
     }
 
     /**
@@ -455,8 +458,8 @@ public class Main_menu extends javax.swing.JFrame {
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addGap(135, 135, 135)
-                .addComponent(txtWelcome, javax.swing.GroupLayout.PREFERRED_SIZE, 385, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(350, Short.MAX_VALUE))
+                .addComponent(txtWelcome, javax.swing.GroupLayout.PREFERRED_SIZE, 550, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(185, Short.MAX_VALUE))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

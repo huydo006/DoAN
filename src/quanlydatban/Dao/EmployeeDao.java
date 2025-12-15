@@ -46,8 +46,6 @@ public class EmployeeDao {
         return null;
     }
     
-   
-    
     public boolean isManager(String users) throws SQLException{
         String sql = "select username, role from employee where username =? ";
                
@@ -60,10 +58,11 @@ public class EmployeeDao {
         String getRole = "";
         if(rs.next()){
             getRole = rs.getString("role");
-        }
-        if(getRole.equalsIgnoreCase("Manager")){
+            if(getRole.equalsIgnoreCase("Manager")){
             return true;
+            }
         }
+        
         return false;
     }
     

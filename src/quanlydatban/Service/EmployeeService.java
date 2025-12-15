@@ -31,5 +31,8 @@ public class EmployeeService {
     public boolean AddEmp(Employee emp){
         return empDao.addEmployee(emp);
     }
+    public boolean getRole(String username) throws SQLException{
+        return empDao.isManager(username);
+    }
     
 }

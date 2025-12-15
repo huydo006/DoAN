@@ -100,7 +100,8 @@ public class AccountDao {
     public Account getActiveAccount(){
         try {
             Account temp;
-            String sql ="select username , password ,isActive from account ";
+            String sql ="select username , password ,isActive from account "
+                    + "Where isActive = true";
             Connection conn = ConnectionDatabase.getConnection();
             PreparedStatement psm= conn.prepareStatement(sql);
             
