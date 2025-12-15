@@ -60,6 +60,7 @@ public class Main_menu extends javax.swing.JFrame {
         pnScreenQuanLyBanAn banAnPanel = new pnScreenQuanLyBanAn();
         pnScreenDatBanMoi datBanPanel = new pnScreenDatBanMoi(this);
         pnScreenDanhSach danhSachPanel =new pnScreenDanhSach();
+        pnScreenTimKiem timKiem = new pnScreenTimKiem();
         
         banAnPanel.setDatBanMoiListener(datBanPanel);
         datBanPanel.setQuanLyBanListener(banAnPanel);
@@ -75,7 +76,8 @@ public class Main_menu extends javax.swing.JFrame {
         pnMain.add(banAnPanel, "pnScreenQuanLyBanAn");
         pnMain.add(datBanPanel, "pnScreenDatBanMoi");
         pnMain.add(danhSachPanel, "pnScreenDanhSach");
-        pnMain.add(danhsachEm , "pnScreenDanhSachEmployee");       
+        pnMain.add(danhsachEm , "pnScreenDanhSachEmployee");
+        pnMain.add(timKiem,"pnScreenTimKiem");
 //          ^ Đối tượng Panel      ^ Tên Card
         
         
@@ -115,6 +117,7 @@ public class Main_menu extends javax.swing.JFrame {
         jButton3 = new RoundedButton();
         jButton4 = new RoundedButton();
         btnLogOut = new RoundedButton();
+        jButton5 = new RoundedButton();
         pnMain = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
 
@@ -375,6 +378,17 @@ public class Main_menu extends javax.swing.JFrame {
             }
         });
 
+        jButton5.setBackground(new java.awt.Color(26, 41, 59));
+        jButton5.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jButton5.setForeground(new java.awt.Color(255, 255, 255));
+        jButton5.setText("Tìm kiếm");
+        jButton5.setBorder(null);
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnMenuLayout = new javax.swing.GroupLayout(pnMenu);
         pnMenu.setLayout(pnMenuLayout);
         pnMenuLayout.setHorizontalGroup(
@@ -382,9 +396,10 @@ public class Main_menu extends javax.swing.JFrame {
             .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE)
             .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jButton4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnLogOut, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jButton3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jButton5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         pnMenuLayout.setVerticalGroup(
             pnMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -394,13 +409,15 @@ public class Main_menu extends javax.swing.JFrame {
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(26, 26, 26)
+                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(26, 26, 26)
                 .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnLogOut, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 735, Short.MAX_VALUE))
+                .addGap(0, 662, Short.MAX_VALUE))
         );
 
         getContentPane().add(pnMenu, java.awt.BorderLayout.LINE_START);
@@ -483,6 +500,13 @@ public class Main_menu extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btnLogOutActionPerformed
 
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        setActiveButton(jButton5);
+        CardLayout bt5 = (CardLayout) pnMain.getLayout();
+        bt5.show(pnMain,"pnScreenTimKiem");
+// TODO add your handling code here:
+    }//GEN-LAST:event_jButton5ActionPerformed
+
     // ... (Sau tất cả các hàm ActionPerformed) ...
 
 private void setButtonDesign(javax.swing.JButton button, boolean isActive) {
@@ -543,6 +567,7 @@ public void setActiveButton(javax.swing.JButton currentButton) {
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
