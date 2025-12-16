@@ -12,6 +12,7 @@ import java.sql.Timestamp;
  * @author HELLO
  */
 public class Booking {
+    private String listTables;
     int idBooking;
     
     Timestamp TimeStart;
@@ -31,6 +32,14 @@ public class Booking {
         this.Note = Note;
         this.IdEmploy = IdEmploy;
         this.IDcus = IDcus;
+    }
+    
+    public String getListTables() {
+        return listTables;
+    }
+
+    public void setListTables(String listTables) {
+        this.listTables = listTables;
     }
 
     public int getIdBooking() {

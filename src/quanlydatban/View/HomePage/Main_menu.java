@@ -59,12 +59,12 @@ public class Main_menu extends javax.swing.JFrame {
             if(empSe.getRole(AccCurrent.getUsername())){
                 //Quản lý
                 this.txtWelcome.setText("Chào mừng quản lí : " + AccCurrent.getUsername());
-                jButton4.setVisible(true); // Đảm bảo nút này hiển thị
+                jButton4.setVisible(true); 
                 jButton4.setEnabled(true);
             }
             else{
 
-                jButton4.setVisible(false); // Đảm bảo nút này hiển thị
+                jButton4.setVisible(false); 
                 jButton4.setEnabled(false);
                 this.txtWelcome.setText("Chào mừng nhân viên : " + AccCurrent.getUsername());
             }

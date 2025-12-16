@@ -22,58 +22,52 @@ import quanlydatban.Service.EmployeeService;
 import javax.swing.JSpinner;
 import quanlydatban.Service.AccountService;
 
-
-/**implements TableUpdateListener
+/**
+ * implements TableUpdateListener
  *
  * @author HELLO
  */
-
 public class pnScreenDatBanMoi extends javax.swing.JPanel implements TableUpdateListener {
+
     private TableUpdateListener quanLyBanListener;
-    private TableUpdateListener danhSachListener; 
-    
+    private TableUpdateListener danhSachListener;
+
     private Employee Emp = null;
-    
+
     private String[] Reserved;
     private Account AccCurrent;
-    
+
     BookingService bks = new BookingService();
     CustomerService cus = new CustomerService();
-    
-    public pnScreenDatBanMoi()  {
-        
-        
+
+    public pnScreenDatBanMoi() {
+
         setCurrentEmp();
         initComponents();
-      jScrollPane1.setPreferredSize(new java.awt.Dimension(800, 300));
-    jScrollPane1.setMinimumSize(new java.awt.Dimension(800, 300));
+        jScrollPane1.setPreferredSize(new java.awt.Dimension(800, 300));
+        jScrollPane1.setMinimumSize(new java.awt.Dimension(800, 300));
 
-    jScrollPane1.setVerticalScrollBarPolicy(
-        javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS
-    );
-    
-    // 6. Tải dữ liệu lần đầu tiên (vì bạn đã xóa nó khỏi Constructor)
-    ViewTable();
+        jScrollPane1.setVerticalScrollBarPolicy(
+                javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS
+        );
+
+        // 6. Tải dữ liệu lần đầu tiên (vì bạn đã xóa nó khỏi Constructor)
+        ViewTable();
     }
-//    private void setTxtChonBan(){
-//        int  row = this.tbTableList.getSelectedRow();
-//        String idTable = ""+this.tbTableList.getValueAt(row,0); 
-//        this.txtChonBan.setText(idTable);
-//    }
-    
-    private void ViewTable(){
+
+    private void ViewTable() {
         TableService list = new TableService();
         DefaultTableModel model = (DefaultTableModel) this.tbTableList.getModel();
         model.setNumRows(0);
-        for(Table x: list.getTbList()){
-            model.addRow(new Object[] {x.getIdTable(),x.getSeats()});
+        for (Table x : list.getTbList()) {
+            model.addRow(new Object[]{x.getIdTable(), x.getSeats()});
         }
         for (int i = 1; i <= 30; i++) {
-    model.addRow(new Object[]{i, i * 2});
-}
+            model.addRow(new Object[]{i, i * 2});
+        }
     }
 
-    private void resetForm(){
+    private void resetForm() {
         this.txtTenKH.setText("");
         this.txtSDT.setText("");
         // Reset về thời điểm hiện tại
@@ -81,17 +75,18 @@ public class pnScreenDatBanMoi extends javax.swing.JPanel implements TableUpdate
         txtTimeEnd.setValue(new java.util.Date());
         this.txtGhiChu.setText("");
         this.txtSoKhach.setText("");
-        
+
         this.txtChonBan.setText("");
-        
+
     }
-    private void setCurrentEmp()  {
+
+    private void setCurrentEmp() {
         try {
             AccountService acs = new AccountService();
             List<Account> AccList = acs.getAccountList();
-            for(Account x: AccList){
-                if(x.isActive==true){
-                    AccCurrent= x;
+            for (Account x : AccList) {
+                if (x.isActive == true) {
+                    AccCurrent = x;
                     break;
                 }
             }
@@ -100,37 +95,37 @@ public class pnScreenDatBanMoi extends javax.swing.JPanel implements TableUpdate
         } catch (SQLException ex) {
             System.getLogger(pnScreenDatBanMoi.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
         }
-    } 
+    }
+
     public void setQuanLyBanListener(TableUpdateListener listener) {
         this.quanLyBanListener = listener;
     }
-    
 
 // Setter mới
     public void setDanhSachListener(TableUpdateListener listener) {
         this.danhSachListener = listener;
     }
+
     private List<Integer> getListIdFromText(String Text) {
         List<Integer> tempList = new ArrayList<>();
         //trim : cắt khoảng trắng
-        if(Text.isEmpty() || Text.trim().isEmpty()){
+        if (Text.isEmpty() || Text.trim().isEmpty()) {
             return null;
         }
         //split : xóa ký tự (dấu phẩy)
-        String[] tempString =Text.split(" ");
-        
-        for(String x: tempString){
-            
+        String[] tempString = Text.split(" ");
+
+        for (String x : tempString) {
+
             String cleanTemp = x.trim();
-            if(!cleanTemp.isEmpty()){
-                int id  = Integer.parseInt(cleanTemp);
+            if (!cleanTemp.isEmpty()) {
+                int id = Integer.parseInt(cleanTemp);
                 tempList.add(id);
             }
         }
         return tempList;
     }
-    
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -567,7 +562,7 @@ public class pnScreenDatBanMoi extends javax.swing.JPanel implements TableUpdate
     private void btnChonBanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChonBanActionPerformed
         // TODO add your handling code here:
         List<Integer> listIdTable = getListIdFromText(this.txtChonBan.getText());
-        if(listIdTable.isEmpty()){
+        if (listIdTable.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn ít nhất 1 bàn!");
             return;
         }
@@ -609,12 +604,10 @@ public class pnScreenDatBanMoi extends javax.swing.JPanel implements TableUpdate
     public void onTableStatusUpdated() {
         resetForm();
         ViewTable();
-        
-        
+
         // Hoặc làm mới toàn bộ JPanel chứa JTable
         this.pnBanTrong.revalidate();
         this.pnBanTrong.repaint();
     }
 
-    
 }

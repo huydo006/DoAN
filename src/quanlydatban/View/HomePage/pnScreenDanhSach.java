@@ -4,6 +4,7 @@
  */
 package quanlydatban.View.HomePage;
 
+import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -12,6 +13,7 @@ import quanlydatban.Model.Customer;
 import quanlydatban.Model.Table;
 import quanlydatban.Service.BookingService;
 import quanlydatban.Service.CustomerService;
+import java.text.SimpleDateFormat;
 
 
 /**
@@ -22,6 +24,7 @@ public class pnScreenDanhSach extends javax.swing.JPanel implements TableUpdateL
     
     private TableUpdateListener datbanmoiListener;
     BookingService bks = new BookingService();
+    CustomerService cus = new CustomerService();
     /**
      * Creates new form pnScreenDanhSach
      */
@@ -29,82 +32,116 @@ public class pnScreenDanhSach extends javax.swing.JPanel implements TableUpdateL
         initComponents();
         setCount();
         ViewTable();
-    }
-    private void ViewTable(){
-        
-        
-        
-        DefaultTableModel model = (DefaultTableModel) this.tbMain.getModel();
-        model.setNumRows(0);
-        
-        for(Booking x : bks.getAllBooking()){
-            CustomerService cus = new CustomerService();
-            Customer temp = cus.getCus(x.getIDcus());
-            
-//            model.addRow(new Object[] {x.getIdBooking() ,x.getIDtable() , temp.getNameCus() , temp.getCusPhone(), x.getTimeStart(),x.getGuestCount() ,x.getNote() });
+    }    
+    
+    private void ViewTable() {
+        DefaultTableModel model = (DefaultTableModel) tbMain.getModel();
+        model.setRowCount(0); // Xóa dữ liệu cũ
+        List<Booking> list = bks.getAllBooking();
+
+        // TẠO BỘ ĐỊNH DẠNG GIỜ:PHÚT
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+
+        for (Booking b : list) {
+            String timeStartStr = "";
+            String timeEndStr = "";
+
+            // Kiểm tra null để tránh lỗi (quan trọng với Timestamp)
+            if (b.getTimeStart() != null) {
+                timeStartStr = sdf.format(b.getTimeStart()); 
+            }
+            if (b.getTimeEnd() != null) {
+                timeEndStr = sdf.format(b.getTimeEnd());     
+            }
+
+            // Tạo chuỗi hiển thị gộp (Ví dụ: "10:30 - 12:00")
+            String timeDisplay = timeStartStr + " - " + timeEndStr;
+
+            model.addRow(new Object[]{
+                b.getIdBooking(),
+                b.getListTables(), // <--- GỌI HÀM NÀY ĐỂ HIỆN CHUỖI "3, 4"
+      
+                cus.getCus(b.getIDcus()).getNameCus(), // Hoặc tên khách hàng
+                cus.getCus(b.getIDcus()).getCusPhone(),
+                // ... các cột khác
+                timeDisplay,
+                b.getGuestCount(),
+                b.getNote()
+            });
         }
-        this.tbMain.revalidate();
-        this.tbMain.repaint();
     }
     private void setCount(){
-        int countTongBooking=0;
-        for(Booking x: bks.getAllBooking() ){
-            countTongBooking++;
-        }
+        this.txtTongBooking.setText(""+bks.getCountBooking());
+        this.txtCountComplete.setText(""+bks.getCount("Hoàn Thành"));
+        this.txtCountCancel.setText(""+bks.getCount("Đã Hủy"));
         
-        this.txtTongBooking.setText(""+countTongBooking);
     }
-    // Trong pnScreenDanhSach.java
-
-private void deleteSelectedBooking(int selectedRowIndex , int idTable) {
-    // 1. Lấy ID Booking từ JTable (chỉ để hiển thị thông báo xác nhận)
-    DefaultTableModel model = (DefaultTableModel) tbMain.getModel();
-    Object bookingIdObj = model.getValueAt(selectedRowIndex, 0); 
-    String bookingIdStr = String.valueOf(bookingIdObj);
-    
-    // 2. Kiểm tra và xác nhận xóa
-    int confirm = JOptionPane.showConfirmDialog(
-        this, 
-        "Bạn có chắc muốn xóa đơn đặt bàn ID: " + bookingIdStr + " khỏi danh sách hiển thị?", 
-        "Xác nhận xóa khỏi UI", 
-        JOptionPane.YES_NO_OPTION
-    );
-
-    if (confirm == JOptionPane.YES_OPTION) {
+    private void CompleteSelectedBooking(int selectedRowIndex , int idBooking){
+        DefaultTableModel model = (DefaultTableModel) tbMain.getModel();
+//        Object bookingIdObj = model.getValueAt(selectedRowIndex, 0);
+//        String bookingIdStr = String.valueOf(bookingIdObj);
         
-        try {
-            // ************ BƯỚC QUAN TRỌNG NHẤT ************
-            // XÓA HÀNG KHỎI JTable (MODEL)
-            model.removeRow(selectedRowIndex); 
-            bks.DeteteBooking(idTable);
-            bks.ResetStatus(idTable);
-            
-            JOptionPane.showMessageDialog(this, 
-                                          "Đơn đặt bàn ID " + bookingIdStr + " đã được xóa ", 
-                                          "Thông báo", 
-                                          JOptionPane.INFORMATION_MESSAGE);
-            
-            // 3. Cập nhật lại giao diện và thống kê
-            
-            // Cập nhật lại UI (Đã có trong ViewTable, nhưng nên gọi lại để làm sạch)
-            this.tbMain.revalidate();
-            this.tbMain.repaint();
-            
-            // Cần gọi lại logic tính toán thống kê (nếu thống kê phụ thuộc vào số hàng trong bảng)
-            // Hoặc gọi ViewTable() nếu bạn muốn làm mới toàn bộ từ DB:
-            // ViewTable(); // Tuy nhiên, nếu gọi ViewTable() thì hàng vừa xóa lại hiện ra, nên không gọi.
-            
-            // Cập nhật thống kê (Nếu txtCountEmpty là Tổng số đơn):
-            // Tính lại tổng số hàng còn lại
-            // int remainingCount = model.getRowCount();
-            // this.txtCountEmpty.setText(String.valueOf(remainingCount));
-            
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Lỗi khi xóa hàng khỏi UI.", "Lỗi", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
+        int confirm = JOptionPane.showConfirmDialog(
+                this,
+                "Xác nhận hoàn thành đơn "+ idBooking,
+                "Xác nhận ",
+                JOptionPane.YES_NO_OPTION
+        );
+        if(confirm==JOptionPane.YES_OPTION){
+            if(bks.setIsComplete(idBooking)){
+                model.removeRow(selectedRowIndex);
+                JOptionPane.showMessageDialog(this, 
+                        "Đã xác nhận hoàn thành đơn "+idBooking,
+                        "Thông báo",
+                        JOptionPane.INFORMATION_MESSAGE);
+                this.tbMain.revalidate();
+                this.tbMain.repaint();
+
+                setCount();       
+            }
+        }
+                
+        
+    }
+
+    private void CancelSelectedBooking(int selectedRowIndex, int idBooking) {
+        // 1. Lấy ID Booking từ JTable (chỉ để hiển thị thông báo xác nhận)
+        DefaultTableModel model = (DefaultTableModel) tbMain.getModel();
+        Object bookingIdObj = model.getValueAt(selectedRowIndex, 0);
+        String bookingIdStr = String.valueOf(bookingIdObj);
+
+        // 2. Kiểm tra và xác nhận xóa
+        int confirm = JOptionPane.showConfirmDialog(
+                this,
+                "Bạn có chắc muốn hủy đặt bàn ID: " + bookingIdStr,
+                "Xác nhận hủy ",
+                JOptionPane.YES_NO_OPTION
+        );
+
+        if (confirm == JOptionPane.YES_OPTION) {
+
+            try {
+
+                if (bks.CancelBooking(idBooking)) {
+                    model.removeRow(selectedRowIndex);
+                    JOptionPane.showMessageDialog(this,
+                            "Đơn đặt bàn ID " + bookingIdStr + " đã được xóa ",
+                            "Thông báo",
+                            JOptionPane.INFORMATION_MESSAGE);
+
+                    // 3. Cập nhật lại giao diện và thống kê
+                    this.tbMain.revalidate();
+                    this.tbMain.repaint();
+
+                    setCount();
+                };
+
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Lỗi khi xóa hàng khỏi UI.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                e.printStackTrace();
+            }
         }
     }
-}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -126,7 +163,10 @@ private void deleteSelectedBooking(int selectedRowIndex , int idTable) {
         jLabel7 = new javax.swing.JLabel();
         jPanel7 = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
-        txtCountEmpty3 = new javax.swing.JTextField();
+        txtCountComplete = new javax.swing.JTextField();
+        jPanel4 = new javax.swing.JPanel();
+        jLabel5 = new javax.swing.JLabel();
+        txtCountCancel = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tbMain = new javax.swing.JTable();
@@ -191,23 +231,21 @@ private void deleteSelectedBooking(int selectedRowIndex , int idTable) {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(75, 75, 75)
-                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(105, 105, 105)
-                        .addComponent(txtTongBooking, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(80, Short.MAX_VALUE))
+                .addContainerGap(37, Short.MAX_VALUE)
+                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(20, 20, 20))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(45, 45, 45)
+                .addComponent(txtTongBooking, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtTongBooking)
-                .addGap(12, 12, 12))
+                .addComponent(txtTongBooking, javax.swing.GroupLayout.DEFAULT_SIZE, 44, Short.MAX_VALUE)
+                .addGap(18, 18, 18))
         );
 
         jLabel7.setText("Thong ke dat ban : ");
@@ -219,12 +257,12 @@ private void deleteSelectedBooking(int selectedRowIndex , int idTable) {
         jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel10.setText("Hoàn Thành");
 
-        txtCountEmpty3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        txtCountEmpty3.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        txtCountEmpty3.setBorder(null);
-        txtCountEmpty3.addActionListener(new java.awt.event.ActionListener() {
+        txtCountComplete.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        txtCountComplete.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtCountComplete.setBorder(null);
+        txtCountComplete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtCountEmpty3ActionPerformed(evt);
+                txtCountCompleteActionPerformed(evt);
             }
         });
 
@@ -233,22 +271,60 @@ private void deleteSelectedBooking(int selectedRowIndex , int idTable) {
         jPanel7Layout.setHorizontalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
-                .addContainerGap(109, Short.MAX_VALUE)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
-                        .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(116, 116, 116))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
-                        .addComponent(txtCountEmpty3, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(99, 99, 99))))
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addGap(67, 67, 67)
+                        .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addGap(51, 51, 51)
+                        .addComponent(txtCountComplete, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(54, Short.MAX_VALUE))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addComponent(jLabel10)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtCountEmpty3, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18))
+                .addComponent(txtCountComplete, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
+        jPanel4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel5.setText("Hủy Bỏ");
+
+        txtCountCancel.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        txtCountCancel.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtCountCancel.setBorder(null);
+        txtCountCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCountCancelActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap(23, Short.MAX_VALUE)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(20, 20, 20))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                        .addComponent(txtCountCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(39, 39, 39))))
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addComponent(jLabel5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtCountCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(28, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout thongkedatbanLayout = new javax.swing.GroupLayout(thongkedatban);
@@ -256,11 +332,13 @@ private void deleteSelectedBooking(int selectedRowIndex , int idTable) {
         thongkedatbanLayout.setHorizontalGroup(
             thongkedatbanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(thongkedatbanLayout.createSequentialGroup()
-                .addContainerGap(31, Short.MAX_VALUE)
+                .addContainerGap(55, Short.MAX_VALUE)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(87, 87, 87)
-                .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(52, 52, 52))
+                .addGap(18, 18, 18)
+                .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(34, 34, 34)
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(27, 27, 27))
             .addGroup(thongkedatbanLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -273,8 +351,10 @@ private void deleteSelectedBooking(int selectedRowIndex , int idTable) {
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(thongkedatbanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(thongkedatbanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGap(21, 21, 21))
         );
 
@@ -304,7 +384,7 @@ private void deleteSelectedBooking(int selectedRowIndex , int idTable) {
                 {null, null, null, null, null, null, null}
             },
             new String [] {
-                "ID Booking", "Ban ", "Khach hang", "Dien Thoai", "Thoi Gian Dung", "So Khach", "Ghi Chu"
+                "ID Booking", "Ban ", "Khach hang", "Dien Thoai", "Thời Gian Dùng", "So Khach", "Ghi Chu"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -352,7 +432,7 @@ private void deleteSelectedBooking(int selectedRowIndex , int idTable) {
         });
 
         jButton2.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
-        jButton2.setText("Xóa Đơn ");
+        jButton2.setText("Hủy Đơn");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
@@ -388,7 +468,7 @@ private void deleteSelectedBooking(int selectedRowIndex , int idTable) {
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 309, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(107, Short.MAX_VALUE))
+                        .addContainerGap(91, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -409,25 +489,31 @@ private void deleteSelectedBooking(int selectedRowIndex , int idTable) {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtTongBookingActionPerformed
 
-    private void txtCountEmpty3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCountEmpty3ActionPerformed
+    private void txtCountCompleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCountCompleteActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtCountEmpty3ActionPerformed
+    }//GEN-LAST:event_txtCountCompleteActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        
+        int n = this.tbMain.getSelectedRow();
+        int id = (int) this.tbMain.getValueAt(n, 0);
+        CompleteSelectedBooking(n,id);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         int n = this.tbMain.getSelectedRow();
         int id = (int) this.tbMain.getValueAt(n, 0);
-        deleteSelectedBooking(n , id);
+        CancelSelectedBooking(n , id);
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void tbMainKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tbMainKeyPressed
         // TODO add your handling code here:
     }//GEN-LAST:event_tbMainKeyPressed
+
+    private void txtCountCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCountCancelActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCountCancelActionPerformed
 //    public void setDatbanmoiListener(TableUpdateListener listener) {
 //        this.datbanmoiListener = listener;
 //    }
@@ -439,9 +525,11 @@ private void deleteSelectedBooking(int selectedRowIndex , int idTable) {
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JPanel main;
@@ -449,17 +537,19 @@ private void deleteSelectedBooking(int selectedRowIndex , int idTable) {
     private javax.swing.JPanel screenDanhSach;
     private javax.swing.JTable tbMain;
     private javax.swing.JPanel thongkedatban;
-    private javax.swing.JTextField txtCountEmpty3;
+    private javax.swing.JTextField txtCountCancel;
+    private javax.swing.JTextField txtCountComplete;
     private javax.swing.JTextField txtTongBooking;
     // End of variables declaration//GEN-END:variables
 
     @Override
     public void onTableStatusUpdated() {
-        setCount();
+        
         ViewTable();
         if (datbanmoiListener != null) {
             this.datbanmoiListener.onTableStatusUpdated(); 
         }
+        setCount();
         this.tbMain.revalidate();
         this.tbMain.repaint();
     }
