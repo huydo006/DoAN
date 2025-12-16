@@ -25,6 +25,7 @@ import java.sql.Timestamp;
 
 public class BookingService {
     List<Booking> list;
+    
     private BookingDao bookingDao = new BookingDao(); 
     // Khởi tạo đối tượng DAO để giao tiếp với DB
 
@@ -51,11 +52,17 @@ public class BookingService {
     public void ResetStatus(int id){
         bookingDao.updateStatusTable("Trống", id);
     }
-    public void setCompleteBooking(){
-        
-    }
     public void DeteteBooking(int id){
         bookingDao.DeleteBooking(id);
+    }
+    public int getCountComplete(){
+        return bookingDao.getCountBookingComplete();
+    }
+    public int getCountBooking(){
+        return bookingDao.getCountBooking();
+    }
+    public boolean setIsComplete(int id){
+        return bookingDao.updateIsComplete(id);
     }
 //    public boolean checkTimeValid(String newStartStr, String newEndStr, int idTable) {
 //        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

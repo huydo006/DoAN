@@ -51,12 +51,6 @@ public class BookingDao {
             System.getLogger(BookingDao.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
             return false;
         }
-        
-//        String sql ="Select IDbooking "
-//                + "from Booking "
-//                + "Where `TimeStarted` = ? AND `IDcus` =? ";
-                
-        
     }
     public void updateStatusTable(String status , int id){
         String sql ="Update DiningTable "
@@ -74,33 +68,50 @@ public class BookingDao {
         }
         
     }
-    public List<Booking> getAllBooking(){
-        List<Booking> list = new ArrayList<Booking>();
-        String sql ="Select IDbooking , TimeStarted ,TimeEnd , guestCount , Note , IDemploy , IDcus "
-                + "From Booking";
+
+    public List<Booking> getAllBooking() {
+        List<Booking> list = new ArrayList<>();
+
+        // SQL THẦN THÁNH: Kết hợp bảng Booking và bảng List
+        // GROUP_CONCAT: Gom các IDtable lại (ví dụ: "1, 3, 5")
+        String sql = "SELECT b.IDbooking, b.TimeStarted, b.TimeEnd, b.guestCount, b.Note, b.IDemploy, b.IDcus, "
+                + "GROUP_CONCAT(l.IDtable SEPARATOR ', ') AS TableList "
+                + "FROM Booking b "
+                + "LEFT JOIN `List` l ON b.IDbooking = l.IDbooking " // Nhớ dấu ` ` ở tên bảng List
+                + "GROUP BY b.IDbooking, b.TimeStarted, b.TimeEnd, b.guestCount, b.Note, b.IDemploy, b.IDcus "
+                + "ORDER BY b.IDbooking DESC"; // Sắp xếp đơn mới lên đầu
+
         try {
             Connection conn = ConnectionDatabase.getConnection();
             PreparedStatement pstm = conn.prepareStatement(sql);
             ResultSet rs = pstm.executeQuery();
-            
-            while (rs.next()){
+
+            while (rs.next()) {
                 int idBooking = rs.getInt("IDbooking");
                 Timestamp TimeStart = rs.getTimestamp("TimeStarted");
-                Timestamp TimeEnd =rs.getTimestamp("TimeEnd");
+                Timestamp TimeEnd = rs.getTimestamp("TimeEnd");
                 int guestCount = rs.getInt("guestCount");
                 String Note = rs.getString("Note");
                 int IdEmploy = rs.getInt("IDemploy");
                 int IDcus = rs.getInt("IDcus");
-                
-                
-                list.add(new Booking(idBooking,TimeStart,TimeEnd, guestCount,Note, IdEmploy, IDcus));
-                
+
+                // Lấy chuỗi danh sách bàn từ SQL
+                String tableListStr = rs.getString("TableList");
+                if (tableListStr == null) {
+                    tableListStr = "Chưa xếp"; // Xử lý nếu null
+                }
+                // Tạo đối tượng Booking
+                Booking b = new Booking(idBooking,TimeStart, TimeEnd, guestCount, Note, IdEmploy, IDcus);
+
+                // Set danh sách bàn vào đối tượng
+                b.setListTables(tableListStr);
+
+                list.add(b);
             }
             conn.close();
             pstm.close();
-            
         } catch (SQLException ex) {
-            System.getLogger(BookingDao.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+            ex.printStackTrace();
         }
         return list;
     }
@@ -166,6 +177,60 @@ public class BookingDao {
         }
         return idBooking; // Đảm bảo trả về ID > 0
     }
+    
+    public int getCountBookingComplete(){
+        int count = 0 ;
+        try {
+            String sql = "Select Count(IDbooking) as SoDonHoanThanh"
+           + " From Booking "
+           + "Where isComplete = 'Hoàn Thành' ";
+            Connection conn = ConnectionDatabase.getConnection();
+            PreparedStatement pstm = conn.prepareStatement(sql);
+            ResultSet rs =pstm.executeQuery();
+            if(rs.next()){
+                count= rs.getInt("SoDonHoanThanh");
+                return count;
+            }
+        } catch (SQLException ex) {
+            System.getLogger(BookingDao.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        }
+        return 0;
         
+    }
+    public int getCountBooking(){
+        int count = 0 ;
+        try {
+            
+            String sql ="Select Count(*) As SoDonBooking "
+                    + "From Booking;";
+            Connection conn = ConnectionDatabase.getConnection();
+            PreparedStatement pstm = conn.prepareStatement(sql);
+            ResultSet rs= pstm.executeQuery();
+            if(rs.next()){
+                count = rs.getInt("SoDonBooking");
+            }
+            return count;
+        } catch (SQLException ex) {
+            System.getLogger(BookingDao.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        }
+        return 0;
+        
+    }
+    
+    public boolean updateIsComplete(int idBooking){
+        try {
+            String sql="Update Booking "
+                    + "Set isComplete ='Hoàn Thành' "
+                    + "Where IDbooking = ?";
+            Connection conn = ConnectionDatabase.getConnection();
+            PreparedStatement pstm = conn.prepareStatement(sql);
+            pstm.setInt(1,idBooking);
+            pstm.executeUpdate();
+            return true;
+        } catch (SQLException ex) {
+            System.getLogger(BookingDao.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        }
+        return false;
+    }
     
 }

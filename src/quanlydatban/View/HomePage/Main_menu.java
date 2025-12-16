@@ -63,6 +63,8 @@ public class Main_menu extends javax.swing.JFrame {
                 jButton4.setEnabled(true);
             }
             else{
+                jButton4.setVisible(false); // Đảm bảo nút này hiển thị
+                jButton4.setEnabled(false);
                 this.txtWelcome.setText("Chào Mừng Nhân Viên: " + AccCurrent.getUsername());
             }
             

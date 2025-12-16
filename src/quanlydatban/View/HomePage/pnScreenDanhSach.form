@@ -240,7 +240,7 @@
                                       <EmptySpace min="-2" pref="116" max="-2" attributes="0"/>
                                   </Group>
                                   <Group type="102" alignment="1" attributes="0">
-                                      <Component id="txtCountEmpty3" min="-2" pref="139" max="-2" attributes="0"/>
+                                      <Component id="txtCountComplete" min="-2" pref="139" max="-2" attributes="0"/>
                                       <EmptySpace min="-2" pref="99" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
@@ -252,7 +252,7 @@
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="jLabel10" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="txtCountEmpty3" min="-2" pref="28" max="-2" attributes="0"/>
+                              <Component id="txtCountComplete" min="-2" pref="28" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
                           </Group>
                       </Group>
@@ -268,7 +268,7 @@
                         <Property name="text" type="java.lang.String" value="Ho&#xe0;n Th&#xe0;nh"/>
                       </Properties>
                     </Component>
-                    <Component class="javax.swing.JTextField" name="txtCountEmpty3">
+                    <Component class="javax.swing.JTextField" name="txtCountComplete">
                       <Properties>
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                           <Font name="Segoe UI" size="14" style="1"/>
@@ -279,7 +279,7 @@
                         </Property>
                       </Properties>
                       <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtCountEmpty3ActionPerformed"/>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtCountCompleteActionPerformed"/>
                       </Events>
                     </Component>
                   </SubComponents>
@@ -357,7 +357,7 @@
                             <Column editable="false" title="Ban " type="java.lang.Object"/>
                             <Column editable="false" title="Khach hang" type="java.lang.Object"/>
                             <Column editable="false" title="Dien Thoai" type="java.lang.Object"/>
-                            <Column editable="false" title="Thoi Gian Dung" type="java.lang.Object"/>
+                            <Column editable="false" title="Th&#x1edd;i Gian D&#xf9;ng" type="java.lang.Object"/>
                             <Column editable="false" title="So Khach" type="java.lang.Object"/>
                             <Column editable="false" title="Ghi Chu" type="java.lang.Object"/>
                           </Table>

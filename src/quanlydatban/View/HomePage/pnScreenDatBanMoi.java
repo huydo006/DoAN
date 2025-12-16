@@ -48,11 +48,6 @@ public class pnScreenDatBanMoi extends javax.swing.JPanel implements TableUpdate
         
         ViewTable();
     }
-//    private void setTxtChonBan(){
-//        int  row = this.tbTableList.getSelectedRow();
-//        String idTable = ""+this.tbTableList.getValueAt(row,0); 
-//        this.txtChonBan.setText(idTable);
-//    }
     
     private void ViewTable(){
         TableService list = new TableService();

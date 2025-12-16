@@ -4,6 +4,7 @@
  */
 package quanlydatban.View.HomePage;
 
+import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -12,6 +13,7 @@ import quanlydatban.Model.Customer;
 import quanlydatban.Model.Table;
 import quanlydatban.Service.BookingService;
 import quanlydatban.Service.CustomerService;
+import java.text.SimpleDateFormat;
 
 
 /**
@@ -22,6 +24,7 @@ public class pnScreenDanhSach extends javax.swing.JPanel implements TableUpdateL
     
     private TableUpdateListener datbanmoiListener;
     BookingService bks = new BookingService();
+    CustomerService cus = new CustomerService();
     /**
      * Creates new form pnScreenDanhSach
      */
@@ -29,32 +32,52 @@ public class pnScreenDanhSach extends javax.swing.JPanel implements TableUpdateL
         initComponents();
         setCount();
         ViewTable();
-    }
-    private void ViewTable(){
-        
-        
-        
-        DefaultTableModel model = (DefaultTableModel) this.tbMain.getModel();
-        model.setNumRows(0);
-        
-        for(Booking x : bks.getAllBooking()){
-            CustomerService cus = new CustomerService();
-            Customer temp = cus.getCus(x.getIDcus());
-            
-//            model.addRow(new Object[] {x.getIdBooking() ,x.getIDtable() , temp.getNameCus() , temp.getCusPhone(), x.getTimeStart(),x.getGuestCount() ,x.getNote() });
+    }    
+    
+    private void ViewTable() {
+        DefaultTableModel model = (DefaultTableModel) tbMain.getModel();
+        model.setRowCount(0); // Xóa dữ liệu cũ
+
+        BookingService service = new BookingService();
+        List<Booking> list = service.getAllBooking();
+
+        // TẠO BỘ ĐỊNH DẠNG GIỜ:PHÚT
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+
+        for (Booking b : list) {
+            String timeStartStr = "";
+            String timeEndStr = "";
+
+            // Kiểm tra null để tránh lỗi (quan trọng với Timestamp)
+            if (b.getTimeStart() != null) {
+                timeStartStr = sdf.format(b.getTimeStart()); // Chuyển Timestamp -> "10:30"
+            }
+            if (b.getTimeEnd() != null) {
+                timeEndStr = sdf.format(b.getTimeEnd());     // Chuyển Timestamp -> "12:00"
+            }
+
+            // Tạo chuỗi hiển thị gộp (Ví dụ: "10:30 - 12:00")
+            String timeDisplay = timeStartStr + " - " + timeEndStr;
+
+            model.addRow(new Object[]{
+                b.getIdBooking(),
+                b.getListTables(), // <--- GỌI HÀM NÀY ĐỂ HIỆN CHUỖI "3, 4"
+                // Gọi service để lấy tên khách hàng từ IDcus nếu cần
+                
+                cus.getCus(b.getIDcus()).getNameCus(), // Hoặc tên khách hàng
+                cus.getCus(b.getIDcus()).getCusPhone(),
+                // ... các cột khác
+                timeDisplay,
+                b.getGuestCount(),
+                b.getNote()
+            });
         }
-        this.tbMain.revalidate();
-        this.tbMain.repaint();
     }
     private void setCount(){
-        int countTongBooking=0;
-        for(Booking x: bks.getAllBooking() ){
-            countTongBooking++;
-        }
-        
-        this.txtTongBooking.setText(""+countTongBooking);
+        this.txtTongBooking.setText(""+bks.getCountBooking());
+        this.txtCountComplete.setText(""+bks.getCountComplete());
     }
-    // Trong pnScreenDanhSach.java
+    
 
 private void deleteSelectedBooking(int selectedRowIndex , int idTable) {
     // 1. Lấy ID Booking từ JTable (chỉ để hiển thị thông báo xác nhận)
@@ -126,7 +149,7 @@ private void deleteSelectedBooking(int selectedRowIndex , int idTable) {
         jLabel7 = new javax.swing.JLabel();
         jPanel7 = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
-        txtCountEmpty3 = new javax.swing.JTextField();
+        txtCountComplete = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tbMain = new javax.swing.JTable();
@@ -219,12 +242,12 @@ private void deleteSelectedBooking(int selectedRowIndex , int idTable) {
         jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel10.setText("Hoàn Thành");
 
-        txtCountEmpty3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        txtCountEmpty3.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        txtCountEmpty3.setBorder(null);
-        txtCountEmpty3.addActionListener(new java.awt.event.ActionListener() {
+        txtCountComplete.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        txtCountComplete.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtCountComplete.setBorder(null);
+        txtCountComplete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtCountEmpty3ActionPerformed(evt);
+                txtCountCompleteActionPerformed(evt);
             }
         });
 
@@ -239,7 +262,7 @@ private void deleteSelectedBooking(int selectedRowIndex , int idTable) {
                         .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(116, 116, 116))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
-                        .addComponent(txtCountEmpty3, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtCountComplete, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(99, 99, 99))))
         );
         jPanel7Layout.setVerticalGroup(
@@ -247,7 +270,7 @@ private void deleteSelectedBooking(int selectedRowIndex , int idTable) {
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addComponent(jLabel10)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtCountEmpty3, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtCountComplete, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18))
         );
 
@@ -304,7 +327,7 @@ private void deleteSelectedBooking(int selectedRowIndex , int idTable) {
                 {null, null, null, null, null, null, null}
             },
             new String [] {
-                "ID Booking", "Ban ", "Khach hang", "Dien Thoai", "Thoi Gian Dung", "So Khach", "Ghi Chu"
+                "ID Booking", "Ban ", "Khach hang", "Dien Thoai", "Thời Gian Dùng", "So Khach", "Ghi Chu"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -409,13 +432,15 @@ private void deleteSelectedBooking(int selectedRowIndex , int idTable) {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtTongBookingActionPerformed
 
-    private void txtCountEmpty3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCountEmpty3ActionPerformed
+    private void txtCountCompleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCountCompleteActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtCountEmpty3ActionPerformed
+    }//GEN-LAST:event_txtCountCompleteActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        
+        int n = this.tbMain.getSelectedRow();
+        int id = (int) this.tbMain.getValueAt(n, 0);
+        bks.setIsComplete(id);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -449,7 +474,7 @@ private void deleteSelectedBooking(int selectedRowIndex , int idTable) {
     private javax.swing.JPanel screenDanhSach;
     private javax.swing.JTable tbMain;
     private javax.swing.JPanel thongkedatban;
-    private javax.swing.JTextField txtCountEmpty3;
+    private javax.swing.JTextField txtCountComplete;
     private javax.swing.JTextField txtTongBooking;
     // End of variables declaration//GEN-END:variables
 

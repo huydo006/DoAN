@@ -27,7 +27,7 @@ public class EmployeeDao {
             
             Statement stm= conn.createStatement();
             ResultSet rs= stm.executeQuery(sql);
-            
+            list.clear();
             while(rs.next()){
                 int IdEmploy = rs.getInt("IDemploy");
                 String name = rs.getString("Name");
@@ -130,6 +130,7 @@ public class EmployeeDao {
                     "WHERE IDemploy = ?;";
             Connection conn = ConnectionDatabase.getConnection();
             PreparedStatement pstm = conn.prepareStatement(sql);
+            pstm.setInt(1, IdEmp);
             pstm.executeUpdate();
             
             return true;
