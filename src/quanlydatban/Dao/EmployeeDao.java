@@ -118,6 +118,21 @@ public class EmployeeDao {
     }
     public boolean DeleteEmp(int IdEmp){
         try {
+            String sql = "Delete from Account "
+                    + "Where IDemploy = ?";
+            Connection conn = ConnectionDatabase.getConnection();
+            PreparedStatement pstm = conn.prepareStatement(sql);
+            pstm.setInt(1, IdEmp);
+            pstm.executeUpdate();
+            
+            pstm.close();
+            conn.close();
+        } catch (SQLException ex) {
+            System.getLogger(EmployeeDao.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        }
+
+        
+        try {
             String sql= "DELETE FROM Employee " +
                     "WHERE IDemploy = ?;";
             Connection conn = ConnectionDatabase.getConnection();
