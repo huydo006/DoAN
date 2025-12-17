@@ -18,7 +18,6 @@ public class Booking {
     private int IDcus;
     private String isComplete; // Trạng thái: Đã xác nhận, Hoàn thành, Đã hủy
 
-    // Các trường bổ sung (trước đây nằm trong BookingDetail)
     private String nameCus;
     private String cusPhone;
     private String listTables;
@@ -42,8 +41,8 @@ public class Booking {
 
     public Booking(int idBooking, Timestamp TimeStart, Timestamp TimeEnd, int guestCount, String Note, int IdEmploy, int IDcus) {
        this.idBooking = idBooking;
-    this.TimeStart = TimeStart; // Bây giờ TimeStart bên phải là tham số có dữ liệu
-    this.TimeEnd = TimeEnd;     // Bây giờ TimeEnd bên phải là tham số có dữ liệu
+    this.TimeStart = TimeStart; 
+    this.TimeEnd = TimeEnd;     
     this.guestCount = guestCount;
     this.Note = Note;
     this.IdEmploy = IdEmploy;

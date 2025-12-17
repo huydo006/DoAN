@@ -11,47 +11,48 @@ import javax.swing.BorderFactory;
 import javax.swing.border.Border;
 import java.awt.Color;
 import java.awt.Font;
+
 /**
  *
  * @author HELLO
  */
 public class cardTable extends javax.swing.JPanel {
-    
+
     /**
      * Creates new form cardTable
      */
     private TableUpdateListener updateListener;
     private int tableId;
-    
+
     TableDao tbDao = new TableDao();
-    
+
     public void setUpdateListener(TableUpdateListener listener) {
         this.updateListener = listener;
     }
+
     public void setTableId(int id) {
         this.tableId = id;
     }
-    
+
     public cardTable() {
         initComponents();
     }
 
     public void setTxtIdTable(String txtIdTable) {
-        this.txtIdTable.setText(this.txtIdTable.getText()+txtIdTable);
+        this.txtIdTable.setText(this.txtIdTable.getText() + txtIdTable);
     }
 
-    public void setTxtSeats(String seat){
-        this.txtSeats.setText(this.txtSeats.getText()+ " " +seat);
+    public void setTxtSeats(String seat) {
+        this.txtSeats.setText(this.txtSeats.getText() + " " + seat);
     }
 
     public void setTxtTrangThai(String txtTrangThai) {
         this.txtTrangThai.setText(txtTrangThai);
         Color bgColor;      // Màu nền
         Color borderColor;  // Màu đường viền
-    
-    // So sánh chuỗi (dùng trim() để loại bỏ khoảng trắng thừa, dùng equalsIgnoreCase để không phân biệt chữ hoa/thường)
+
         String status = txtTrangThai;
-    
+
         switch (status) {
             case "Trống":
                 bgColor = new Color(102, 240, 150);
@@ -61,47 +62,40 @@ public class cardTable extends javax.swing.JPanel {
                 bgColor = new Color(254, 212, 0);
                 borderColor = new Color(251, 131, 0);
                 break;
-            default:  
+            default:
                 bgColor = new Color(255, 179, 190);
                 borderColor = new Color(245, 17, 53);
                 break;
         }
-        
-    // --- Áp dụng Background và Border ---
-    
-    // 1. Áp dụng Màu nền
-    this.txtTrangThai.setBackground(bgColor);
-    this.txtTrangThai.setOpaque(true); // Quan trọng: Đảm bảo nền được hiển thị
-    
-    // 2. Tạo MatteBorder
-    // Tạo MatteBorder với padding (top, left, bottom, right) và màu viền
-    int padding = 2; 
-    Border matteBorder = BorderFactory.createMatteBorder(
-            padding, padding, padding, padding, borderColor);
-    this.txtTrangThai.setBorder(BorderFactory.createCompoundBorder(
-            matteBorder, 
-            BorderFactory.createEmptyBorder(2, 5, 2, 5) // Padding nhỏ bên trong text
-    ));
+
+        // --- Áp dụng Background và Border ---
+        // 1. Áp dụng Màu nền
+        this.txtTrangThai.setBackground(bgColor);
+        this.txtTrangThai.setOpaque(true); 
+
+        // 2. Tạo MatteBorder
+        // Tạo MatteBorder với padding (top, left, bottom, right) và màu viền
+        int padding = 2;
+        Border matteBorder = BorderFactory.createMatteBorder(
+                padding, padding, padding, padding, borderColor);
+        this.txtTrangThai.setBorder(BorderFactory.createCompoundBorder(
+                matteBorder,
+                BorderFactory.createEmptyBorder(2, 5, 2, 5) // Padding nhỏ bên trong text
+        ));
     }
-    
+
     private void handleUpdate(String status) {
-        // Vì tableId giờ là số (int), không dùng .isEmpty() hay == null nữa
-    if (this.tableId <= 0) { 
-        System.out.println("Lỗi: ID bàn không hợp lệ.");
-        return;
+        if (this.tableId <= 0) {
+            System.out.println("Lỗi: ID bàn không hợp lệ.");
+            return;
+        }
+        tbDao.updateStatus(tableId, status);
+        this.txtTrangThai.setText(status);
+        if (updateListener != null) {
+            updateListener.onTableStatusUpdated();
+        }
     }
-    
-    // 1. Cập nhật DB (Đảm bảo hàm updateStatus trong tbDao nhận tham số int)
-    tbDao.updateStatus(tableId, status); 
 
-    // 2. Cập nhật giao diện của Card hiện tại
-    this.txtTrangThai.setText(status);
-
-    // 3. GỌI CALLBACK để cập nhật lại số lượng bàn trống/đã đặt trên thanh thống kê
-    if (updateListener != null) {
-        updateListener.onTableStatusUpdated();
-    }
-}
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -239,25 +233,24 @@ public class cardTable extends javax.swing.JPanel {
     private void modeEmptyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modeEmptyActionPerformed
         // TODO add your handling code here:
         handleUpdate("Trống");
-        
+
     }//GEN-LAST:event_modeEmptyActionPerformed
 
     private void modeEmptyMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_modeEmptyMouseClicked
         // TODO add your handling code here:
-        
+
     }//GEN-LAST:event_modeEmptyMouseClicked
 
     private void modeBookedMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_modeBookedMouseClicked
         // TODO add your handling code here:
-        
-        
-        
+
+
     }//GEN-LAST:event_modeBookedMouseClicked
 
     private void modeUsingMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_modeUsingMouseClicked
         // TODO add your handling code here:
-        
-     
+
+
     }//GEN-LAST:event_modeUsingMouseClicked
 
 
@@ -272,6 +265,5 @@ public class cardTable extends javax.swing.JPanel {
     private javax.swing.JLabel txtSeats;
     private javax.swing.JTextField txtTrangThai;
     // End of variables declaration//GEN-END:variables
-
 
 }

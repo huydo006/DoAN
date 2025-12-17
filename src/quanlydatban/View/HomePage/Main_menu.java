@@ -4,7 +4,6 @@
  */
 package quanlydatban.View.HomePage;
 
-
 import quanlydatban.Model.Table;
 import java.sql.Connection;
 import quanlydatban.Dao.ConnectionDatabase;
@@ -17,8 +16,6 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.sql.Statement;
 import java.sql.ResultSet;
-
-
 
 import java.util.List;
 import quanlydatban.Dao.AccountDao;
@@ -33,74 +30,75 @@ import quanlydatban.View.dangnhap.JFLoginUI;
  * @author HELLO
  */
 public class Main_menu extends javax.swing.JFrame {
-    // Khai báo ở đầu lớp Main_menu, cùng nơi bạn khai báo các JButton
+
     private javax.swing.JButton activeButton;
     public Account AccCurrent;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Main_menu.class.getName());
     TableDao table = new TableDao();
     AccountDao acc = new AccountDao();
     EmployeeService empSe = new EmployeeService();
-    
+
     List<Account> AccList;
     List<Table> tbList;
+
     /**
      * Creates new form Main_menu
      */
-    
+
     public Main_menu(Account accLogin, String role) throws SQLException {
 
-            
-            
         this.AccCurrent = accLogin;
-    initComponents();
-    
-    // BƯỚC 3: Khởi tạo các Panel con và TRUYỀN DỮ LIỆU vào
-    pnScreenQuanLyBanAn banAnPanel = new pnScreenQuanLyBanAn();
-    
-    pnScreenDatBanMoi datBanPanel = new pnScreenDatBanMoi();
-    // Truyền AccCurrent vào cho Panel Đặt bàn để nó có dữ liệu chạy hàm setCurrentEmp()
-    datBanPanel.setAccount(this.AccCurrent); 
-    datBanPanel.setCurrentEmp(); // Sau khi có Account mới chạy hàm lấy Employee
-    
-    pnScreenDanhSach danhSachPanel = new pnScreenDanhSach();
-    pnScreenTimKiem timKiem = new pnScreenTimKiem();
-    pnScreenDanhSachEmployee danhsachEm = new pnScreenDanhSachEmployee();
+        initComponents();
 
-    // Thiết lập các Listener
-    banAnPanel.setDatBanMoiListener(datBanPanel);
-    datBanPanel.setQuanLyBanListener(banAnPanel);
-    datBanPanel.setDanhSachListener(danhSachPanel); 
+        pnScreenQuanLyBanAn banAnPanel = new pnScreenQuanLyBanAn();
 
-    // BƯỚC 4: Thêm vào pnMain (CardLayout)
-    pnMain.add(banAnPanel, "pnScreenQuanLyBanAn");
-    pnMain.add(datBanPanel, "pnScreenDatBanMoi");
-    pnMain.add(danhSachPanel, "pnScreenDanhSach");
-    pnMain.add(danhsachEm , "pnScreenDanhSachEmployee");
-    pnMain.add(timKiem,"pnScreenTimKiem");
+        pnScreenDatBanMoi datBanPanel = new pnScreenDatBanMoi();
+        datBanPanel.setAccount(this.AccCurrent);
+        datBanPanel.setCurrentEmp();
 
-    // Phân quyền và hiển thị
-    applyRolePermissions(role); 
-    this.setLocationRelativeTo(null);
-        
+        pnScreenDanhSach danhSachPanel = new pnScreenDanhSach();
+        pnScreenTimKiem timKiem = new pnScreenTimKiem();
+        pnScreenDanhSachEmployee danhsachEm = new pnScreenDanhSachEmployee();
+
+        // Thiết lập các Listener
+        banAnPanel.setDatBanMoiListener(datBanPanel);
+        datBanPanel.setQuanLyBanListener(banAnPanel);
+        datBanPanel.setDanhSachListener(danhSachPanel);
+
+        pnMain.add(banAnPanel, "pnScreenQuanLyBanAn");
+        pnMain.add(datBanPanel, "pnScreenDatBanMoi");
+        pnMain.add(danhSachPanel, "pnScreenDanhSach");
+        pnMain.add(danhsachEm, "pnScreenDanhSachEmployee");
+        pnMain.add(timKiem, "pnScreenTimKiem");
+
+        // Phân quyền và hiển thị
+        applyRolePermissions(role);
+        this.setLocationRelativeTo(null);
+
     }
+
     private void applyRolePermissions(String role) {
-        if (AccCurrent == null) return; // Bảo vệ nếu chưa có dữ liệu
-    if (role != null && role.equalsIgnoreCase("Manager")) {
-        // Nếu là Quản lý: Hiện lời chào và nút nhân viên
-        this.txtWelcome.setText("Chào mừng quản lý: " + AccCurrent.getUsername());
-        jButton4.setVisible(true);
-        jButton4.setEnabled(true);
-    } else {
-        // Nếu là Nhân viên: Đổi lời chào và ẨN NÚT
-        this.txtWelcome.setText("Chào mừng nhân viên: " + AccCurrent.getUsername());
-        jButton4.setVisible(false);
-        jButton4.setEnabled(false);
+        if (AccCurrent == null) {
+            return; // Bảo vệ nếu chưa có dữ liệu
+        }
+        if (role != null && role.equalsIgnoreCase("Manager")) {
+            // Nếu là Quản lý: Hiện lời chào và nút nhân viên
+            this.txtWelcome.setText("Chào mừng quản lý: " + AccCurrent.getUsername());
+            jButton4.setVisible(true);
+            jButton4.setEnabled(true);
+        } else {
+            // Nếu là Nhân viên: Đổi lời chào và ẨN NÚT
+            this.txtWelcome.setText("Chào mừng nhân viên: " + AccCurrent.getUsername());
+            jButton4.setVisible(false);
+            jButton4.setEnabled(false);
+        }
     }
-}
-    private void setCurrentAcc(){
-        AccountService acs= new AccountService();
-        this.AccCurrent=acs.getActiveACc();
+
+    private void setCurrentAcc() {
+        AccountService acs = new AccountService();
+        this.AccCurrent = acs.getActiveACc();
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -476,15 +474,15 @@ public class Main_menu extends javax.swing.JFrame {
         // TODO add your handling code here:
         setActiveButton(jButton1);
         CardLayout bt1 = (CardLayout) pnMain.getLayout();
-        bt1.show(pnMain,"pnScreenQuanLyBanAn");
-        
+        bt1.show(pnMain, "pnScreenQuanLyBanAn");
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         setActiveButton(jButton2);
         CardLayout bt2 = (CardLayout) pnMain.getLayout();
-        bt2.show(pnMain ,"pnScreenDatBanMoi");
+        bt2.show(pnMain, "pnScreenDatBanMoi");
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -516,62 +514,49 @@ public class Main_menu extends javax.swing.JFrame {
     private void btnLogOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogOutActionPerformed
         // TODO add your handling code here:
         setActiveButton(btnLogOut);
-    
-    // 1. Cập nhật trạng thái trong Database
-    if (this.AccCurrent != null) {
-        acc.updateActive(false, this.AccCurrent.getUsername());
-    }
 
-    // 2. KHỞI TẠO MỚI hoàn toàn màn hình Login 
-    // Không dùng biến loginUI khai báo ở trên đầu nữa
-    new JFLoginUI().setVisible(true); 
-
-    // 3. HỦY hoàn toàn Menu hiện tại khỏi bộ nhớ RAM
-    this.dispose();
+        // 1. Cập nhật trạng thái trong Database
+        if (this.AccCurrent != null) {
+            acc.updateActive(false, this.AccCurrent.getUsername());
+        }
+        new JFLoginUI().setVisible(true);
+        this.dispose();
 
     }//GEN-LAST:event_btnLogOutActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         setActiveButton(jButton5);
         CardLayout bt5 = (CardLayout) pnMain.getLayout();
-        bt5.show(pnMain,"pnScreenTimKiem");
+        bt5.show(pnMain, "pnScreenTimKiem");
 // TODO add your handling code here:
     }//GEN-LAST:event_jButton5ActionPerformed
 
-    // ... (Sau tất cả các hàm ActionPerformed) ...
-
-private void setButtonDesign(javax.swing.JButton button, boolean isActive) {
-    if (isActive) {
-        // Màu Active: Màu xanh (điều chỉnh RGB theo ý muốn)
-        button.setBackground(new java.awt.Color(0, 101, 234)); 
-        button.setForeground(new java.awt.Color(255, 255, 255)); 
-    } else {
-        // Màu Inactive: Màu nền Menu (điều chỉnh RGB theo ý muốn)
-        button.setBackground(new java.awt.Color(26, 41, 59)); 
-        button.setForeground(new java.awt.Color(238, 238, 238));
-    }
-}
-
-// ... (Sau hàm setButtonDesign) ...
-
-public void setActiveButton(javax.swing.JButton currentButton) {
-    // 1. Đặt lại màu cho nút đang Active trước đó (Inactive)
-    if (activeButton != null) {
-        setButtonDesign(activeButton, false); 
+    private void setButtonDesign(javax.swing.JButton button, boolean isActive) {
+        if (isActive) {
+            // Màu Active: Màu xanh 
+            button.setBackground(new java.awt.Color(0, 101, 234));
+            button.setForeground(new java.awt.Color(255, 255, 255));
+        } else {
+            // Màu Inactive: Màu nền Menu 
+            button.setBackground(new java.awt.Color(26, 41, 59));
+            button.setForeground(new java.awt.Color(238, 238, 238));
+        }
     }
 
-    // 2. Thiết lập trạng thái Active cho nút mới
-    setButtonDesign(currentButton, true); 
+    public void setActiveButton(javax.swing.JButton currentButton) {
+        if (activeButton != null) {
+            setButtonDesign(activeButton, false);
+        }
 
-    // 3. Lưu trữ nút mới làm nút Active
-    activeButton = currentButton;
-}
-    
+        setButtonDesign(currentButton, true);
+        activeButton = currentButton;
+    }
+
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        
+
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -3,31 +3,31 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package quanlydatban.View.dangnhap;
+
 import quanlydatban.Dao.EmployeeDao;
+
 /**
  *
  * @author 40C LTN
  */
 public class JFSignUpUI extends javax.swing.JFrame {
-    // Biến lưu trữ ID nhân viên được truyền sang
-    private int idEmpVuaTao; 
+
+    private int idEmpVuaTao;
     private quanlydatban.View.dangnhap.SignUpListener listener;
-    private EmployeeDao empDao = new EmployeeDao(); // THÊM DÒNG NÀY
-    // Constructor mặc định (Giữ lại để NetBeans không báo lỗi Design)
+    private EmployeeDao empDao = new EmployeeDao(); 
+
     public JFSignUpUI() {
         initComponents();
         this.setLocationRelativeTo(null);
     }
 
     public JFSignUpUI(int idEmp, quanlydatban.View.dangnhap.SignUpListener listener) {
-    this(); 
-    this.idEmpVuaTao = idEmp; 
-    this.listener = listener; // Lưu listener lại để dùng ở nút bấm
-    System.out.println("Đang tạo tài khoản cho nhân viên ID: " + idEmpVuaTao);
-}
-     
+        this();
+        this.idEmpVuaTao = idEmp;
+        this.listener = listener; 
+        System.out.println("Đang tạo tài khoản cho nhân viên ID: " + idEmpVuaTao);
+    }
 
-    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -108,24 +108,24 @@ public class JFSignUpUI extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 102, 102));
-        jLabel1.setText("Đăng Kí");
+        jLabel1.setText("Đăng ký");
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(102, 102, 102));
-        jLabel2.setText("Họ và Tên");
+        jLabel2.setText("Tên tài khoản");
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(102, 102, 102));
-        jLabel3.setText("Mật Khẩu");
+        jLabel3.setText("Mật khẩu");
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(102, 102, 102));
-        jLabel4.setText("Nhập Lại Mật Khẩu");
+        jLabel4.setText("Xác nhận mật khẩu");
 
         jButton1.setBackground(new java.awt.Color(0, 102, 102));
         jButton1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setText("Đăng Kí");
+        jButton1.setText("Đăng ký");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -200,43 +200,40 @@ public class JFSignUpUI extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 
         String username = jTextField1.getText().trim();
-    // Sử dụng getPassword() cho PasswordField để bảo mật
-    String password = new String(jPasswordField2.getPassword());
-    String confirm = new String(jPasswordField1.getPassword());
+        // Sử dụng getPassword() cho PasswordField để bảo mật
+        String password = new String(jPasswordField2.getPassword());
+        String confirm = new String(jPasswordField1.getPassword());
 
-    // 1. Kiểm tra rỗng
-    if (username.isEmpty() || password.isEmpty()) {
-        javax.swing.JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin!");
-        return;
-    }
-
-    // 2. Kiểm tra khớp mật khẩu
-    if (!password.equals(confirm)) {
-        javax.swing.JOptionPane.showMessageDialog(this, "Mật khẩu nhập lại không chính xác!");
-        return;
-    }
-
-    // 3. Thực hiện lưu
-    try {
-        boolean thanhCong = empDao.luuTaiKhoan(username, password, idEmpVuaTao);
-
-        if (thanhCong) {
-    javax.swing.JOptionPane.showMessageDialog(this, "Tạo tài khoản thành công cho nhân viên ID: " + idEmpVuaTao);
-    
-    // THÊM DÒNG NÀY: Gọi listener để màn hình danh sách tự load lại bảng
-    if (this.listener != null) {
-        this.listener.onSignUpSuccess();
-    }
-    
-    this.dispose(); 
-}
-         else {
-            // Thông báo chung chung thay vì khẳng định là trùng tên
-            javax.swing.JOptionPane.showMessageDialog(this, "Đăng ký thất bại! Kiểm tra lại tên đăng nhập hoặc kết nối.");
+        // 1. Kiểm tra rỗng
+        if (username.isEmpty() || password.isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin!");
+            return;
         }
-    } catch (Exception e) {
-        javax.swing.JOptionPane.showMessageDialog(this, "Lỗi hệ thống: " + e.getMessage());
-    }
+
+        // 2. Kiểm tra khớp mật khẩu
+        if (!password.equals(confirm)) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Mật khẩu nhập lại không chính xác!");
+            return;
+        }
+
+        // 3. Thực hiện lưu
+        try {
+            boolean thanhCong = empDao.luuTaiKhoan(username, password, idEmpVuaTao);
+
+            if (thanhCong) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Tạo tài khoản thành công cho nhân viên ID: " + idEmpVuaTao);
+
+                if (this.listener != null) {
+                    this.listener.onSignUpSuccess();
+                }
+
+                this.dispose();
+            } else {
+                javax.swing.JOptionPane.showMessageDialog(this, "Đăng ký thất bại! Kiểm tra lại tên đăng nhập hoặc kết nối.");
+            }
+        } catch (Exception e) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Lỗi hệ thống: " + e.getMessage());
+        }
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -244,7 +241,7 @@ public class JFSignUpUI extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-       try {
+        try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
@@ -264,9 +261,8 @@ public class JFSignUpUI extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {
-    // TRUYỀN THÊM null: Để hết báo lỗi biên dịch khi chạy test lẻ file này
-    new JFSignUpUI(0, null).setVisible(true); 
-});
+            new JFSignUpUI(0, null).setVisible(true);
+        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

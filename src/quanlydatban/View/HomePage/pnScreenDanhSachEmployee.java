@@ -3,11 +3,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
 package quanlydatban.View.HomePage;
-import quanlydatban.Dao.EmployeeDao; // Phải có để lấy dữ liệu
-import quanlydatban.Model.Employee; // Phải có để dùng đối tượng Employee
+
+import quanlydatban.Dao.EmployeeDao; 
+import quanlydatban.Model.Employee; 
 import java.util.List;
-import javax.swing.table.DefaultTableModel; // Phải có để quản lý dữ liệu bảng
-import javax.swing.JOptionPane; // Để hiển thị thông báo lỗi
+import javax.swing.table.DefaultTableModel; 
+import javax.swing.JOptionPane;
 import quanlydatban.Dao.ConnectionDatabase;
 import quanlydatban.View.dangnhap.RoundedBorder;
 import java.sql.Connection;
@@ -20,72 +21,68 @@ import quanlydatban.Service.EmployeeService;
  * @author HELLO
  */
 public class pnScreenDanhSachEmployee extends javax.swing.JPanel implements quanlydatban.View.dangnhap.SignUpListener {
-    // ... (bên trong public class pnScreenDanhSachEmployee extends javax.swing.JPanel { ) ...
+
     private RoundedBorder roundedBorder;
     EmployeeService ems = new EmployeeService();
+
     public pnScreenDanhSachEmployee() {
         initComponents();
         loadDataToTable();
         applyRoundedBorder();
-        
-    
+
     }
+
     private void applyRoundedBorder() {
         int radius = 15; // Chọn bán kính bo tròn
         roundedBorder = new RoundedBorder(radius);
 
         // Áp dụng cho các nút
-        if (jButton1 != null) jButton1.setBorder(roundedBorder);
-        if (jButton2 != null) jButton2.setBorder(roundedBorder);
-        
-        // Tùy chọn: Áp dụng cho khung JScrollPane chứa JTable
+        if (jButton1 != null) {
+            jButton1.setBorder(roundedBorder);
+        }
+        if (jButton2 != null) {
+            jButton2.setBorder(roundedBorder);
+        }
+
         if (jScrollPane1 != null) {
             jScrollPane1.setBorder(roundedBorder);
         }
     }
-    
-   private void loadDataToTable() {
-    DefaultTableModel model = new DefaultTableModel(
-        new String[]{"ID", "Họ và Tên", "Ngày sinh", "Giới Tính", "Số điện thoại", "Địa Chỉ", "Lương", "Chức Vụ"},
-        0
-    );
-    
-    try {
-        // 2a. THAY ĐỔI: GỌI phương thức getEmployee() để TẢI DỮ LIỆU vào biến list nội bộ của DAO
-//        ems.getListEMP();
-        
-        // 2b. THAY ĐỔI: Lấy danh sách đã được tải ra bằng getList()
-        List<Employee> employeeList = ems.getListEMP();
-        
-        // 3. Duyệt qua danh sách và thêm từng dòng vào Model
-        for (Employee emp : employeeList) {
-            model.addRow(new Object[]{
-                emp.getIdEmploy(),
-                emp.getName(),
-                emp.getDoB(),
-                emp.getGender(),
-                emp.getPhone(),
-                emp.getAddress(),
-                emp.getSalary(),
-                emp.getRole()
-            });
+
+    private void loadDataToTable() {
+        DefaultTableModel model = new DefaultTableModel(
+                new String[]{"ID", "Họ và Tên", "Ngày sinh", "Giới Tính", "Số điện thoại", "Địa Chỉ", "Lương", "Chức Vụ"},
+                0
+        );
+
+        try {
+            List<Employee> employeeList = ems.getListEMP();
+
+            for (Employee emp : employeeList) {
+                model.addRow(new Object[]{
+                    emp.getIdEmploy(),
+                    emp.getName(),
+                    emp.getDoB(),
+                    emp.getGender(),
+                    emp.getPhone(),
+                    emp.getAddress(),
+                    emp.getSalary(),
+                    emp.getRole()
+                });
+            }
+
+            jTable1.setModel(model);
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Lỗi khi tải dữ liệu nhân viên: " + e.getMessage(),
+                    "Lỗi Database", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
-        
-        // 4. Đặt Model vào JTable
-        jTable1.setModel(model);
-        
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Lỗi khi tải dữ liệu nhân viên: " + e.getMessage(), 
-                                      "Lỗi Database", JOptionPane.ERROR_MESSAGE);
-        e.printStackTrace();
     }
-}
 
     /**
      * Creates new form pnScreenDanhSachEmployee
      */
-
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -121,7 +118,6 @@ public class pnScreenDanhSachEmployee extends javax.swing.JPanel implements quan
         jPanel2.setForeground(new java.awt.Color(204, 204, 204));
         jPanel2.setPreferredSize(new java.awt.Dimension(800, 500));
 
-        jTable1.setBackground(new java.awt.Color(204, 204, 204));
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null, null},
@@ -130,7 +126,7 @@ public class pnScreenDanhSachEmployee extends javax.swing.JPanel implements quan
                 {null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "ID", "Họ và Tên", "Ngày sinh", "Giới Tính", "Số điện thoại", "Địa Chỉ", "Lương", "Chức Vụ"
+                "ID", "Họ và tên", "Ngày sinh", "Giới tính", "Số điện thoại", "Địa chỉ", "Lương", "Chức vụ"
             }
         ));
         jTable1.setPreferredSize(new java.awt.Dimension(800, 500));
@@ -149,14 +145,18 @@ public class pnScreenDanhSachEmployee extends javax.swing.JPanel implements quan
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        jButton1.setText("Thêm Nhân Viên");
+        jButton1.setBackground(new java.awt.Color(237, 233, 216));
+        jButton1.setText("Thêm nhân viên");
+        jButton1.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 2, new java.awt.Color(128, 128, 128)), javax.swing.BorderFactory.createMatteBorder(2, 2, 0, 0, new java.awt.Color(255, 255, 255))));
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
 
-        jButton2.setText("Xóa Nhân Viên");
+        jButton2.setBackground(new java.awt.Color(237, 233, 216));
+        jButton2.setText("Xóa nhân viên");
+        jButton2.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 2, new java.awt.Color(128, 128, 128)), javax.swing.BorderFactory.createMatteBorder(2, 2, 0, 0, new java.awt.Color(255, 255, 255))));
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
@@ -172,10 +172,10 @@ public class pnScreenDanhSachEmployee extends javax.swing.JPanel implements quan
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 794, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(45, 45, 45)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(175, 175, 175)))
+                        .addComponent(jButton1)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(29, 29, 29)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -185,68 +185,63 @@ public class pnScreenDanhSachEmployee extends javax.swing.JPanel implements quan
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 403, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(162, 162, 162))
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(14, 14, 14))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-          pnScreenThemNhanVien addEmployeeFrame = new pnScreenThemNhanVien(this); 
-          addEmployeeFrame.setVisible(true);
-          addEmployeeFrame.setLocationRelativeTo(null);
+        pnScreenThemNhanVien addEmployeeFrame = new pnScreenThemNhanVien(this);
+        addEmployeeFrame.setVisible(true);
+        addEmployeeFrame.setLocationRelativeTo(null);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-      // TODO add your handling code here:
-      // Đã xóa code gắn sự kiện đệ quy khỏi đây
-      int selectedRow = jTable1.getSelectedRow();
-    
-    if (selectedRow == -1) {
-        JOptionPane.showMessageDialog(this, "Vui lòng chọn nhân viên cần xóa trong bảng.", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
-        return;
-    }
+        // TODO add your handling code here:
+        int selectedRow = jTable1.getSelectedRow();
 
-    // 1. Lấy ID từ cột đầu tiên (index 0)
-    Object idValue = jTable1.getValueAt(selectedRow, 0); 
-    int employeeId;
-    
-    try {
-        employeeId = Integer.parseInt(idValue.toString());
-    } catch (NumberFormatException e) {
-        JOptionPane.showMessageDialog(this, "Không thể lấy ID nhân viên. Dữ liệu bảng bị lỗi.", "Lỗi dữ liệu", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
-    
-    // 2. Hộp thoại xác nhận
-    int confirm = JOptionPane.showConfirmDialog(this, 
-        "Bạn có chắc chắn muốn xóa nhân viên ID: " + employeeId + " không?", 
-        "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
-
-    if (confirm == JOptionPane.YES_OPTION) {
-        EmployeeDao dao = new EmployeeDao();
-        try {
-            // 3. Thực hiện xóa (Cần phương thức deleteEmployee(int id) trong EmployeeDao)
-            boolean success = ems.RemoveEmp(employeeId); 
-            
-            if (success) {
-                JOptionPane.showMessageDialog(this, "Xóa nhân viên thành công!", "Thành công", JOptionPane.INFORMATION_MESSAGE);
-                loadDataToTable(); // 4. Tải lại bảng sau khi xóa
-            } else {
-                JOptionPane.showMessageDialog(this, "Không tìm thấy nhân viên hoặc thao tác xóa thất bại.", "Lỗi", JOptionPane.ERROR_MESSAGE);
-            }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Lỗi không xác định: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn nhân viên cần xóa trong bảng.", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+            return;
         }
-    }
+
+        Object idValue = jTable1.getValueAt(selectedRow, 0);
+        int employeeId;
+
+        try {
+            employeeId = Integer.parseInt(idValue.toString());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Không thể lấy ID nhân viên. Dữ liệu bảng bị lỗi.", "Lỗi dữ liệu", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        int confirm = JOptionPane.showConfirmDialog(this,
+                "Bạn có chắc chắn muốn xóa nhân viên ID: " + employeeId + " không?",
+                "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
+
+        if (confirm == JOptionPane.YES_OPTION) {
+            EmployeeDao dao = new EmployeeDao();
+            try {
+                boolean success = ems.RemoveEmp(employeeId);
+
+                if (success) {
+                    JOptionPane.showMessageDialog(this, "Xóa nhân viên thành công!", "Thành công", JOptionPane.INFORMATION_MESSAGE);
+                    loadDataToTable();
+                } else {
+                    JOptionPane.showMessageDialog(this, "Không tìm thấy nhân viên hoặc thao tác xóa thất bại.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Lỗi không xác định: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     @Override
-public void onSignUpSuccess() {
-    loadDataToTable(); // Tự động load lại bảng khi đăng ký xong
-}
+    public void onSignUpSuccess() {
+        loadDataToTable(); 
+    }
 
-    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;

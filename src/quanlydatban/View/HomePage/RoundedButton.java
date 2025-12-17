@@ -13,12 +13,12 @@ import javax.swing.JButton;
  * @author Admin
  */
 public class RoundedButton extends JButton {
-    private int cornerRadius = 10; // Độ cong của góc (điều chỉnh theo ý muốn)
+    private int cornerRadius = 10; 
 
     public RoundedButton() {
         // Thiết lập thuộc tính mặc định
         super();
-        setContentAreaFilled(false); // Quan trọng: Tắt vùng nội dung mặc định
+        setContentAreaFilled(false); 
         setFocusPainted(false);
         setBorderPainted(false); // Tắt đường viền mặc định
     }
@@ -29,7 +29,6 @@ public class RoundedButton extends JButton {
         setText(text);
     }
     
-    // Phương thức này sẽ vẽ lại hình dạng của nút
     @Override
     protected void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g.create();
@@ -50,7 +49,7 @@ public class RoundedButton extends JButton {
         g2.dispose();
     }
     
-    // Phương thức này sẽ vẽ lại đường viền (nếu có)
+    
     @Override
     protected void paintBorder(Graphics g) {
         // Không vẽ đường viền (vì đã tắt setBorderPainted(false))
@@ -59,7 +58,6 @@ public class RoundedButton extends JButton {
     // Phương thức này giúp Mouse nhận biết hình dạng bo góc
     @Override
     public boolean contains(int x, int y) {
-        // Mặc định: Trả về hình chữ nhật, bạn có thể custom phức tạp hơn nếu cần
         return super.contains(x, y); 
     }
 }

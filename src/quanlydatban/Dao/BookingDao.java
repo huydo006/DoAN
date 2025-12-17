@@ -22,17 +22,14 @@ import java.sql.Timestamp;
  */
 public class BookingDao {
 
-    // SQL Base dùng chung để JOIN lấy đầy đủ 8 cột thông tin (Tên khách, SĐT, Danh sách bàn)
+    
     private final String SELECT_BASE
             = "SELECT b.*, c.nameCus, c.cusPhone, GROUP_CONCAT(l.IDtable SEPARATOR ', ') AS TableList "
             + "FROM Booking b "
             + "JOIN Customer c ON b.IDcus = c.IDcus "
             + "LEFT JOIN List l ON b.IDbooking = l.IDbooking ";
 
-    /**
-     * Hàm Helper dùng chung để Map dữ liệu từ ResultSet sang đối tượng Booking
-     * duy nhất
-     */
+    
     private Booking mapToFullBooking(ResultSet rs) throws SQLException {
         return new Booking(
                 rs.getInt("IDbooking"),
@@ -50,11 +47,7 @@ public class BookingDao {
     }
 
     // --- NHÓM HÀM TRUY VẤN DỮ LIỆU ---
-    /**
-     * Lấy danh sách hiển thị cho cả Tìm kiếm và Danh sách (Tùy biến theo từ
-     * khóa) Thay thế cho: getAllBooking, getAllBookingDetail,
-     * searchBookingDetail
-     */
+    
     public List<Booking> getBookingsWithFullDetails(String keyword) {
         List<Booking> list = new ArrayList<>();
         String sql = SELECT_BASE;
@@ -83,7 +76,7 @@ public class BookingDao {
         return list;
     }
 
-    // --- NHÓM HÀM THỰC THI (INSERT/UPDATE/DELETE) ---
+    
     public boolean addBooking(Timestamp timeStart, Timestamp timeEnd, int numGuest, String note, int idEmp, int idCus) {
         String sql = "INSERT INTO Booking (TimeStarted, TimeEnd, guestCount, Note, IDemploy, IDcus) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection conn = ConnectionDatabase.getConnection(); PreparedStatement ptm = conn.prepareStatement(sql)) {
@@ -170,44 +163,45 @@ public class BookingDao {
 
     public List<Booking> getConflictingBookings(List<Integer> idTableList) {
         List<Booking> list = new ArrayList<>();
-    if (idTableList == null || idTableList.isEmpty()) return list;
-
-    String placeholders = String.join(",", java.util.Collections.nCopies(idTableList.size(), "?"));
-    
-    // Sử dụng UPPER để không phân biệt chữ hoa/thường trong Database
-    String sql = "SELECT DISTINCT b.* FROM Booking b " +
-                 "JOIN List l ON b.IDbooking = l.IDbooking " +
-                 "WHERE l.IDtable IN (" + placeholders + ") " +
-                 "AND (UPPER(b.isComplete) = 'ĐÃ XÁC NHẬN' OR UPPER(b.isComplete) = 'HOÀN THÀNH')";
-
-    try (Connection conn = ConnectionDatabase.getConnection();
-         PreparedStatement pstm = conn.prepareStatement(sql)) {
-        
-        for (int i = 0; i < idTableList.size(); i++) {
-            pstm.setInt(i + 1, idTableList.get(i));
+        if (idTableList == null || idTableList.isEmpty()) {
+            return list;
         }
 
-        try (ResultSet rs = pstm.executeQuery()) {
-            while (rs.next()) {
-        // Sử dụng Constructor có 7 tham số mà bạn đã định nghĩa trong Booking.java
-        // Lưu ý: Thứ tự truyền vào phải khớp chính xác với Constructor trong Model
-        Booking b = new Booking(
-            rs.getInt("IDbooking"),
-            rs.getTimestamp("TimeStarted"),
-            rs.getTimestamp("TimeEnd"),
-            rs.getInt("guestCount"),
-            rs.getString("Note"),
-            rs.getInt("IDemploy"),
-            rs.getInt("IDcus")
-        );
-        
-        // Gán thêm trạng thái để Service kiểm tra (vì Constructor 7 tham số không có field này)
-        b.setIsComplete(rs.getString("isComplete")); 
-        
-        list.add(b);
-    }
+        String placeholders = String.join(",", java.util.Collections.nCopies(idTableList.size(), "?"));
+
+        // Sử dụng UPPER để không phân biệt chữ hoa/thường trong Database
+        String sql = "SELECT DISTINCT b.* FROM Booking b "
+                + "JOIN List l ON b.IDbooking = l.IDbooking "
+                + "WHERE l.IDtable IN (" + placeholders + ") "
+                + "AND (UPPER(b.isComplete) = 'ĐÃ XÁC NHẬN' OR UPPER(b.isComplete) = 'HOÀN THÀNH')";
+
+        try (Connection conn = ConnectionDatabase.getConnection(); PreparedStatement pstm = conn.prepareStatement(sql)) {
+
+            for (int i = 0; i < idTableList.size(); i++) {
+                pstm.setInt(i + 1, idTableList.get(i));
+            }
+
+            try (ResultSet rs = pstm.executeQuery()) {
+                while (rs.next()) {
+                    Booking b = new Booking(
+                            rs.getInt("IDbooking"),
+                            rs.getTimestamp("TimeStarted"),
+                            rs.getTimestamp("TimeEnd"),
+                            rs.getInt("guestCount"),
+                            rs.getString("Note"),
+                            rs.getInt("IDemploy"),
+                            rs.getInt("IDcus")
+                    );
+
+                    
+                    b.setIsComplete(rs.getString("isComplete"));
+
+                    list.add(b);
+                }
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
-    } catch (SQLException ex) { ex.printStackTrace(); }
-    return list;
+        return list;
     }
 }

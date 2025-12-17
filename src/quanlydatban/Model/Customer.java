@@ -9,6 +9,7 @@ package quanlydatban.Model;
  * @author HELLO
  */
 public class Customer {
+
     String nameCus;
     String cusPhone;
 
@@ -33,6 +34,4 @@ public class Customer {
         this.cusPhone = cusPhone;
     }
 
-    
-    
 }

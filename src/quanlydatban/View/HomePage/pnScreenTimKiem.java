@@ -4,15 +4,15 @@
  */
 package quanlydatban.View.HomePage;
 
-import java.awt.Color; // Cần thêm dòng này nếu chưa có
-import java.awt.event.FocusAdapter; // Cần thêm dòng này nếu chưa có
-import java.awt.event.FocusEvent; // Cần thêm dòng này nếu chưa có
+import java.awt.Color; 
+import java.awt.event.FocusAdapter; 
+import java.awt.event.FocusEvent; 
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
-import quanlydatban.Model.Booking; // Sử dụng Model Booking duy nhất
-import quanlydatban.Service.BookingService; // Gọi thông qua Service thay vì DAO trực tiếp
+import quanlydatban.Model.Booking;
+import quanlydatban.Service.BookingService; 
 
 /**
  *
@@ -35,8 +35,6 @@ public class pnScreenTimKiem extends javax.swing.JPanel {
 
         initComponents();
         addPlaceholderFeature(jTextField2);
-
-        // Gọi khởi tạo bảng (chỉ khởi tạo model, không tải dữ liệu)
         khoiTaoJTable();
     }
 
@@ -185,7 +183,7 @@ public class pnScreenTimKiem extends javax.swing.JPanel {
 
     private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
         // TODO add your handling code here:                                     
-        jButton2ActionPerformed(evt); // Nhấn Enter cũng sẽ kích hoạt tìm kiếm
+        jButton2ActionPerformed(evt); 
     }//GEN-LAST:event_jTextField2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -201,17 +199,13 @@ public class pnScreenTimKiem extends javax.swing.JPanel {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         String tuKhoa = jTextField2.getText().trim();
-
-        // Nếu để trống hoặc là placeholder, lấy toàn bộ danh sách chi tiết từ Service
         if (tuKhoa.isEmpty() || tuKhoa.equals(PLACEHOLDER_TEXT)) {
             taiDuLieuLenBang(bookingService.getAllBooking());
             return;
         }
 
-        // Gọi Service thực hiện tìm kiếm (Service sẽ JOIN SQL lấy đủ thông tin)
         List<Booking> ketQua = bookingService.searchBooking(tuKhoa);
 
-        // Hiển thị kết quả
         taiDuLieuLenBang(ketQua);
 
         if (ketQua.isEmpty()) {
@@ -223,7 +217,6 @@ public class pnScreenTimKiem extends javax.swing.JPanel {
 // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
 
-    // >>> Vị trí DÁN CODE 3: Thêm phương thức xử lý FocusListener <<<
     private void addPlaceholderFeature(JTextField textField) {
         textField.addFocusListener(new FocusAdapter() {
             @Override
@@ -247,7 +240,7 @@ public class pnScreenTimKiem extends javax.swing.JPanel {
     // --- PHƯƠNG THỨC KHỞI TẠO BẢNG VÀ TẢI DỮ LIỆU BAN ĐẦU ---
     private void khoiTaoJTable() {
         tableModel = (DefaultTableModel) jTable1.getModel();
-        tableModel.setRowCount(0); // Bảng trống khi khởi tạo
+        tableModel.setRowCount(0);
     }
 
 // --- PHƯƠNG THỨC ĐỔ DỮ LIỆU VÀO BẢNG ---

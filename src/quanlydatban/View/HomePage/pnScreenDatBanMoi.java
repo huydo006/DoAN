@@ -50,8 +50,6 @@ public class pnScreenDatBanMoi extends javax.swing.JPanel implements TableUpdate
         jScrollPane1.setVerticalScrollBarPolicy(
                 javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS
         );
-
-        // 6. Tải dữ liệu lần đầu tiên (vì bạn đã xóa nó khỏi Constructor)
         ViewTable();
     }
 
@@ -62,7 +60,7 @@ public class pnScreenDatBanMoi extends javax.swing.JPanel implements TableUpdate
         for (Table x : list.getTbList()) {
             model.addRow(new Object[]{x.getIdTable(), x.getSeats()});
         }
-        
+
     }
 
     private void resetForm() {
@@ -79,13 +77,13 @@ public class pnScreenDatBanMoi extends javax.swing.JPanel implements TableUpdate
     }
 
     public void setAccount(Account acc) {
-    this.AccCurrent = acc;
-}
-    public void setCurrentEmp() {
-        // Thêm dòng kiểm tra null này
-    if (this.AccCurrent == null) {
-        return; 
+        this.AccCurrent = acc;
     }
+
+    public void setCurrentEmp() {
+        if (this.AccCurrent == null) {
+            return;
+        }
         try {
             AccountService acs = new AccountService();
             List<Account> AccList = acs.getAccountList();
@@ -113,11 +111,9 @@ public class pnScreenDatBanMoi extends javax.swing.JPanel implements TableUpdate
 
     private List<Integer> getListIdFromText(String Text) {
         List<Integer> tempList = new ArrayList<>();
-        //trim : cắt khoảng trắng
         if (Text.isEmpty() || Text.trim().isEmpty()) {
             return null;
         }
-        //split : xóa ký tự (dấu phẩy)
         String[] tempString = Text.split(" ");
 
         for (String x : tempString) {
@@ -177,23 +173,23 @@ public class pnScreenDatBanMoi extends javax.swing.JPanel implements TableUpdate
         titleTDDBM.setPreferredSize(new java.awt.Dimension(870, 70));
 
         jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel8.setText("Tao Don Dat Ban Moi");
+        jLabel8.setText("Tạo đơn đặt bàn mới");
 
         javax.swing.GroupLayout titleTDDBMLayout = new javax.swing.GroupLayout(titleTDDBM);
         titleTDDBM.setLayout(titleTDDBMLayout);
         titleTDDBMLayout.setHorizontalGroup(
             titleTDDBMLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(titleTDDBMLayout.createSequentialGroup()
-                .addGap(14, 14, 14)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, titleTDDBMLayout.createSequentialGroup()
+                .addContainerGap(358, Short.MAX_VALUE)
                 .addComponent(jLabel8)
-                .addContainerGap(673, Short.MAX_VALUE))
+                .addGap(339, 339, 339))
         );
         titleTDDBMLayout.setVerticalGroup(
             titleTDDBMLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(titleTDDBMLayout.createSequentialGroup()
-                .addGap(20, 20, 20)
+                .addGap(19, 19, 19)
                 .addComponent(jLabel8)
-                .addContainerGap(25, Short.MAX_VALUE))
+                .addContainerGap(26, Short.MAX_VALUE))
         );
 
         screenDatBanMoi.add(titleTDDBM, java.awt.BorderLayout.PAGE_START);
@@ -204,26 +200,32 @@ public class pnScreenDatBanMoi extends javax.swing.JPanel implements TableUpdate
         pnThongTinKH.setPreferredSize(new java.awt.Dimension(870, 300));
 
         jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel9.setText("Thong tin khach hang");
+        jLabel9.setText("Thông tin khách hàng");
 
-        jLabel10.setText("Ten Khach Hang : *");
+        jLabel10.setText("Tên khách hàng");
 
-        jLabel12.setText("Chon Ban :");
+        txtTenKH.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 2, new java.awt.Color(128, 128, 128)), javax.swing.BorderFactory.createMatteBorder(2, 2, 0, 0, new java.awt.Color(255, 255, 255))));
 
-        jLabel13.setText("So dien thoai : ");
+        jLabel12.setText("Chọn bàn");
 
-        jLabel14.setText("Gio hen : ");
+        jLabel13.setText("Số điện thoại");
 
-        jLabel15.setText("So khach :");
+        txtSDT.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 2, new java.awt.Color(128, 128, 128)), javax.swing.BorderFactory.createMatteBorder(2, 2, 0, 0, new java.awt.Color(255, 255, 255))));
 
-        btnDeleteAll.setText("Xoa Form");
+        jLabel14.setText("Giờ hẹn");
+
+        jLabel15.setText("Số khách");
+
+        txtSoKhach.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 2, new java.awt.Color(128, 128, 128)), javax.swing.BorderFactory.createMatteBorder(2, 2, 0, 0, new java.awt.Color(255, 255, 255))));
+
+        btnDeleteAll.setText("Xóa Form");
         btnDeleteAll.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnDeleteAllActionPerformed(evt);
             }
         });
 
-        btnConfirm.setText("Tao Don");
+        btnConfirm.setText("Tạo đơn");
         btnConfirm.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnConfirmActionPerformed(evt);
@@ -232,20 +234,27 @@ public class pnScreenDatBanMoi extends javax.swing.JPanel implements TableUpdate
 
         jLabel16.setText("Ghi chú :");
 
+        txtGhiChu.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 2, new java.awt.Color(128, 128, 128)), javax.swing.BorderFactory.createMatteBorder(2, 2, 0, 0, new java.awt.Color(255, 255, 255))));
         txtGhiChu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtGhiChuActionPerformed(evt);
             }
         });
 
-        jLabel17.setText("Gio ket thuc : ");
+        jLabel17.setText("Giờ kết thúc");
 
-        btnChonBan.setText("Xác Nhận Bàn");
+        txtChonBan.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 2, new java.awt.Color(128, 128, 128)), javax.swing.BorderFactory.createMatteBorder(2, 2, 0, 0, new java.awt.Color(255, 255, 255))));
+
+        btnChonBan.setText("Xác nhận bàn");
         btnChonBan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnChonBanActionPerformed(evt);
             }
         });
+
+        txtTimeStarted.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 2, new java.awt.Color(128, 128, 128)), javax.swing.BorderFactory.createMatteBorder(2, 2, 0, 0, new java.awt.Color(255, 255, 255))));
+
+        txtTimeEnd.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 2, new java.awt.Color(128, 128, 128)), javax.swing.BorderFactory.createMatteBorder(2, 2, 0, 0, new java.awt.Color(255, 255, 255))));
 
         javax.swing.GroupLayout pnThongTinKHLayout = new javax.swing.GroupLayout(pnThongTinKH);
         pnThongTinKH.setLayout(pnThongTinKHLayout);
@@ -267,28 +276,25 @@ public class pnScreenDatBanMoi extends javax.swing.JPanel implements TableUpdate
                             .addComponent(jLabel17)
                             .addComponent(txtTimeStarted, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtTimeEnd, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(pnThongTinKHLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(pnThongTinKHLayout.createSequentialGroup()
-                        .addGap(23, 23, 23)
-                        .addComponent(btnChonBan)
-                        .addGap(0, 387, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnThongTinKHLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(pnThongTinKHLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnThongTinKHLayout.createSequentialGroup()
-                                .addGroup(pnThongTinKHLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(txtSDT, javax.swing.GroupLayout.DEFAULT_SIZE, 321, Short.MAX_VALUE)
-                                    .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel13)
-                                    .addComponent(txtSoKhach, javax.swing.GroupLayout.DEFAULT_SIZE, 321, Short.MAX_VALUE)
-                                    .addComponent(jLabel12)
-                                    .addComponent(txtChonBan))
-                                .addGap(187, 187, 187))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnThongTinKHLayout.createSequentialGroup()
-                                .addComponent(btnDeleteAll)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnConfirm)
-                                .addGap(75, 75, 75))))))
+                        .addGroup(pnThongTinKHLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtSDT, javax.swing.GroupLayout.DEFAULT_SIZE, 321, Short.MAX_VALUE)
+                            .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel13)
+                            .addComponent(txtSoKhach, javax.swing.GroupLayout.DEFAULT_SIZE, 321, Short.MAX_VALUE)
+                            .addComponent(jLabel12)
+                            .addComponent(txtChonBan))
+                        .addGap(171, 171, 171))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnThongTinKHLayout.createSequentialGroup()
+                        .addComponent(btnDeleteAll)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnConfirm)
+                        .addGap(75, 75, 75))
+                    .addGroup(pnThongTinKHLayout.createSequentialGroup()
+                        .addComponent(btnChonBan)
+                        .addContainerGap())))
         );
         pnThongTinKHLayout.setVerticalGroup(
             pnThongTinKHLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -323,17 +329,17 @@ public class pnScreenDatBanMoi extends javax.swing.JPanel implements TableUpdate
                     .addGroup(pnThongTinKHLayout.createSequentialGroup()
                         .addGap(13, 13, 13)
                         .addComponent(jLabel16)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
                         .addGroup(pnThongTinKHLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnDeleteAll)
                             .addComponent(btnConfirm))
                         .addGap(19, 19, 19))
                     .addGroup(pnThongTinKHLayout.createSequentialGroup()
-                        .addGap(6, 6, 6)
+                        .addGap(18, 18, 18)
                         .addComponent(btnChonBan)
-                        .addGap(12, 12, 12)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtGhiChu, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addContainerGap(10, Short.MAX_VALUE))))
         );
 
         javax.swing.JSpinner.DateEditor timeStartedEditor = new javax.swing.JSpinner.DateEditor(txtTimeStarted, "HH:mm");
@@ -355,7 +361,7 @@ public class pnScreenDatBanMoi extends javax.swing.JPanel implements TableUpdate
 
             },
             new String [] {
-                "ID Table", "Seats"
+                "Số bàn", "Số chỗ ngồi"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -420,7 +426,7 @@ public class pnScreenDatBanMoi extends javax.swing.JPanel implements TableUpdate
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 159, Short.MAX_VALUE)
+                .addGap(0, 156, Short.MAX_VALUE)
                 .addComponent(screenDatBanMoi, javax.swing.GroupLayout.PREFERRED_SIZE, 941, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -434,7 +440,7 @@ public class pnScreenDatBanMoi extends javax.swing.JPanel implements TableUpdate
     }//GEN-LAST:event_txtGhiChuActionPerformed
 
     private void btnConfirmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmActionPerformed
-// 1. Khóa nút để tránh spam click
+
         btnConfirm.setEnabled(false);
 
         try {
@@ -445,11 +451,10 @@ public class pnScreenDatBanMoi extends javax.swing.JPanel implements TableUpdate
                     || txtChonBan.getText().trim().isEmpty()) {
 
                 JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin (Tên, SĐT, Số khách, Bàn)!", "Thiếu thông tin", JOptionPane.WARNING_MESSAGE);
-                btnConfirm.setEnabled(true); // Mở lại nút
-                return; // Dừng lại không chạy tiếp
+                btnConfirm.setEnabled(true);
+                return; 
             }
 
-            // Kiểm tra số khách có phải là số không
             int seat = 0;
             try {
                 seat = Integer.parseInt(this.txtSoKhach.getText().trim());
@@ -470,14 +475,13 @@ public class pnScreenDatBanMoi extends javax.swing.JPanel implements TableUpdate
 
             // Kiểm tra xem khách hàng này đã tồn tại chưa
             int existingCusId = cus.getIdCus(sdt);
-            boolean isNewCustomer = (existingCusId == 0); // Nếu ID = 0 tức là chưa có
+            boolean isNewCustomer = (existingCusId == 0); 
             int finalCusId = existingCusId;
 
             if (isNewCustomer) {
-                // Nếu chưa có thì thêm mới
                 boolean addCusSuccess = cus.addCus(tenKH, sdt);
                 if (addCusSuccess) {
-                    finalCusId = cus.getIdCus(sdt); // Lấy ID mới vừa tạo
+                    finalCusId = cus.getIdCus(sdt);
                 } else {
                     JOptionPane.showMessageDialog(this, "Lỗi khi tạo thông tin khách hàng!", "Lỗi", JOptionPane.ERROR_MESSAGE);
                     btnConfirm.setEnabled(true);
@@ -485,20 +489,18 @@ public class pnScreenDatBanMoi extends javax.swing.JPanel implements TableUpdate
                 }
             }
 
-            // --- CHUẨN BỊ DỮ LIỆU ĐẶT BÀN ---
             List<Integer> idTable = getListIdFromText(this.txtChonBan.getText());
             int idEmp = this.Emp.getIdEmploy();
 
             Date uStart = (Date) this.txtTimeStarted.getValue();
             Date uEnd = (Date) this.txtTimeEnd.getValue();
-            java.sql.Timestamp timeStart = new java.sql.Timestamp(uStart.getTime()); // Dùng Timestamp như đã sửa ở DAO
+            java.sql.Timestamp timeStart = new java.sql.Timestamp(uStart.getTime()); 
             java.sql.Timestamp timeEnd = new java.sql.Timestamp(uEnd.getTime());
 
             String note = this.txtGhiChu.getText();
 
             // --- GỌI SERVICE TẠO ĐƠN ---
             if (bks.inserBooking(timeStart, timeEnd, seat, note, idEmp, finalCusId, idTable)) {
-                // ==> THÀNH CÔNG
                 JOptionPane.showMessageDialog(this, "Thêm đơn đặt thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
 
                 // Update giao diện
@@ -511,14 +513,8 @@ public class pnScreenDatBanMoi extends javax.swing.JPanel implements TableUpdate
                 onTableStatusUpdated();
 
             } else {
-                // ==> THẤT BẠI
                 JOptionPane.showMessageDialog(this, "Tạo đơn thất bại (Lỗi hệ thống hoặc trùng lịch)!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-
-                // *** LOGIC ROLLBACK ***
-                // Nếu ban nãy mình vừa tạo khách mới mà giờ tạo đơn lỗi, thì xóa khách đó đi
                 if (isNewCustomer) {
-                    // Bạn cần đảm bảo CustomerService có hàm deleteCus(int id) hoặc deleteCusByPhone(String sdt)
-                    // Ví dụ: cus.deleteCus(finalCusId); 
                     cus.DeleteCus(finalCusId);
                     System.out.println("Đã xóa khách hàng vừa tạo do lỗi đặt bàn.");
                 }
@@ -542,10 +538,8 @@ public class pnScreenDatBanMoi extends javax.swing.JPanel implements TableUpdate
         }
 
         String idTable = "" + this.tbTableList.getValueAt(row, 0);
-        String currentText = this.txtChonBan.getText().trim(); // Lấy text hiện tại và cắt khoảng trắng thừa
+        String currentText = this.txtChonBan.getText().trim(); 
 
-        // Kiểm tra xem bàn này đã có trong danh sách chưa
-        // (Dùng logic đơn giản: check chuỗi. Kỹ hơn thì nên split ra list rồi check)
         boolean isExist = false;
         String[] selectedIds = currentText.split(" ");
         for (String id : selectedIds) {
@@ -557,9 +551,9 @@ public class pnScreenDatBanMoi extends javax.swing.JPanel implements TableUpdate
 
         if (!isExist) {
             if (currentText.isEmpty()) {
-                this.txtChonBan.setText(idTable); // Nếu chưa có gì thì gán luôn
+                this.txtChonBan.setText(idTable); 
             } else {
-                this.txtChonBan.setText(currentText + " " + idTable); // Nếu có rồi thì thêm dấu cách + ID
+                this.txtChonBan.setText(currentText + " " + idTable); 
             }
         }
     }//GEN-LAST:event_tbTableListMouseClicked
@@ -604,13 +598,10 @@ public class pnScreenDatBanMoi extends javax.swing.JPanel implements TableUpdate
     private javax.swing.JSpinner txtTimeStarted;
     // End of variables declaration//GEN-END:variables
 
-    // Trong pnScreenDatBanMoi.java
     @Override
     public void onTableStatusUpdated() {
         resetForm();
         ViewTable();
-
-        // Hoặc làm mới toàn bộ JPanel chứa JTable
         this.pnBanTrong.revalidate();
         this.pnBanTrong.repaint();
     }

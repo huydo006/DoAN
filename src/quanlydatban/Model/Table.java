@@ -9,8 +9,9 @@ package quanlydatban.Model;
  * @author HELLO
  */
 public class Table {
-    private int idTable; // Đổi String thành int
-    private int seats;   // Đổi String thành int
+
+    private int idTable; 
+    private int seats;   
     private String statusTable;
 
     public Table(int idTable, int seats, String statusTable) {
@@ -42,5 +43,5 @@ public class Table {
     public String getStatusTable() {
         return statusTable;
     }
-    
+
 }

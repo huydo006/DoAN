@@ -9,33 +9,39 @@ import java.util.List;
 import quanlydatban.Dao.EmployeeDao;
 import quanlydatban.Model.Employee;
 
-
 /**
  *
  * @author Admin
  */
 public class EmployeeService {
+
     EmployeeDao empDao = new EmployeeDao();
-    Employee emp=null;
+    Employee emp = null;
     List<Employee> list;
-    public Employee getCurrentEmp(String user) throws SQLException{
-        emp= empDao.getEmpbyUsername(user);
+
+    public Employee getCurrentEmp(String user) throws SQLException {
+        emp = empDao.getEmpbyUsername(user);
         return emp;
     }
-    public List<Employee> getListEMP(){
+
+    public List<Employee> getListEMP() {
         return empDao.getListEmployee();
     }
-    public boolean RemoveEmp(int id){
+
+    public boolean RemoveEmp(int id) {
         return empDao.DeleteEmp(id);
     }
-    public boolean AddEmp(Employee emp){
+
+    public boolean AddEmp(Employee emp) {
         return empDao.addEmployee(emp);
     }
-    public boolean getRole(String username) throws SQLException{
+
+    public boolean getRole(String username) throws SQLException {
         return empDao.isManager(username);
     }
+
     public int addEmployeeAndGetId(Employee emp) {
-    return empDao.addEmployeeAndGetId(emp);
-}
-    
+        return empDao.addEmployeeAndGetId(emp);
+    }
+
 }

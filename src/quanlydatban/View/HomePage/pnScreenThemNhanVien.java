@@ -4,14 +4,13 @@
  */
 package quanlydatban.View.HomePage;
 
-
 import quanlydatban.Model.Employee;
 import javax.swing.ButtonGroup;
 import quanlydatban.View.dangnhap.SignUpListener;
 import javax.swing.JOptionPane;
 import java.sql.SQLException;
 import java.util.logging.Level;
-import javax.swing.JButton; // Cần giữ lại để code biên dịch
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -25,42 +24,39 @@ import quanlydatban.View.dangnhap.RoundedBorder;
  * @author 40C LTN
  */
 public class pnScreenThemNhanVien extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(pnScreenThemNhanVien.class.getName());
     private EmployeeService ems = new EmployeeService();
     private SignUpListener listener;
     private RoundedBorder roundedBorder;
-    
-    
+
     public pnScreenThemNhanVien(SignUpListener listener) {
-        this.listener = listener; // Nhận listener từ màn hình danh sách truyền sang
+        this.listener = listener; 
         initComponents();
         initializeGroups();
-        this.setLocationRelativeTo(null); // Hiển thị giữa màn hình
+        this.setLocationRelativeTo(null);
     }
-    
-    // Thêm constructor mặc định để tránh lỗi biên dịch nếu cần
+
     public pnScreenThemNhanVien() {
         initComponents();
         initializeGroups();
     }
 
-    
     // PHƯƠNG THỨC KHỞI TẠO CÁC NHÓM RADIO BUTTON
     private void initializeGroups() {
         ButtonGroup genderGroup = new ButtonGroup();
-        genderGroup.add(jRadioButton1); 
-        genderGroup.add(jRadioButton2); 
-        
+        genderGroup.add(jRadioButton1);
+        genderGroup.add(jRadioButton2);
+
         ButtonGroup roleGroup = new ButtonGroup();
-        roleGroup.add(jRadioButton3); 
-        roleGroup.add(jRadioButton4); 
-        
-        jRadioButton1.setSelected(true); 
-        jRadioButton4.setSelected(true); 
-           btnXacNhan.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        roleGroup.add(jRadioButton3);
+        roleGroup.add(jRadioButton4);
+
+        jRadioButton1.setSelected(true);
+        jRadioButton4.setSelected(true);
+        btnXacNhan.setFont(new java.awt.Font("Segoe UI", 1, 14));
         btnXacNhan.setText("Xác Nhận");
-        
+
         // **********************************************
         // THÊM: GẮN LISTENER CHO NÚT XÁC NHẬN
         btnXacNhan.addActionListener(new java.awt.event.ActionListener() {
@@ -69,36 +65,39 @@ public class pnScreenThemNhanVien extends javax.swing.JFrame {
             }
         });
     }
-    
+
     // PHƯƠNG THỨC LẤY GIỚI TÍNH
     private String getSelectedGender() {
-        if (jRadioButton1.isSelected()) return "Nam";
-        if (jRadioButton2.isSelected()) return "Nữ";
+        if (jRadioButton1.isSelected()) {
+            return "Nam";
+        }
+        if (jRadioButton2.isSelected()) {
+            return "Nữ";
+        }
         return null;
     }
-    
+
     // PHƯƠNG THỨC LẤY CHỨC VỤ
     private String getSelectedRole() {
-        if (jRadioButton3.isSelected()) return "Manager";
-        if (jRadioButton4.isSelected()) return "Employee";
-        return null; 
+        if (jRadioButton3.isSelected()) {
+            return "Manager";
+        }
+        if (jRadioButton4.isSelected()) {
+            return "Employee";
+        }
+        return null;
     }
 
     /**
      * LOGIC XỬ LÝ KHI BẤM NÚT XÁC NHẬN (jButton1)
      */
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
-        
+
     }
-    /**
-     * LOGIC XỬ LÝ KHI BẤM NÚT THOÁT (jButton2)
-     */
 
     /**
      * Creates new form pnScreenThemNhanVien
      */
-
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -136,38 +135,38 @@ public class pnScreenThemNhanVien extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setPreferredSize(new java.awt.Dimension(800, 600));
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel2.setText("Họ và tên ");
 
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel3.setText("Ngày sinh");
 
-        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel4.setText("Giới Tính");
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel4.setText("Giới tính");
 
-        jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel5.setText("Số điện thoại");
 
-        jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel6.setText("Địa chỉ");
 
-        jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel7.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel7.setText("Lương");
 
-        jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel8.setText("Chức Vụ");
+        jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel8.setText("Chức vụ");
 
         jRadioButton1.setBackground(new java.awt.Color(255, 255, 255));
-        jRadioButton1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jRadioButton1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jRadioButton1.setText("Nam");
 
         jRadioButton2.setBackground(new java.awt.Color(255, 255, 255));
-        jRadioButton2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jRadioButton2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jRadioButton2.setText("Nữ");
 
         jRadioButton3.setBackground(new java.awt.Color(255, 255, 255));
-        jRadioButton3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jRadioButton3.setText("Quản Lí");
+        jRadioButton3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jRadioButton3.setText("Quản lý");
         jRadioButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jRadioButton3ActionPerformed(evt);
@@ -175,19 +174,23 @@ public class pnScreenThemNhanVien extends javax.swing.JFrame {
         });
 
         jRadioButton4.setBackground(new java.awt.Color(255, 255, 255));
-        jRadioButton4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jRadioButton4.setText("Nhân Viên");
+        jRadioButton4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jRadioButton4.setText("Nhân viên");
 
+        btnXacNhan.setBackground(new java.awt.Color(237, 233, 216));
         btnXacNhan.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        btnXacNhan.setText("Xác Nhận");
+        btnXacNhan.setText("Xác nhận");
+        btnXacNhan.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 2, new java.awt.Color(128, 128, 128)), javax.swing.BorderFactory.createMatteBorder(2, 2, 0, 0, new java.awt.Color(255, 255, 255))));
         btnXacNhan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnXacNhanActionPerformed(evt);
             }
         });
 
+        jButton2.setBackground(new java.awt.Color(237, 233, 216));
         jButton2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jButton2.setText("Thoát");
+        jButton2.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 2, new java.awt.Color(128, 128, 128)), javax.swing.BorderFactory.createMatteBorder(2, 2, 0, 0, new java.awt.Color(255, 255, 255))));
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
@@ -242,32 +245,29 @@ public class pnScreenThemNhanVien extends javax.swing.JFrame {
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addComponent(jLabel5)
-                            .addGap(18, 18, 18)
-                            .addComponent(txtEmpNumberPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addComponent(jLabel6)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtEmpAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addGap(65, 65, 65))
-                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addComponent(jRadioButton3)
-                                    .addGap(31, 31, 31)
-                                    .addComponent(jRadioButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addComponent(txtEmpSalary, javax.swing.GroupLayout.DEFAULT_SIZE, 224, Short.MAX_VALUE))))
+                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jRadioButton3)
+                            .addGap(31, 31, 31)
+                            .addComponent(jRadioButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                            .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGap(59, 59, 59)
+                            .addComponent(txtEmpSalary, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel6)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(txtEmpAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel5)
+                                .addGap(18, 18, 18)
+                                .addComponent(txtEmpNumberPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(44, 44, 44)
-                        .addComponent(btnXacNhan)
+                        .addGap(20, 20, 20)
+                        .addComponent(btnXacNhan, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(62, 62, 62)
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(57, 57, 57))
@@ -317,7 +317,7 @@ public class pnScreenThemNhanVien extends javax.swing.JFrame {
 
         jLabel10.setBackground(new java.awt.Color(255, 255, 255));
         jLabel10.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel10.setText("Thêm Nhân Viên ");
+        jLabel10.setText("Thêm nhân viên ");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -326,30 +326,30 @@ public class pnScreenThemNhanVien extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 58, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(201, 201, 201))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 455, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(45, Short.MAX_VALUE))
+                .addContainerGap(39, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-       this.dispose();
+        this.dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void btnXacNhanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXacNhanActionPerformed
         try {
-            // 1. Lấy và kiểm tra dữ liệu đầu vào
             String name = txtEmpName.getText().trim();
             String dob = txtEmpDoB.getText().trim();
             String phone = txtEmpNumberPhone.getText().trim();
@@ -366,15 +366,13 @@ public class pnScreenThemNhanVien extends javax.swing.JFrame {
             int salary = Integer.parseInt(salaryStr);
             Employee newEmp = new Employee(name, dob, gender, phone, address, salary, role);
 
-            // 2. Lưu nhân viên và lấy ID tự động tăng về
-            int generatedId = ems.addEmployeeAndGetId(newEmp); 
+            int generatedId = ems.addEmployeeAndGetId(newEmp);
 
             if (generatedId > 0) {
                 JOptionPane.showMessageDialog(this, "Thêm nhân viên thành công! Hãy tạo tài khoản.");
-                
-                // 3. Đóng màn hình này và mở màn hình Đăng ký, truyền ID + Listener
-                this.dispose(); 
-                JFSignUpUI signUpFrame = new JFSignUpUI(generatedId, listener); 
+
+                this.dispose();
+                JFSignUpUI signUpFrame = new JFSignUpUI(generatedId, listener);
                 signUpFrame.setVisible(true);
             } else {
                 JOptionPane.showMessageDialog(this, "Lỗi khi lưu vào cơ sở dữ liệu.", "Lỗi", JOptionPane.ERROR_MESSAGE);
@@ -396,7 +394,7 @@ public class pnScreenThemNhanVien extends javax.swing.JFrame {
      */
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(() -> {
-            new pnScreenThemNhanVien(null).setVisible(true); // Truyền null để test
+            new pnScreenThemNhanVien(null).setVisible(true); 
         });
     }
 

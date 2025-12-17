@@ -9,7 +9,8 @@ package quanlydatban.Model;
  * @author HELLO
  */
 public class Employee {
-    int IdEmploy ;
+
+    int IdEmploy;
     String name;
     String DoB;
     String Gender;
@@ -28,9 +29,10 @@ public class Employee {
         this.Salary = Salary;
         this.Role = Role;
     }
+
     public Employee() {
-    
-}
+
+    }
 
     public Employee(String name, String DoB, String Gender, String Phone, String Address, int Salary, String Role) {
         this.name = name;
@@ -41,7 +43,7 @@ public class Employee {
         this.Salary = Salary;
         this.Role = Role;
     }
-    
+
     public int getIdEmploy() {
         return IdEmploy;
     }
@@ -107,8 +109,7 @@ public class Employee {
     }
 
     public void setIDemploy(int IdEmploy) {
-    this.IdEmploy = IdEmploy;
-}
-    
-    
+        this.IdEmploy = IdEmploy;
+    }
+
 }
