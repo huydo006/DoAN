@@ -39,6 +39,7 @@ public class pnScreenDatBanMoi extends javax.swing.JPanel implements TableUpdate
 
     BookingService bks = new BookingService();
     CustomerService cus = new CustomerService();
+    List<Integer> listIdTable;
 
     public pnScreenDatBanMoi() {
 
@@ -486,7 +487,7 @@ public class pnScreenDatBanMoi extends javax.swing.JPanel implements TableUpdate
             }
 
             // --- CHUẨN BỊ DỮ LIỆU ĐẶT BÀN ---
-            List<Integer> idTable = getListIdFromText(this.txtChonBan.getText());
+//            List<Integer> idTable listIdTable = getListIdFromText(this.txtChonBan.getText());
             int idEmp = this.Emp.getIdEmploy();
 
             Date uStart = (Date) this.txtTimeStarted.getValue();
@@ -497,7 +498,7 @@ public class pnScreenDatBanMoi extends javax.swing.JPanel implements TableUpdate
             String note = this.txtGhiChu.getText();
 
             // --- GỌI SERVICE TẠO ĐƠN ---
-            if (bks.inserBooking(timeStart, timeEnd, seat, note, idEmp, finalCusId, idTable)) {
+            if (bks.inserBooking(timeStart, timeEnd, seat, note, idEmp, finalCusId, listIdTable)) {
                 // ==> THÀNH CÔNG
                 JOptionPane.showMessageDialog(this, "Thêm đơn đặt thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
 
@@ -566,7 +567,7 @@ public class pnScreenDatBanMoi extends javax.swing.JPanel implements TableUpdate
 
     private void btnChonBanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChonBanActionPerformed
         // TODO add your handling code here:
-        List<Integer> listIdTable = getListIdFromText(this.txtChonBan.getText());
+        listIdTable = getListIdFromText(this.txtChonBan.getText());
         if (listIdTable.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn ít nhất 1 bàn!");
             return;
