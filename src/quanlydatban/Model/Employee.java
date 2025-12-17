@@ -28,6 +28,9 @@ public class Employee {
         this.Salary = Salary;
         this.Role = Role;
     }
+    public Employee() {
+    
+}
 
     public Employee(String name, String DoB, String Gender, String Phone, String Address, int Salary, String Role) {
         this.name = name;
@@ -102,6 +105,10 @@ public class Employee {
     public void setRole(String Role) {
         this.Role = Role;
     }
+
+    public void setIDemploy(int IdEmploy) {
+    this.IdEmploy = IdEmploy;
+}
     
     
 }

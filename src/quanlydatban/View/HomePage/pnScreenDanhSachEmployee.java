@@ -19,7 +19,7 @@ import quanlydatban.Service.EmployeeService;
  *
  * @author HELLO
  */
-public class pnScreenDanhSachEmployee extends javax.swing.JPanel {
+public class pnScreenDanhSachEmployee extends javax.swing.JPanel implements quanlydatban.View.dangnhap.SignUpListener {
     // ... (bên trong public class pnScreenDanhSachEmployee extends javax.swing.JPanel { ) ...
     private RoundedBorder roundedBorder;
     EmployeeService ems = new EmployeeService();
@@ -192,9 +192,9 @@ public class pnScreenDanhSachEmployee extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-          pnScreenThemNhanVien addEmployeeFrame = new pnScreenThemNhanVien();
-        addEmployeeFrame.setVisible(true);
-        addEmployeeFrame.setLocationRelativeTo(null);
+          pnScreenThemNhanVien addEmployeeFrame = new pnScreenThemNhanVien(this); 
+          addEmployeeFrame.setVisible(true);
+          addEmployeeFrame.setLocationRelativeTo(null);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -241,6 +241,10 @@ public class pnScreenDanhSachEmployee extends javax.swing.JPanel {
     }
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    @Override
+public void onSignUpSuccess() {
+    loadDataToTable(); // Tự động load lại bảng khi đăng ký xong
+}
 
     
 

@@ -35,65 +35,68 @@ import quanlydatban.View.dangnhap.JFLoginUI;
 public class Main_menu extends javax.swing.JFrame {
     // Khai báo ở đầu lớp Main_menu, cùng nơi bạn khai báo các JButton
     private javax.swing.JButton activeButton;
+    public Account AccCurrent;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Main_menu.class.getName());
     TableDao table = new TableDao();
     AccountDao acc = new AccountDao();
     EmployeeService empSe = new EmployeeService();
     
-    List<Account> AccList = acc.getAllAcount();
-    List<Table> tbList = table.getAllTable();
-    JFLoginUI loginUI =new JFLoginUI();
-    public Account AccCurrent;
+    List<Account> AccList;
+    List<Table> tbList;
     /**
      * Creates new form Main_menu
      */
     
-    public Main_menu() throws SQLException {
+    public Main_menu(Account accLogin, String role) throws SQLException {
 
-        setCurrentAcc();
-        initComponents();
-
-        if(AccCurrent!=null){           //Đang Nhap thành công
             
             
-            if(empSe.getRole(AccCurrent.getUsername())){
-                //Quản lý
-                this.txtWelcome.setText("Chào mừng quản lí : " + AccCurrent.getUsername());
-                jButton4.setVisible(true); 
-                jButton4.setEnabled(true);
-            }
-            else{
+        this.AccCurrent = accLogin;
+    initComponents();
+    
+    // BƯỚC 3: Khởi tạo các Panel con và TRUYỀN DỮ LIỆU vào
+    pnScreenQuanLyBanAn banAnPanel = new pnScreenQuanLyBanAn();
+    
+    pnScreenDatBanMoi datBanPanel = new pnScreenDatBanMoi();
+    // Truyền AccCurrent vào cho Panel Đặt bàn để nó có dữ liệu chạy hàm setCurrentEmp()
+    datBanPanel.setAccount(this.AccCurrent); 
+    datBanPanel.setCurrentEmp(); // Sau khi có Account mới chạy hàm lấy Employee
+    
+    pnScreenDanhSach danhSachPanel = new pnScreenDanhSach();
+    pnScreenTimKiem timKiem = new pnScreenTimKiem();
+    pnScreenDanhSachEmployee danhsachEm = new pnScreenDanhSachEmployee();
 
-                jButton4.setVisible(false); 
-                jButton4.setEnabled(false);
-                this.txtWelcome.setText("Chào mừng nhân viên : " + AccCurrent.getUsername());
-            }
-            
-            
-        }
+    // Thiết lập các Listener
+    banAnPanel.setDatBanMoiListener(datBanPanel);
+    datBanPanel.setQuanLyBanListener(banAnPanel);
+    datBanPanel.setDanhSachListener(danhSachPanel); 
 
-        // 1. Khởi tạo đối tượng từ File Panel
-        pnScreenQuanLyBanAn banAnPanel = new pnScreenQuanLyBanAn();
-        pnScreenDatBanMoi datBanPanel = new pnScreenDatBanMoi();
-        pnScreenDanhSach danhSachPanel =new pnScreenDanhSach();
-        pnScreenTimKiem timKiem = new pnScreenTimKiem();
-        pnScreenDanhSachEmployee danhsachEm = new pnScreenDanhSachEmployee();
-        
-        banAnPanel.setDatBanMoiListener(datBanPanel);
-        datBanPanel.setQuanLyBanListener(banAnPanel);
-        datBanPanel.setDanhSachListener(danhSachPanel); 
-        
-        // 2. Thêm vào pnMain với một tên chuỗi CỐ ĐỊNH và DUY NHẤT
-        // Cấu trúc: pnMain.add(đối tượng_Panel, "Tên_Card");
-        pnMain.add(banAnPanel, "pnScreenQuanLyBanAn");
-        pnMain.add(datBanPanel, "pnScreenDatBanMoi");
-        pnMain.add(danhSachPanel, "pnScreenDanhSach");
-        pnMain.add(danhsachEm , "pnScreenDanhSachEmployee");
-        pnMain.add(timKiem,"pnScreenTimKiem");
-//          ^ Đối tượng Panel      ^ Tên Card
-        
+    // BƯỚC 4: Thêm vào pnMain (CardLayout)
+    pnMain.add(banAnPanel, "pnScreenQuanLyBanAn");
+    pnMain.add(datBanPanel, "pnScreenDatBanMoi");
+    pnMain.add(danhSachPanel, "pnScreenDanhSach");
+    pnMain.add(danhsachEm , "pnScreenDanhSachEmployee");
+    pnMain.add(timKiem,"pnScreenTimKiem");
+
+    // Phân quyền và hiển thị
+    applyRolePermissions(role); 
+    this.setLocationRelativeTo(null);
         
     }
+    private void applyRolePermissions(String role) {
+        if (AccCurrent == null) return; // Bảo vệ nếu chưa có dữ liệu
+    if (role != null && role.equalsIgnoreCase("Manager")) {
+        // Nếu là Quản lý: Hiện lời chào và nút nhân viên
+        this.txtWelcome.setText("Chào mừng quản lý: " + AccCurrent.getUsername());
+        jButton4.setVisible(true);
+        jButton4.setEnabled(true);
+    } else {
+        // Nếu là Nhân viên: Đổi lời chào và ẨN NÚT
+        this.txtWelcome.setText("Chào mừng nhân viên: " + AccCurrent.getUsername());
+        jButton4.setVisible(false);
+        jButton4.setEnabled(false);
+    }
+}
     private void setCurrentAcc(){
         AccountService acs= new AccountService();
         this.AccCurrent=acs.getActiveACc();
@@ -512,16 +515,19 @@ public class Main_menu extends javax.swing.JFrame {
 
     private void btnLogOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogOutActionPerformed
         // TODO add your handling code here:
-        // 1. Kiểm tra nếu có tài khoản đang đăng nhập
         setActiveButton(btnLogOut);
-        if (this.AccCurrent != null) {
-            // 2. Gọi hàm updateActive để set isActive = FALSE
-            acc.updateActive(false, this.AccCurrent.getUsername());
-        }
+    
+    // 1. Cập nhật trạng thái trong Database
+    if (this.AccCurrent != null) {
+        acc.updateActive(false, this.AccCurrent.getUsername());
+    }
 
-        // 3. Hiển thị lại màn hình đăng nhập và đóng form Main_menu
-        loginUI.show(); // Hoặc new JFLoginUI().setVisible(true);
-        this.dispose();
+    // 2. KHỞI TẠO MỚI hoàn toàn màn hình Login 
+    // Không dùng biến loginUI khai báo ở trên đầu nữa
+    new JFLoginUI().setVisible(true); 
+
+    // 3. HỦY hoàn toàn Menu hiện tại khỏi bộ nhớ RAM
+    this.dispose();
 
     }//GEN-LAST:event_btnLogOutActionPerformed
 
@@ -565,25 +571,7 @@ public void setActiveButton(javax.swing.JButton currentButton) {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-//        java.awt.EventQueue.invokeLater(() -> new Main_menu().setVisible(true));
+        
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

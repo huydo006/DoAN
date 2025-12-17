@@ -34,5 +34,8 @@ public class EmployeeService {
     public boolean getRole(String username) throws SQLException{
         return empDao.isManager(username);
     }
+    public int addEmployeeAndGetId(Employee emp) {
+    return empDao.addEmployeeAndGetId(emp);
+}
     
 }

@@ -62,9 +62,7 @@ public class pnScreenDatBanMoi extends javax.swing.JPanel implements TableUpdate
         for (Table x : list.getTbList()) {
             model.addRow(new Object[]{x.getIdTable(), x.getSeats()});
         }
-        for (int i = 1; i <= 30; i++) {
-            model.addRow(new Object[]{i, i * 2});
-        }
+        
     }
 
     private void resetForm() {
@@ -80,7 +78,14 @@ public class pnScreenDatBanMoi extends javax.swing.JPanel implements TableUpdate
 
     }
 
-    private void setCurrentEmp() {
+    public void setAccount(Account acc) {
+    this.AccCurrent = acc;
+}
+    public void setCurrentEmp() {
+        // Thêm dòng kiểm tra null này
+    if (this.AccCurrent == null) {
+        return; 
+    }
         try {
             AccountService acs = new AccountService();
             List<Account> AccList = acs.getAccountList();

@@ -15,16 +15,16 @@ import quanlydatban.Service.BookingService;
 import quanlydatban.Service.CustomerService;
 import java.text.SimpleDateFormat;
 
-
 /**
  *
  * @author HELLO
  */
 public class pnScreenDanhSach extends javax.swing.JPanel implements TableUpdateListener {
-    
+
     private TableUpdateListener datbanmoiListener;
     BookingService bks = new BookingService();
     CustomerService cus = new CustomerService();
+
     /**
      * Creates new form pnScreenDanhSach
      */
@@ -32,115 +32,100 @@ public class pnScreenDanhSach extends javax.swing.JPanel implements TableUpdateL
         initComponents();
         setCount();
         ViewTable();
-    }    
-    
+    }
+
     private void ViewTable() {
         DefaultTableModel model = (DefaultTableModel) tbMain.getModel();
-        model.setRowCount(0); // Xóa dữ liệu cũ
-        List<Booking> list = bks.getAllBooking();
+    model.setRowCount(0); // Xóa dữ liệu cũ
+    List<Booking> list = bks.getAllBooking();
 
-        // TẠO BỘ ĐỊNH DẠNG GIỜ:PHÚT
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+    // TẠO BỘ ĐỊNH DẠNG GIỜ:PHÚT
+    SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
 
-        for (Booking b : list) {
-            String timeStartStr = "";
-            String timeEndStr = "";
+    for (Booking b : list) {
+        String timeStartStr = "";
+        String timeEndStr = "";
 
-            // Kiểm tra null để tránh lỗi (quan trọng với Timestamp)
-            if (b.getTimeStart() != null) {
-                timeStartStr = sdf.format(b.getTimeStart()); 
-            }
-            if (b.getTimeEnd() != null) {
-                timeEndStr = sdf.format(b.getTimeEnd());     
-            }
+        // Kiểm tra null để tránh lỗi (quan trọng với Timestamp)
+        if (b.getTimeStart() != null) {
+            timeStartStr = sdf.format(b.getTimeStart());
+        }
+        if (b.getTimeEnd() != null) {
+            timeEndStr = sdf.format(b.getTimeEnd());
+        }
 
-            // Tạo chuỗi hiển thị gộp (Ví dụ: "10:30 - 12:00")
-            String timeDisplay = timeStartStr + " - " + timeEndStr;
+        // Tạo chuỗi hiển thị gộp (Ví dụ: "10:30 - 12:00")
+        String timeDisplay = timeStartStr + " - " + timeEndStr;
 
-            model.addRow(new Object[]{
-                b.getIdBooking(),
-                b.getListTables(), // <--- GỌI HÀM NÀY ĐỂ HIỆN CHUỖI "3, 4"
-      
-                cus.getCus(b.getIDcus()).getNameCus(), // Hoặc tên khách hàng
-                cus.getCus(b.getIDcus()).getCusPhone(),
-                // ... các cột khác
-                timeDisplay,
-                b.getGuestCount(),
-                b.getNote()
-            });
+        // Đổ dữ liệu vào hàng (Phải đủ 8 cột như thiết kế)
+        model.addRow(new Object[]{
+            b.getIdBooking(),                     // Cột 0: Mã đặt bàn
+            b.getListTables(),                    // Cột 1: Bàn
+            cus.getCus(b.getIDcus()).getNameCus(),// Cột 2: Khách hàng
+            cus.getCus(b.getIDcus()).getCusPhone(),// Cột 3: Điện thoại
+            timeDisplay,                          // Cột 4: Thời Gian Dùng
+            b.getGuestCount(),                    // Cột 5: Số khách
+            b.getNote(),                          // Cột 6: Ghi chú
+            b.getIsComplete()                     // Cột 7: Trạng thái (MỚI THÊM)
+        });
+    }
+    }
+
+    private void setCount() {
+        this.txtTongBooking.setText("" + bks.getCountBooking());
+        this.txtCountComplete.setText("" + bks.getCount("Hoàn Thành"));
+        this.txtCountCancel.setText("" + bks.getCount("Đã Hủy"));
+
+    }
+
+    private void CompleteSelectedBooking(int selectedRowIndex, int idBooking) {
+       int confirm = JOptionPane.showConfirmDialog(
+            this,
+            "Xác nhận hoàn thành đơn " + idBooking,
+            "Xác nhận",
+            JOptionPane.YES_NO_OPTION
+    );
+    if (confirm == JOptionPane.YES_OPTION) {
+        if (bks.setIsComplete(idBooking)) {
+            // Tương tự: Gọi ViewTable để cập nhật trạng thái mới
+            ViewTable(); 
+            
+            JOptionPane.showMessageDialog(this, "Đã xác nhận hoàn thành đơn " + idBooking);
+            setCount();
         }
     }
-    private void setCount(){
-        this.txtTongBooking.setText(""+bks.getCountBooking());
-        this.txtCountComplete.setText(""+bks.getCount("Hoàn Thành"));
-        this.txtCountCancel.setText(""+bks.getCount("Đã Hủy"));
-        
-    }
-    private void CompleteSelectedBooking(int selectedRowIndex , int idBooking){
-        DefaultTableModel model = (DefaultTableModel) tbMain.getModel();
-//        Object bookingIdObj = model.getValueAt(selectedRowIndex, 0);
-//        String bookingIdStr = String.valueOf(bookingIdObj);
-        
-        int confirm = JOptionPane.showConfirmDialog(
-                this,
-                "Xác nhận hoàn thành đơn "+ idBooking,
-                "Xác nhận ",
-                JOptionPane.YES_NO_OPTION
-        );
-        if(confirm==JOptionPane.YES_OPTION){
-            if(bks.setIsComplete(idBooking)){
-                model.removeRow(selectedRowIndex);
-                JOptionPane.showMessageDialog(this, 
-                        "Đã xác nhận hoàn thành đơn "+idBooking,
-                        "Thông báo",
-                        JOptionPane.INFORMATION_MESSAGE);
-                this.tbMain.revalidate();
-                this.tbMain.repaint();
-
-                setCount();       
-            }
-        }
-                
-        
     }
 
     private void CancelSelectedBooking(int selectedRowIndex, int idBooking) {
-        // 1. Lấy ID Booking từ JTable (chỉ để hiển thị thông báo xác nhận)
         DefaultTableModel model = (DefaultTableModel) tbMain.getModel();
-        Object bookingIdObj = model.getValueAt(selectedRowIndex, 0);
-        String bookingIdStr = String.valueOf(bookingIdObj);
+    
+    // Xác nhận hủy
+    int confirm = JOptionPane.showConfirmDialog(
+            this,
+            "Bạn có chắc muốn hủy đặt bàn ID: " + idBooking,
+            "Xác nhận hủy",
+            JOptionPane.YES_NO_OPTION
+    );
 
-        // 2. Kiểm tra và xác nhận xóa
-        int confirm = JOptionPane.showConfirmDialog(
-                this,
-                "Bạn có chắc muốn hủy đặt bàn ID: " + bookingIdStr,
-                "Xác nhận hủy ",
-                JOptionPane.YES_NO_OPTION
-        );
+    if (confirm == JOptionPane.YES_OPTION) {
+        try {
+            if (bks.CancelBooking(idBooking)) {
+                // THAY ĐỔI Ở ĐÂY: Không removeRow nữa
+                // Gọi ViewTable để tải lại toàn bộ danh sách, đơn bị hủy sẽ hiện chữ "Đã Hủy"
+                ViewTable(); 
+                
+                JOptionPane.showMessageDialog(this,
+                        "Đơn đặt bàn ID " + idBooking + " đã được chuyển trạng thái: Đã Hủy",
+                        "Thông báo",
+                        JOptionPane.INFORMATION_MESSAGE);
 
-        if (confirm == JOptionPane.YES_OPTION) {
-
-            try {
-
-                if (bks.CancelBooking(idBooking)) {
-                    model.removeRow(selectedRowIndex);
-                    JOptionPane.showMessageDialog(this,
-                            "Đơn đặt bàn ID " + bookingIdStr + " đã được xóa ",
-                            "Thông báo",
-                            JOptionPane.INFORMATION_MESSAGE);
-
-                    // 3. Cập nhật lại giao diện và thống kê
-                    this.tbMain.revalidate();
-                    this.tbMain.repaint();
-
-                    setCount();
-                };
-
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, "Lỗi khi xóa hàng khỏi UI.", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                e.printStackTrace();
+                setCount(); // Cập nhật lại các con số thống kê phía trên
             }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Lỗi khi cập nhật trạng thái đơn.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
+    }
     }
 
     /**
@@ -186,23 +171,23 @@ public class pnScreenDanhSach extends javax.swing.JPanel implements TableUpdateL
         pnTitle.setPreferredSize(new java.awt.Dimension(870, 70));
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel3.setText("Danh Sach Dat Ban");
+        jLabel3.setText("Danh sách đặt bàn");
 
         javax.swing.GroupLayout pnTitleLayout = new javax.swing.GroupLayout(pnTitle);
         pnTitle.setLayout(pnTitleLayout);
         pnTitleLayout.setHorizontalGroup(
             pnTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnTitleLayout.createSequentialGroup()
-                .addGap(29, 29, 29)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnTitleLayout.createSequentialGroup()
+                .addContainerGap(382, Short.MAX_VALUE)
                 .addComponent(jLabel3)
-                .addContainerGap(678, Short.MAX_VALUE))
+                .addGap(328, 328, 328))
         );
         pnTitleLayout.setVerticalGroup(
             pnTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnTitleLayout.createSequentialGroup()
-                .addContainerGap(23, Short.MAX_VALUE)
+            .addGroup(pnTitleLayout.createSequentialGroup()
+                .addGap(20, 20, 20)
                 .addComponent(jLabel3)
-                .addGap(20, 20, 20))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
 
         screenDanhSach.add(pnTitle, java.awt.BorderLayout.PAGE_START);
@@ -215,7 +200,7 @@ public class pnScreenDanhSach extends javax.swing.JPanel implements TableUpdateL
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel4.setText("Tổng Số Bàn Đã Đặt");
+        jLabel4.setText("Tổng số bàn đã đặt");
 
         txtTongBooking.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         txtTongBooking.setHorizontalAlignment(javax.swing.JTextField.CENTER);
@@ -248,14 +233,14 @@ public class pnScreenDanhSach extends javax.swing.JPanel implements TableUpdateL
                 .addGap(18, 18, 18))
         );
 
-        jLabel7.setText("Thong ke dat ban : ");
+        jLabel7.setText("Thống kê đặt bàn");
 
         jPanel7.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jPanel7.setPreferredSize(new java.awt.Dimension(349, 74));
 
         jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel10.setText("Hoàn Thành");
+        jLabel10.setText("Hoàn thành");
 
         txtCountComplete.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         txtCountComplete.setHorizontalAlignment(javax.swing.JTextField.CENTER);
@@ -293,7 +278,7 @@ public class pnScreenDanhSach extends javax.swing.JPanel implements TableUpdateL
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel5.setText("Hủy Bỏ");
+        jLabel5.setText("Hủy bỏ");
 
         txtCountCancel.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         txtCountCancel.setHorizontalAlignment(javax.swing.JTextField.CENTER);
@@ -352,9 +337,8 @@ public class pnScreenDanhSach extends javax.swing.JPanel implements TableUpdateL
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(thongkedatbanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(thongkedatbanLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(21, 21, 21))
         );
 
@@ -362,33 +346,33 @@ public class pnScreenDanhSach extends javax.swing.JPanel implements TableUpdateL
 
         tbMain.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "ID Booking", "Ban ", "Khach hang", "Dien Thoai", "Thời Gian Dùng", "So Khach", "Ghi Chu"
+                "Mã đặt bàn", "Bàn", "Khách hàng", "Điện thoại", "Thời Gian Dùng", "Số khách", "Ghi chú", "Trạng thái"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -406,7 +390,7 @@ public class pnScreenDanhSach extends javax.swing.JPanel implements TableUpdateL
         jScrollPane2.setViewportView(tbMain);
         if (tbMain.getColumnModel().getColumnCount() > 0) {
             tbMain.getColumnModel().getColumn(0).setResizable(false);
-            tbMain.getColumnModel().getColumn(0).setPreferredWidth(30);
+            tbMain.getColumnModel().getColumn(0).setPreferredWidth(40);
             tbMain.getColumnModel().getColumn(1).setResizable(false);
             tbMain.getColumnModel().getColumn(1).setPreferredWidth(40);
             tbMain.getColumnModel().getColumn(2).setResizable(false);
@@ -419,9 +403,10 @@ public class pnScreenDanhSach extends javax.swing.JPanel implements TableUpdateL
             tbMain.getColumnModel().getColumn(5).setPreferredWidth(30);
             tbMain.getColumnModel().getColumn(6).setResizable(false);
             tbMain.getColumnModel().getColumn(6).setPreferredWidth(150);
+            tbMain.getColumnModel().getColumn(7).setResizable(false);
         }
 
-        jLabel1.setText("Danh sach dat ban :");
+        jLabel1.setText("Danh sách đặt bàn");
 
         jButton1.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         jButton1.setText("Hoàn Thành");
@@ -450,31 +435,26 @@ public class pnScreenDanhSach extends javax.swing.JPanel implements TableUpdateL
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(8, 8, 8)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButton2)
+                        .addGap(26, 26, 26)
+                        .addComponent(jButton1)))
                 .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton2)
-                .addGap(33, 33, 33)
-                .addComponent(jButton1)
-                .addGap(214, 214, 214))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(24, 24, 24)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 309, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(91, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton2)
-                            .addComponent(jButton1))
-                        .addGap(47, 47, 47))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton2)
+                    .addComponent(jButton1))
+                .addContainerGap(89, Short.MAX_VALUE))
         );
 
         main.add(jPanel3, java.awt.BorderLayout.CENTER);
@@ -497,14 +477,14 @@ public class pnScreenDanhSach extends javax.swing.JPanel implements TableUpdateL
         // TODO add your handling code here:
         int n = this.tbMain.getSelectedRow();
         int id = (int) this.tbMain.getValueAt(n, 0);
-        CompleteSelectedBooking(n,id);
+        CompleteSelectedBooking(n, id);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         int n = this.tbMain.getSelectedRow();
         int id = (int) this.tbMain.getValueAt(n, 0);
-        CancelSelectedBooking(n , id);
+        CancelSelectedBooking(n, id);
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void tbMainKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tbMainKeyPressed
@@ -544,10 +524,10 @@ public class pnScreenDanhSach extends javax.swing.JPanel implements TableUpdateL
 
     @Override
     public void onTableStatusUpdated() {
-        
+
         ViewTable();
         if (datbanmoiListener != null) {
-            this.datbanmoiListener.onTableStatusUpdated(); 
+            this.datbanmoiListener.onTableStatusUpdated();
         }
         setCount();
         this.tbMain.revalidate();

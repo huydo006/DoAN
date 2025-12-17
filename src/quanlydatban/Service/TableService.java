@@ -13,15 +13,14 @@ import quanlydatban.Model.Table;
  * @author HELLO
  */
 public class TableService {
-    List<Table> tbList;
-    
-    TableDao tbDao = new TableDao();
+    // Không nên khai báo biến toàn cục tbList ở đây nếu muốn dữ liệu luôn mới
+    private TableDao tbDao = new TableDao();
+
     public TableService() {
-        
-        this.tbList= tbDao.getAllTable();
     }
 
+    // Sửa hàm này để gọi trực tiếp từ DAO mỗi khi cần kiểm tra sức chứa
     public List<Table> getTbList() {
-        return tbList;
+        return tbDao.getAllTable(); 
     }
 }

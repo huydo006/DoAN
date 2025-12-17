@@ -217,30 +217,27 @@ public class JFLoginUI extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
                                                     
-        // Lấy tên đăng nhập từ JTextField1
-        String user = this.jTextField1.getText();
-        // Lấy mật khẩu từ JPasswordField1 (getText() trả về String)
-        String pass = new String(this.jPasswordField1.getPassword()); // Hoặc dùng jPasswordField1.getText() (ít bảo mật hơn)
+       String user = jTextField1.getText().trim();
+    String pass = new String(jPasswordField1.getPassword());
 
-        if (xacthuc.checkLogin(user, pass)) {
-            try {
-                JOptionPane.showMessageDialog(null, "Đăng nhập thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
-                
-                //gọi Trang Manager
+    String role = xacthuc.getRoleByLogin(user, pass); 
 
-                Main_menu menu = new Main_menu();
+    if (role != null) {
+        // --- THÊM DÒNG NÀY ---
+        JOptionPane.showMessageDialog(this, "Đăng nhập thành công với quyền: " + role);
+        // ---------------------
 
-                menu.show();
-
-                this.dispose(); // Đóng form hiện tại
-            } catch (SQLException ex) {
-                System.getLogger(JFLoginUI.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
-            }
-
-        } else {
-            JOptionPane.showMessageDialog(null, "Sai tên đăng nhập hoặc mật khẩu!", "Lỗi đăng nhập", JOptionPane.ERROR_MESSAGE);
+        Account acc = xacthuc.getAccountByUser(user); 
+        try {
+            Main_menu menu = new Main_menu(acc, role); 
+            menu.setVisible(true);
+            this.dispose(); 
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Lỗi khởi tạo Menu: " + ex.getMessage());
         }
-
+    } else {
+        JOptionPane.showMessageDialog(this, "Tài khoản hoặc mật khẩu không đúng!");
+    }
     } 
     public class MyTextField extends JTextField {
 

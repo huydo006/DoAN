@@ -7,6 +7,7 @@ package quanlydatban.View.HomePage;
 
 import quanlydatban.Model.Employee;
 import javax.swing.ButtonGroup;
+import quanlydatban.View.dangnhap.SignUpListener;
 import javax.swing.JOptionPane;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -27,15 +28,21 @@ public class pnScreenThemNhanVien extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(pnScreenThemNhanVien.class.getName());
     private EmployeeService ems = new EmployeeService();
-    
+    private SignUpListener listener;
     private RoundedBorder roundedBorder;
     
     
+    public pnScreenThemNhanVien(SignUpListener listener) {
+        this.listener = listener; // Nhận listener từ màn hình danh sách truyền sang
+        initComponents();
+        initializeGroups();
+        this.setLocationRelativeTo(null); // Hiển thị giữa màn hình
+    }
+    
+    // Thêm constructor mặc định để tránh lỗi biên dịch nếu cần
     public pnScreenThemNhanVien() {
-        // Cần thiết để khởi tạo các component UI (DÙ KHÔNG THỂ HIỆN CODE)
-        initComponents(); 
-        initializeGroups(); 
-        
+        initComponents();
+        initializeGroups();
     }
 
     
@@ -161,6 +168,11 @@ public class pnScreenThemNhanVien extends javax.swing.JFrame {
         jRadioButton3.setBackground(new java.awt.Color(255, 255, 255));
         jRadioButton3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jRadioButton3.setText("Quản Lí");
+        jRadioButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton3ActionPerformed(evt);
+            }
+        });
 
         jRadioButton4.setBackground(new java.awt.Color(255, 255, 255));
         jRadioButton4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -336,69 +348,56 @@ public class pnScreenThemNhanVien extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void btnXacNhanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXacNhanActionPerformed
-        // TODO add your handling code here:
         try {
-
+            // 1. Lấy và kiểm tra dữ liệu đầu vào
             String name = txtEmpName.getText().trim();
             String dob = txtEmpDoB.getText().trim();
             String phone = txtEmpNumberPhone.getText().trim();
-            int salary = Integer.parseInt(txtEmpSalary.getText().trim());
             String address = txtEmpAddress.getText().trim();
+            String salaryStr = txtEmpSalary.getText().trim();
             String gender = getSelectedGender();
             String role = getSelectedRole();
 
-            if (name.isEmpty() || dob.isEmpty() || phone.isEmpty() || address.isEmpty() || gender == null || role == null) {
+            if (name.isEmpty() || dob.isEmpty() || phone.isEmpty() || address.isEmpty() || gender == null || role == null || salaryStr.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Vui lòng điền đầy đủ thông tin.", "Lỗi nhập liệu", JOptionPane.WARNING_MESSAGE);
                 return;
             }
 
+            int salary = Integer.parseInt(salaryStr);
             Employee newEmp = new Employee(name, dob, gender, phone, address, salary, role);
 
-            // Cần phương thức addEmployee trong EmployeeDao để dòng này chạy
-            if (ems.AddEmp(newEmp)) {
-                JOptionPane.showMessageDialog(this, "Thêm nhân viên " + name + " thành công!", "Thành công", JOptionPane.INFORMATION_MESSAGE);
-                this.dispose();
+            // 2. Lưu nhân viên và lấy ID tự động tăng về
+            int generatedId = ems.addEmployeeAndGetId(newEmp); 
+
+            if (generatedId > 0) {
+                JOptionPane.showMessageDialog(this, "Thêm nhân viên thành công! Hãy tạo tài khoản.");
                 
-                JFSignUpUI signUP = new JFSignUpUI ();
-                signUP.show();
+                // 3. Đóng màn hình này và mở màn hình Đăng ký, truyền ID + Listener
+                this.dispose(); 
+                JFSignUpUI signUpFrame = new JFSignUpUI(generatedId, listener); 
+                signUpFrame.setVisible(true);
             } else {
-                JOptionPane.showMessageDialog(this, "Không thể thêm nhân viên. ID có thể đã tồn tại.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Lỗi khi lưu vào cơ sở dữ liệu.", "Lỗi", JOptionPane.ERROR_MESSAGE);
             }
 
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Lương và ID phải là số nguyên hợp lệ.", "Lỗi Định dạng", JOptionPane.ERROR_MESSAGE);
-            logger.log(Level.WARNING, "Lỗi định dạng số", e);
+            JOptionPane.showMessageDialog(this, "Lương phải là số nguyên hợp lệ.", "Lỗi định dạng", JOptionPane.ERROR_MESSAGE);
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Lỗi không xác định: " + e.getMessage(), "Lỗi Chung", JOptionPane.ERROR_MESSAGE);
-            logger.log(Level.SEVERE, null, e);
+            JOptionPane.showMessageDialog(this, "Lỗi không xác định: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
-        
-
     }//GEN-LAST:event_btnXacNhanActionPerformed
+
+    private void jRadioButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jRadioButton3ActionPerformed
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new pnScreenThemNhanVien().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> {
+            new pnScreenThemNhanVien(null).setVisible(true); // Truyền null để test
+        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -53,26 +53,24 @@ public class AccountDao {
     }
     public Account getAccountByUser(String user){
         Account acc = null;
-        String sql = "Select * from Account "
-                + "Where username = ?";
-        try {
-            Connection conn = ConnectionDatabase.getConnection();
-            PreparedStatement psm = conn.prepareStatement(sql);
+    String sql = "Select * from Account "
+            + "Where username = ?"; //
+    try {
+        Connection conn = ConnectionDatabase.getConnection();
+        PreparedStatement psm = conn.prepareStatement(sql);
+        
+        psm.setString(1, user);
+        ResultSet rs= psm.executeQuery();
+        if(rs.next()){
+            String users = rs.getString("username");
+            String pass = rs.getString("password");
             
-            psm.setString(1, user);
-            ResultSet rs= psm.executeQuery();
-            if(rs.next()){
-                String users = rs.getString("username");
-                String pass = rs.getString("password");
-                
-                acc = new Account(users, pass);
-            }
-            
-            
-        } catch (SQLException ex) {
-            System.getLogger(AccountDao.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+            acc = new Account(users, pass); // Trả về đối tượng Account
         }
-        return acc;
+    } catch (SQLException ex) {
+        System.getLogger(AccountDao.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+    }
+    return acc;
         
     }
     public void updateActive(boolean isActive,String username){
@@ -121,4 +119,26 @@ public class AccountDao {
         return null;
         
     }
+    public String getRoleByLogin(String user, String pass) {
+    String role = null;
+    String sql = "SELECT e.role FROM employee e " +
+                 "JOIN account a ON e.IDemploy = a.IDemploy " +
+                 "WHERE a.username = ? AND a.password = ?";
+    
+    try (Connection conn = ConnectionDatabase.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+        
+        ps.setString(1, user);
+        ps.setString(2, pass);
+        
+        try (ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                role = rs.getString("role");
+            }
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return role;
+}
 }

@@ -21,14 +21,14 @@ public class cardTable extends javax.swing.JPanel {
      * Creates new form cardTable
      */
     private TableUpdateListener updateListener;
-    private String tableId;
+    private int tableId;
     
     TableDao tbDao = new TableDao();
     
     public void setUpdateListener(TableUpdateListener listener) {
         this.updateListener = listener;
     }
-    public void setTableId(String id) {
+    public void setTableId(int id) {
         this.tableId = id;
     }
     
@@ -85,20 +85,22 @@ public class cardTable extends javax.swing.JPanel {
     }
     
     private void handleUpdate(String status) {
-        if (this.tableId == null || this.tableId.isEmpty()) {
-            System.out.println("Lỗi: Không có ID bàn.");
-            return;
-        }
-        // 1. Cập nhật DB
-        tbDao.updateStatus(tableId, status); 
+        // Vì tableId giờ là số (int), không dùng .isEmpty() hay == null nữa
+    if (this.tableId <= 0) { 
+        System.out.println("Lỗi: ID bàn không hợp lệ.");
+        return;
+    }
     
-        // 2. Cập nhật giao diện của Card hiện tại (Để người dùng thấy thay đổi ngay lập tức)
-        this.txtTrangThai.setText(status);
-    
-        // 3. **GỌI CALLBACK** (Thông báo cho pnScreenQuanLyBanAn)
-        if (updateListener != null) {
-            updateListener.onTableStatusUpdated();
-        }
+    // 1. Cập nhật DB (Đảm bảo hàm updateStatus trong tbDao nhận tham số int)
+    tbDao.updateStatus(tableId, status); 
+
+    // 2. Cập nhật giao diện của Card hiện tại
+    this.txtTrangThai.setText(status);
+
+    // 3. GỌI CALLBACK để cập nhật lại số lượng bàn trống/đã đặt trên thanh thống kê
+    if (updateListener != null) {
+        updateListener.onTableStatusUpdated();
+    }
 }
     /**
      * This method is called from within the constructor to initialize the form.

@@ -9,21 +9,21 @@ package quanlydatban.Model;
  * @author HELLO
  */
 public class Table {
-    String idTable;
-    String seats;
-    String statusTable;
+    private int idTable; // Đổi String thành int
+    private int seats;   // Đổi String thành int
+    private String statusTable;
 
-    public Table(String idTable, String seats, String statusTable) {
+    public Table(int idTable, int seats, String statusTable) {
         this.idTable = idTable;
         this.seats = seats;
         this.statusTable = statusTable;
     }
 
-    public void setIdTable(String idTable) {
+    public void setIdTable(int idTable) {
         this.idTable = idTable;
     }
 
-    public void setSeats(String seats) {
+    public void setSeats(int seats) {
         this.seats = seats;
     }
 
@@ -31,11 +31,11 @@ public class Table {
         this.statusTable = statusTable;
     }
 
-    public String getIdTable() {
+    public int getIdTable() {
         return idTable;
     }
 
-    public String getSeats() {
+    public int getSeats() {
         return seats;
     }
 

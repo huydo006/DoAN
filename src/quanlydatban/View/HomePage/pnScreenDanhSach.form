@@ -63,19 +63,19 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
+                  <Group type="102" alignment="1" attributes="0">
+                      <EmptySpace pref="382" max="32767" attributes="0"/>
                       <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="678" max="32767" attributes="0"/>
+                      <EmptySpace min="-2" pref="328" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace pref="23" max="32767" attributes="0"/>
-                      <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
+                  <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
+                      <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace pref="23" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -86,7 +86,7 @@
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Segoe UI" size="18" style="1"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Danh Sach Dat Ban"/>
+                <Property name="text" type="java.lang.String" value="Danh s&#xe1;ch &#x111;&#x1eb7;t b&#xe0;n"/>
               </Properties>
             </Component>
           </SubComponents>
@@ -141,10 +141,8 @@
                           <EmptySpace max="32767" attributes="0"/>
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
                               <Component id="jPanel4" max="32767" attributes="0"/>
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="jPanel7" pref="90" max="32767" attributes="0"/>
-                                  <Component id="jPanel2" max="32767" attributes="0"/>
-                              </Group>
+                              <Component id="jPanel7" pref="90" max="32767" attributes="0"/>
+                              <Component id="jPanel2" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
                       </Group>
@@ -194,7 +192,7 @@
                           <Font name="Segoe UI" size="14" style="0"/>
                         </Property>
                         <Property name="horizontalAlignment" type="int" value="0"/>
-                        <Property name="text" type="java.lang.String" value="T&#x1ed5;ng S&#x1ed1; B&#xe0;n &#x110;&#xe3; &#x110;&#x1eb7;t"/>
+                        <Property name="text" type="java.lang.String" value="T&#x1ed5;ng s&#x1ed1; b&#xe0;n &#x111;&#xe3; &#x111;&#x1eb7;t"/>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JTextField" name="txtTongBooking">
@@ -215,7 +213,7 @@
                 </Container>
                 <Component class="javax.swing.JLabel" name="jLabel7">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Thong ke dat ban : "/>
+                    <Property name="text" type="java.lang.String" value="Th&#x1ed1;ng k&#xea; &#x111;&#x1eb7;t b&#xe0;n"/>
                   </Properties>
                 </Component>
                 <Container class="javax.swing.JPanel" name="jPanel7">
@@ -266,7 +264,7 @@
                           <Font name="Segoe UI" size="14" style="0"/>
                         </Property>
                         <Property name="horizontalAlignment" type="int" value="0"/>
-                        <Property name="text" type="java.lang.String" value="Ho&#xe0;n Th&#xe0;nh"/>
+                        <Property name="text" type="java.lang.String" value="Ho&#xe0;n th&#xe0;nh"/>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JTextField" name="txtCountComplete">
@@ -330,7 +328,7 @@
                           <Font name="Segoe UI" size="14" style="0"/>
                         </Property>
                         <Property name="horizontalAlignment" type="int" value="0"/>
-                        <Property name="text" type="java.lang.String" value="H&#x1ee7;y B&#x1ecf;"/>
+                        <Property name="text" type="java.lang.String" value="H&#x1ee7;y b&#x1ecf;"/>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JTextField" name="txtCountCancel">
@@ -370,15 +368,14 @@
                                   <Component id="jLabel1" min="-2" pref="119" max="-2" attributes="0"/>
                                   <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                               </Group>
+                              <Group type="102" alignment="1" attributes="0">
+                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                  <Component id="jButton2" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
+                                  <Component id="jButton1" min="-2" max="-2" attributes="0"/>
+                              </Group>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
-                      </Group>
-                      <Group type="102" alignment="1" attributes="0">
-                          <EmptySpace max="32767" attributes="0"/>
-                          <Component id="jButton2" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
-                          <Component id="jButton1" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="214" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -387,21 +384,14 @@
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
                           <Component id="jLabel1" min="-2" pref="22" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" attributes="0">
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="jScrollPane2" min="-2" pref="309" max="-2" attributes="0"/>
-                                  <EmptySpace pref="91" max="32767" attributes="0"/>
-                              </Group>
-                              <Group type="102" alignment="1" attributes="0">
-                                  <EmptySpace max="32767" attributes="0"/>
-                                  <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="jButton2" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jButton1" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <EmptySpace min="-2" pref="47" max="-2" attributes="0"/>
-                              </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="jScrollPane2" min="-2" pref="264" max="-2" attributes="0"/>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="jButton2" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jButton1" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
+                          <EmptySpace pref="89" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -417,19 +407,20 @@
                     <Component class="javax.swing.JTable" name="tbMain">
                       <Properties>
                         <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                          <Table columnCount="7" rowCount="20">
-                            <Column editable="false" title="ID Booking" type="java.lang.Object"/>
-                            <Column editable="false" title="Ban " type="java.lang.Object"/>
-                            <Column editable="false" title="Khach hang" type="java.lang.Object"/>
-                            <Column editable="false" title="Dien Thoai" type="java.lang.Object"/>
+                          <Table columnCount="8" rowCount="20">
+                            <Column editable="false" title="M&#xe3; &#x111;&#x1eb7;t b&#xe0;n" type="java.lang.Object"/>
+                            <Column editable="false" title="B&#xe0;n" type="java.lang.Object"/>
+                            <Column editable="false" title="Kh&#xe1;ch h&#xe0;ng" type="java.lang.Object"/>
+                            <Column editable="false" title="&#x110;i&#x1ec7;n tho&#x1ea1;i" type="java.lang.Object"/>
                             <Column editable="false" title="Th&#x1edd;i Gian D&#xf9;ng" type="java.lang.Object"/>
-                            <Column editable="false" title="So Khach" type="java.lang.Object"/>
-                            <Column editable="false" title="Ghi Chu" type="java.lang.Object"/>
+                            <Column editable="false" title="S&#x1ed1; kh&#xe1;ch" type="java.lang.Object"/>
+                            <Column editable="false" title="Ghi ch&#xfa;" type="java.lang.Object"/>
+                            <Column editable="false" title="Tr&#x1ea1;ng th&#xe1;i" type="java.lang.Object"/>
                           </Table>
                         </Property>
                         <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
                           <TableColumnModel selectionModel="0">
-                            <Column maxWidth="-1" minWidth="-1" prefWidth="30" resizable="false">
+                            <Column maxWidth="-1" minWidth="-1" prefWidth="40" resizable="false">
                               <Title/>
                               <Editor/>
                               <Renderer/>
@@ -464,6 +455,11 @@
                               <Editor/>
                               <Renderer/>
                             </Column>
+                            <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="false">
+                              <Title/>
+                              <Editor/>
+                              <Renderer/>
+                            </Column>
                           </TableColumnModel>
                         </Property>
                         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
@@ -485,7 +481,7 @@
                 </Container>
                 <Component class="javax.swing.JLabel" name="jLabel1">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Danh sach dat ban :"/>
+                    <Property name="text" type="java.lang.String" value="Danh s&#xe1;ch &#x111;&#x1eb7;t b&#xe0;n"/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JButton" name="jButton1">

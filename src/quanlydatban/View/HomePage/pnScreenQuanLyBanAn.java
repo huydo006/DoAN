@@ -53,39 +53,40 @@ public class pnScreenQuanLyBanAn extends JPanel implements  TableUpdateListener 
         
     }
     public void uploadTable(){
-        
         uploadTablefromDataBase();
-        int count1=0, count2=0 , count3=0;
-        this.tableListPanel.removeAll();
+    int count1 = 0, count2 = 0, count3 = 0;
+    this.tableListPanel.removeAll();
+    
+    this.tableListPanel.setLayout(new GridLayout(0, 4, 10, 10));
+    for (int i = 0; i < tbList.size(); i++) {
+        cardTable card = new cardTable();
+        Table temp = tbList.get(i);
+
+        // ĐỔI Ở ĐÂY: Dùng String.valueOf() để chuyển int sang String
+        card.setTxtIdTable(String.valueOf(temp.getIdTable())); 
+        card.setTxtTrangThai(temp.getStatusTable());
+        card.setTxtSeats(String.valueOf(temp.getSeats())); 
         
-        this.tableListPanel.setLayout(new GridLayout(0, 4, 10, 10));
-        for(int i = 0 ; i<tbList.size() ;i++){
-            cardTable card = new cardTable();
-            Table temp= tbList.get(i);
-            card.setTxtIdTable(temp.getIdTable());
-            card.setTxtTrangThai(temp.getStatusTable());
-            card.setTxtSeats(temp.getSeats());
-            
-            card.setTableId(temp.getIdTable());
-            card.setUpdateListener(this);
-            
-            String status = tbList.get(i).getStatusTable();
-            if(status.equalsIgnoreCase("Trống")){
-                count1++;
-            }
-            else if(status.equalsIgnoreCase("Đã đặt")){
-                count2++;
-            }
-            else{ 
-                count3++;
-            }
-            this.tableListPanel.add(card);
+        card.setTableId(temp.getIdTable()); // idTable giờ là int nên truyền trực tiếp
+        card.setUpdateListener(this);
+        
+        String status = temp.getStatusTable(); // Dùng temp luôn cho gọn
+        if (status.equalsIgnoreCase("Trống")) {
+            count1++;
+        } else if (status.equalsIgnoreCase("Đã đặt")) {
+            count2++;
+        } else {
+            count3++;
         }
-        this.txtCountEmpty.setText(""+count1);
-        this.txtCountBooked.setText(""+count2);
-        this.txtCountUsing.setText(""+count3);
-        tableListPanel.revalidate();
-        tableListPanel.repaint();
+        this.tableListPanel.add(card);
+    }
+    this.txtCountEmpty.setText(String.valueOf(count1));
+    this.txtCountBooked.setText(String.valueOf(count2));
+    this.txtCountUsing.setText(String.valueOf(count3));
+    
+    tableListPanel.revalidate();
+    tableListPanel.repaint();
+        
     }
     
     // Trong pnScreenQuanLyBanAn.java (thêm vào cuối class, trước dấu } cuối cùng)

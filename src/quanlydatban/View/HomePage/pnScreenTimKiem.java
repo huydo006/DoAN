@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
 package quanlydatban.View.HomePage;
+
 import java.awt.Color; // Cần thêm dòng này nếu chưa có
 import java.awt.event.FocusAdapter; // Cần thêm dòng này nếu chưa có
 import java.awt.event.FocusEvent; // Cần thêm dòng này nếu chưa có
@@ -10,31 +11,33 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
-import quanlydatban.Model.BookingDetail; // Thêm Model Detail
-import quanlydatban.Dao.BookingDao; // Thêm DAO
+import quanlydatban.Model.Booking; // Sử dụng Model Booking duy nhất
+import quanlydatban.Service.BookingService; // Gọi thông qua Service thay vì DAO trực tiếp
+
 /**
  *
  * @author Admin
  */
 public class pnScreenTimKiem extends javax.swing.JPanel {
+
     private final String PLACEHOLDER_TEXT = "Tìm kiếm theo tên hoặc số điện thoại";
-    
-    private BookingDao bookingDao;
+
+    private BookingService bookingService;
     private DefaultTableModel tableModel;
+
     /**
      * Creates new form pnScreenTimKiem
      */
     public pnScreenTimKiem() {
         initComponents();
+
+        bookingService = new BookingService();
+
+        initComponents();
         addPlaceholderFeature(jTextField2);
-        
-       bookingDao = new BookingDao(); 
-    
-    initComponents();
-    addPlaceholderFeature(jTextField2);
-    
-    // Gọi khởi tạo bảng (chỉ khởi tạo model, không tải dữ liệu)
-    khoiTaoJTable();
+
+        // Gọi khởi tạo bảng (chỉ khởi tạo model, không tải dữ liệu)
+        khoiTaoJTable();
     }
 
     /**
@@ -150,13 +153,13 @@ public class pnScreenTimKiem extends javax.swing.JPanel {
         jTable1.setBackground(new java.awt.Color(255, 255, 102));
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Mã đặt bàn", "Bàn", "Khách hàng", "Điện thoại", "Thời gian dùng", "Số khách", "Ghi chú"
+                "Mã đặt bàn", "Bàn", "Khách hàng", "Điện thoại", "Thời gian dùng", "Số khách", "Ghi chú", "Trạng thái"
             }
         ));
         jScrollPane1.setViewportView(jTable1);
@@ -179,99 +182,92 @@ public class pnScreenTimKiem extends javax.swing.JPanel {
         add(jPanel2, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
-    
-    
+
     private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
-        // TODO add your handling code here:
+        // TODO add your handling code here:                                     
+        jButton2ActionPerformed(evt); // Nhấn Enter cũng sẽ kích hoạt tìm kiếm
     }//GEN-LAST:event_jTextField2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-       // Đặt lại ô tìm kiếm về trạng thái placeholder
-    jTextField2.setText(PLACEHOLDER_TEXT);
-    jTextField2.setForeground(new java.awt.Color(204, 204, 204));
-    jTextField2.requestFocus();
-    
-    // >>> THAY ĐỔI: CHỈ LÀM TRỐNG BẢNG, KHÔNG TẢI LẠI DỮ LIỆU <<<
-    if (tableModel != null) {
-        tableModel.setRowCount(0);
-    }
+        jTextField2.setText(PLACEHOLDER_TEXT);
+        jTextField2.setForeground(new java.awt.Color(204, 204, 204));
+        jTextField2.requestFocus();
+
+        // Làm trống bảng
+        if (tableModel != null) {
+            tableModel.setRowCount(0);
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         String tuKhoa = jTextField2.getText().trim();
-    
-    if (tuKhoa.isEmpty() || tuKhoa.equals(PLACEHOLDER_TEXT)) {
-        // Nếu trống, hiển thị lại toàn bộ dữ liệu
-        taiDuLieuLenBang(bookingDao.getAllBookingDetail()); 
-        return;
-    }
-    
-    // Gọi DAO để tìm kiếm
-    List<BookingDetail> ketQua = bookingDao.searchBookingDetail(tuKhoa);
-    
-    // Đổ dữ liệu kết quả tìm kiếm vào JTable
-    taiDuLieuLenBang(ketQua);
-    
-    if (ketQua.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Không tìm thấy đặt bàn nào khớp với từ khóa: " + tuKhoa, "Thông báo", JOptionPane.INFORMATION_MESSAGE);
-    }
+
+        // Nếu để trống hoặc là placeholder, lấy toàn bộ danh sách chi tiết từ Service
+        if (tuKhoa.isEmpty() || tuKhoa.equals(PLACEHOLDER_TEXT)) {
+            taiDuLieuLenBang(bookingService.getAllBooking());
+            return;
+        }
+
+        // Gọi Service thực hiện tìm kiếm (Service sẽ JOIN SQL lấy đủ thông tin)
+        List<Booking> ketQua = bookingService.searchBooking(tuKhoa);
+
+        // Hiển thị kết quả
+        taiDuLieuLenBang(ketQua);
+
+        if (ketQua.isEmpty()) {
+            JOptionPane.showMessageDialog(this,
+                    "Không tìm thấy đặt bàn nào khớp với: " + tuKhoa,
+                    "Thông báo",
+                    JOptionPane.INFORMATION_MESSAGE);
+        }
 // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
 
-    
     // >>> Vị trí DÁN CODE 3: Thêm phương thức xử lý FocusListener <<<
     private void addPlaceholderFeature(JTextField textField) {
-        // Lấy lại giá trị Text và Color đã được set sẵn từ initComponents()
-        
         textField.addFocusListener(new FocusAdapter() {
             @Override
             public void focusGained(FocusEvent e) {
-                // Khi click vào: Nếu text là Placeholder, thì xóa text và đổi màu
                 if (textField.getText().equals(PLACEHOLDER_TEXT)) {
                     textField.setText("");
-                    textField.setForeground(Color.BLACK); // Đổi màu về màu chữ thường
+                    textField.setForeground(Color.BLACK);
                 }
             }
 
             @Override
             public void focusLost(FocusEvent e) {
-                // Khi mất focus: Nếu text trống, thì hiện lại Placeholder và đổi màu
                 if (textField.getText().isEmpty()) {
                     textField.setText(PLACEHOLDER_TEXT);
-                    textField.setForeground(new java.awt.Color(204, 204, 204)); // Dùng lại màu đã set trong initComponents
+                    textField.setForeground(new java.awt.Color(204, 204, 204));
                 }
             }
         });
     }
 
     // --- PHƯƠNG THỨC KHỞI TẠO BẢNG VÀ TẢI DỮ LIỆU BAN ĐẦU ---
-private void khoiTaoJTable() {
-    tableModel = (DefaultTableModel) jTable1.getModel();
-    
-    // XÓA DÒNG NÀY: taiDuLieuLenBang(bookingDao.getAllBookingDetail()); 
-    
-    // Nếu bạn muốn bảng trống trơn khi khởi động:
-    tableModel.setRowCount(0);
-}
+    private void khoiTaoJTable() {
+        tableModel = (DefaultTableModel) jTable1.getModel();
+        tableModel.setRowCount(0); // Bảng trống khi khởi tạo
+    }
 
 // --- PHƯƠNG THỨC ĐỔ DỮ LIỆU VÀO BẢNG ---
-private void taiDuLieuLenBang(List<BookingDetail> listBookingDetail) {
-    tableModel.setRowCount(0); 
-    if (listBookingDetail != null) {
-        for (BookingDetail detail : listBookingDetail) {
-            // ...
-            tableModel.addRow(new Object[]{
-                detail.getIdBooking(),
-                detail.getIdTable(),     
-                detail.getNameCus(),     
-                detail.getCusPhone(),    
-                detail.getDurationString(), // <<< THAY THẾ BẰNG DURATION
-                detail.getGuestCount(),  
-                detail.getNote()         
-            });
+    private void taiDuLieuLenBang(List<Booking> listBooking) {
+        tableModel.setRowCount(0);
+        if (listBooking != null) {
+            for (Booking b : listBooking) {
+                tableModel.addRow(new Object[]{
+                    b.getIdBooking(), // 1. Mã đặt bàn
+                    b.getListTables(), // 2. Bàn
+                    b.getNameCus(), // 3. Khách hàng
+                    b.getCusPhone(), // 4. Điện thoại
+                    b.getTimeRangeDisplay(), // 5. Thời gian (HH:mm - HH:mm)
+                    b.getGuestCount(), // 6. Số khách
+                    b.getNote(), // 7. Ghi chú
+                    b.getIsComplete() // 8. Trạng thái
+                });
+            }
         }
     }
-}
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;

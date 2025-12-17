@@ -36,12 +36,31 @@ public class AccountService {
         }
         return false;
     }
-    public Account getAccbyUser(String user){
-        acc= accDao.getAccountByUser(user);
-        return acc;
+    
+    public String checkLoginAndGetRole(String user, String pass) {
+    // Luôn tải lại danh sách mới nhất từ Database để tránh dữ liệu cũ trong bộ nhớ đệm
+    this.list = accDao.getAllAcount(); 
+    return accDao.getRoleByLogin(user, pass);
+}
+    public String getRoleByLogin(String user, String pass) {
+    return accDao.getRoleByLogin(user, pass);
+}
+
+    // Lấy thông tin account để truyền sang Main_menu
+    public Account getAccountByUser(String user) {
+        return accDao.getAccountByUser(user);
     }
-    public Account getActiveACc(){
-        return acc= accDao.getActiveAccount();
+
+    // Cập nhật trạng thái Active khi đăng nhập/đăng xuất
+    public void updateStatus(boolean isActive, String user) {
+        accDao.updateActive(isActive, user);
     }
+
+    // Lấy tài khoản đang Active (nếu cần)
+    public Account getActiveACc() {
+        return accDao.getActiveAccount();
+    }
+
+ 
     
 }
